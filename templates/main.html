@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Oddy-main{% endblock %}
+
+{% block content %}
+<h1>Oddy</h1>
+<h3>설레는 여행 계획하기, 오디와 함께해요!</h3>
+<a href="#" class="main-kakao">카카오 로그인</a><br>
+<a href="{% url 'plans:create_group' %}">여행 모임 생성(소셜 로그인 성공하면 이 링크 지워주세요(^o^))</a>
+{% endblock %}

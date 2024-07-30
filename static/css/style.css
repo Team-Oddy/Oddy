@@ -1,0 +1,24 @@
+.create_group-page {
+    display: none;
+}
+.create_group-page.create_group-active {
+    display: block;
+}
+.create_group-error {
+    color: red;
+    display: none;
+}
+
+.test-page {
+    display: none;
+}
+.test-page.test-active {
+    display: block;
+}
+.test-page-number {
+    font-size: 0.9em;
+    color: gray;
+}
+.test-selected {
+    background-color: lightblue;
+}
