@@ -10,29 +10,41 @@
 <script>
 let questions = [
     {
-        question: '질문 1',
-        answers: ['답변 1-1', '답변 1-2', '답변 1-3']
+        question: '여행 계획을 세울 때 당신의 스타일은?',
+        answers: ['a) 세세한 부분까지 꼼꼼히 계획한다',
+        'b) 대략적인 일정만 잡고 즉흥적으로 결정한다',
+        'c) 주요 명소 위주로 효율적으로 계획한다']
     },
     {
-        question: '질문 2',
-        answers: ['답변 2-1', '답변 2-2', '답변 2-3']
+        question: '새로운 여행지에서 가장 하고 싶은 것은?',
+        answers: ['a) 유명 관광지 방문하기',
+        'b) 현지 시장이나 골목 탐험하기',
+        'c) 현지 맛집 탐방하기']
     },
     {
-        question: '질문 3',
-        answers: ['답변 3-1', '답변 3-2', '답변 3-3']
+        question: '여행 중 예상치 못한 상황이 발생했을 때 당신의 반응은?',
+        answers: ['a) 당황하고 스트레스를 받는다',
+        'b) 새로운 모험의 기회로 받아들인다',
+        'c) 빠르게 대안을 찾아 해결한다']
     },
     {
-        question: '질문 4',
-        answers: ['답변 4-1', '답변 4-2', '답변 4-3']
+        question: '여행에서 가장 중요하게 생각하는 것은?',
+        answers: ['a) 효율적인 일정 소화',
+        'b) 새로운 문화 체험',
+        'c) 충분한 휴식과 여유']
     },
     {
-        question: '질문 5',
-        answers: ['답변 5-1', '답변 5-2', '답변 5-3']
+        question: '이상적인 숙소는?',
+        answers: ['a) 편안하고 안전한 호텔',
+        'b) 현지 문화를 느낄 수 있는 게스트하우스',
+        'c) 휴양과 힐링이 가능한 리조트']
     }
 ];
 
+let answers = [];
 let currentPage = 0;
 
+//페이지 생성, 답변 선택 함수+답변 선택하지 않고 다음 누르면 alert창 뜸
 function createPage(index) {
     let totalPages = questions.length;
     let pageContainer = document.getElementById('test-page-container');
@@ -40,7 +52,7 @@ function createPage(index) {
     let pageDiv = document.createElement('div');
     pageDiv.id = `test-page${index + 1}`;
     pageDiv.classList.add('test-page');
-    if (index === 0) pageDiv.classList.add('test-active');
+    if (index == 0) pageDiv.classList.add('test-active');
 
     let nav = document.createElement('h2');
     if (index > 0) {
@@ -58,7 +70,13 @@ function createPage(index) {
         let nextLink = document.createElement('a');
         nextLink.innerHTML = '&gt;';
         nextLink.href = 'javascript:void(0)';
-        nextLink.onclick = () => showPage(index + 1);
+        nextLink.onclick = () => {
+            if (validateAnswer(index)) {
+                showPage(index + 1);
+            } else {
+                alert("답변을 선택하세요.");
+            }
+        };
         nav.appendChild(nextLink);
     }
     pageDiv.appendChild(nav);
@@ -70,7 +88,7 @@ function createPage(index) {
     questions[index].answers.forEach(answer => {
         let answerButton = document.createElement('button');
         answerButton.textContent = answer;
-        answerButton.onclick = (event) => highlightButton(event.target);
+        answerButton.onclick = (event) => selectAnswer(event.target, index, answer);
         pageDiv.appendChild(answerButton);
         pageDiv.appendChild(document.createElement('br'));
     });
@@ -79,9 +97,17 @@ function createPage(index) {
     completeButton.textContent = (index === totalPages - 1) ? '완료하기' : '다음';
     completeButton.onclick = () => {
         if (index === totalPages - 1) {
-            completeTest();
+            if (validateAnswer(index)) {
+                completeTest();
+            } else {
+                alert("답변을 선택하세요.");
+            }
         } else {
-            showPage(index + 1);
+            if (validateAnswer(index)) {
+                showPage(index + 1);
+            } else {
+                alert("답변을 선택하세요.");
+            }
         }
     };
     pageDiv.appendChild(completeButton);
@@ -89,30 +115,92 @@ function createPage(index) {
     pageContainer.appendChild(pageDiv);
 }
 
+//답변 선택 확인 함수
+function validateAnswer(index) {
+    return answers[index] !== undefined;
+}
+
+//페이지 전환
 function showPage(pageIndex) {
     currentPage = pageIndex;
     document.querySelectorAll('.test-page').forEach(page => page.classList.remove('test-active'));
     document.getElementById(`test-page${pageIndex + 1}`).classList.add('test-active');
 }
 
+//선택한 답변만 answers배열에 저장되게
+function selectAnswer(button, questionIndex, answer) {
+    let buttons = button.parentNode.querySelectorAll('button');
+    buttons.forEach(btn => btn.classList.remove('test-selected'));
+    button.classList.add('test-selected');
+    answers[questionIndex] = answer;
+}
+
+
 function completeTest() {
+    let travelType = determineTravelType(answers);
+
     let resultPage = document.createElement('div');
     resultPage.classList.add('test-page', 'test-active');
     resultPage.innerHTML = `
-        <p>00의 여행 유형은 ~형이에요!</p>
-        <div>특징 ~~~</div>
-        <div>장점 ~~~</div>
-        <div>단점 ~~~</div>
+        <p>(유저 이름)의 여행 유형은 <strong>${travelType.name}</strong>입니다.</p>
+        <div class="result-box">
+            <p>특징</p>
+            <ul>
+                ${travelType.characteristics.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+            <p>장점</p>
+            <ul>
+                ${travelType.advantages.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+            <p>단점</p>
+            <ul>
+                ${travelType.disadvantages.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
         <a href="#">여행 모임 입장하기</a>
     `;
     document.getElementById('test-page-container').innerHTML = '';
     document.getElementById('test-page-container').appendChild(resultPage);
 }
 
-function highlightButton(button) {
-    let buttons = button.parentNode.querySelectorAll('button');
-    buttons.forEach(btn => btn.classList.remove('test-selected'));
-    button.classList.add('test-selected');
+//테스트 결과
+function determineTravelType(answers) {
+    let travelTypes = {
+        'a': {
+            name: '완벽주의 플래너형',
+            characteristics: ['#효율적', '#체계적', '주요 관광지를 빠짐없이 방문'],
+            advantages: ['시간 관리 탁월', '예산 통제력 우수', '주요 명소 놓치지 않음'],
+            disadvantages: ['융통성 부족', '예상 밖 상황에 스트레스']
+        },
+        'b': {
+            name: '자유로운 모험가형',
+            characteristics: ['#즉흥적', '#문화체험', '현지 문화에 깊이 몰입하며 새로운 경험을 추구'],
+            advantages: ['독특한 경험 발견', '현지인과 쉽게 교류', '예상 밖 상황을 즐김'],
+            disadvantages: ['중요 일정 놓칠 수 있음', '안전 문제 발생 가능성']
+        },
+        'c': {
+            name: '휴식 추구형',
+            characteristics: ['#힐링', '#여유', '편안한 숙소에서 여유롭게 시간을 보내며 휴식'],
+            advantages: ['충분한 휴식과 재충전', '스트레스 없는 여행', '여유로운 일정 진행'],
+            disadvantages: ['새로운 경험 부족', '현지 문화 체험 제한적']
+        },
+        'd': {
+            name: '미식 탐험가형',
+            characteristics: ['#맛집투어', '#현지음식', '현지 음식과 맛집 위주로 여행 일정을 구성'],
+            advantages: ['음식으로 문화 이해', '독특한 맛집 발굴', '현지 시장 탐방 능숙'],
+            disadvantages: ['다른 관광 요소 소홀', '식비 초과 가능성']
+        },
+        'e': {
+            name: '균형 잡힌 탐험가형',
+            characteristics: ['#다재다능', '#융통성', '계획과 즉흥성의 균형을 맞추며 다양한 경험 추구'],
+            advantages: ['다양한 여행 요소 체험', '상황에 따른 유연한 대처', '동행자와 조화로운 여행'],
+            disadvantages: ['우선순위 설정 어려움', '깊이 있는 경험 부족할 수 있음']
+        },
+    };
+
+    return travelTypes['a']; //현재는 질문에 대한 답변 선택결과와 상관없이 'a'유형(완벽주의 플래너형)이라고 나옴
+    
+    //알고리즘 만들어서 views.py에 추가하면 위의 부분 더 간단하게 바꿀 수 있을 것 같아요!^.^
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -120,8 +208,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
 {% endblock %}
+
+
+
 
 
 
