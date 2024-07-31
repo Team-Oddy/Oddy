@@ -99,9 +99,11 @@ function completeTest() {
     let resultPage = document.createElement('div');
     resultPage.classList.add('test-page', 'test-active');
     resultPage.innerHTML = `
-        <h2>테스트 결과</h2>
-        <p>00님의 여행 유형은 ~이에요!</p>
-        <p>여행 모임 입장하기</p>
+        <p>00의 여행 유형은 ~형이에요!</p>
+        <div>특징 ~~~</div>
+        <div>장점 ~~~</div>
+        <div>단점 ~~~</div>
+        <a href="#">여행 모임 입장하기</a>
     `;
     document.getElementById('test-page-container').innerHTML = '';
     document.getElementById('test-page-container').appendChild(resultPage);
