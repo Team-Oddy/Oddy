@@ -33,7 +33,7 @@
     <h3>여행 일정을 알려주세요!</h3><br>
     <input type="text" id="travelStartDate" placeholder="2024/07/31"> - <input type="text" id="travelEndDate" placeholder="2024/07/31"><br>
     <p id="travelDateError" class="create_group-error">여행 시작일과 종료일을 모두 입력해주세요.</p><br>
-    <button onclick="nextStepDates('travelStartDate', 'travelEndDate', 'completePage')">완료</button><br>
+    <button onclick="nextStepDates('travelStartDate', 'travelEndDate')">완료</button><br>
     <p>나중에 만드시겠어요? <a href="{% url 'plans:main' %}">나가기</a></p>
 </div>
 
@@ -58,7 +58,6 @@
     <button onclick="showPage('entryPage')">여행 모임 입장하기</button>
 </div>
 
-
 <script>
 let formData = {};
 
@@ -70,40 +69,102 @@ function showPage(pageId) {
 
 function nextStep(inputId, nextPageId) {
     let value = document.getElementById(inputId).value;
-    if (value.trim() == "") {
+    if (value.trim() === "") {
         return;
     }
-    if (inputId == 'nickname' && value.length > 5) {
+    if (inputId === 'nickname' && value.length > 5) {
         document.getElementById('nicknameError').style.display = 'block'; 
         return;
     }
-    if (inputId == 'travelName' && value.length > 15) {
+    if (inputId === 'travelName' && value.length > 15) {
         document.getElementById('travelNameError').style.display = 'block'; 
         return;
     }
-    if (inputId == 'inviteCode') {
-        if (isNaN(value) || value.length !== 6) {
-            document.getElementById('inviteCodeError').style.display = 'block'; 
-            return;
-        }
-    }
     formData[inputId] = value;
-    showPage(nextPageId);
+
+    if (inputId === 'nickname') {
+        submitNickname();
+    } else if (nextPageId === 'travelDatePage') {
+        showPage(nextPageId);
+    } else {
+        showPage(nextPageId);
+    }
 }
 
-function nextStepDates(startInputId, endInputId, nextPageId) {
+function nextStepDates(startInputId, endInputId) {
     let startValue = document.getElementById(startInputId).value;
     let endValue = document.getElementById(endInputId).value;
-    if (startValue.trim() == "" || endValue.trim() == "") {
+    if (startValue.trim() === "" || endValue.trim() === "") {
         document.getElementById('travelDateError').style.display = 'block'; 
         return;  
     }
     formData[startInputId] = startValue;
     formData[endInputId] = endValue;
-    showPage(nextPageId);
+
+    // 여행 정보 저장
+    submitTravelInfo();
+}
+
+// CSRF 토큰을 가져오는 함수
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// 폼 데이터를 서버로 전송하는 함수
+function submitNickname() {
+    fetch('/create_group/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({nickname: formData.nickname})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showPage('optionsPage');
+        } else {
+            alert(data.error);
+        }
+    });
+}
+
+function submitTravelInfo() {
+    const startDate = new Date(formData.travelStartDate);
+    const endDate = new Date(formData.travelEndDate);
+
+    fetch('/travel_name_page/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            travelName: formData.travelName,
+            travelStartDate: startDate.toISOString().split('T')[0],
+            travelEndDate: endDate.toISOString().split('T')[0]
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showPage('completePage');
+        } else {
+            alert(data.error);
+        }
+    });
 }
 </script>
 {% endblock %}
-
-
-
