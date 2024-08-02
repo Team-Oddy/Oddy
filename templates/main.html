@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Oddy-main{% endblock %}
+{% block title %}Oddy-my_page{% endblock %}
 
 {% block content %}
 <h1>Oddy</h1>
 <h3>설레는 여행 계획하기, 오디와 함께해요!</h3>
 <a href="#" class="main-kakao">카카오 로그인</a><br>
-<a href="{% url 'plans:create_group' %}">여행 모임 생성(소셜 로그인 성공하면 이 링크 지워주세요(^o^))</a>
+<a href="{% url 'plans:create_group' %}">여행 모임 생성(소셜 로그인 성공하면 이 링크 지워주세요(^o^))</a><br>
+<a href="{% url 'plans:my_page' %}">로그인 후 계정이 있다면->마이페이지</a>
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
@@ -10,3 +10,9 @@ def create_group(request):
 
 def test(request):
     return render(request, 'test.html')
+
+def my_page(request):
+    return render(request, 'my_page.html')
+
+
+

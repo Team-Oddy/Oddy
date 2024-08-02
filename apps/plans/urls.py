@@ -7,4 +7,6 @@ urlpatterns=[
     path('', main, name='main'),
     path('create_group/', create_group, name='create_group'),
     path('test/', test, name='test'),
+    path('my_page/', my_page, name='my_page'),
+    
 ]
