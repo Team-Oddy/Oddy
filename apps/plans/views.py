@@ -9,9 +9,8 @@ from .forms import NicknameForm
 import requests
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
-from django.shortcuts import redirect
 from allauth.socialaccount.models import SocialToken
-
+from django.views.decorators.http import require_http_methods
 #선아 작성 부분
 def main(request):
     if request.user.is_authenticated:
@@ -57,19 +56,25 @@ def set_nickname(request):
 
 # Create your views here.
 
+@login_required
+@require_http_methods(["GET", "POST"])
 def create_group(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         nickname = data.get('nickname')
         if nickname and len(nickname) <= 5:
-            user_profile = UserProfile.objects.create(nickname=nickname)
-            request.session['user_profile_id'] = user_profile.id
+            user = request.user
+            user_profile, created = UserProfile.objects.update_or_create(
+                user=user,
+                defaults={'nickname': nickname}
+            )
             return JsonResponse({'success': True, 'message': '닉네임 저장 완료'})
         else:
             return JsonResponse({'success': False, 'error': '닉네임은 5글자 이내로 작성해주세요.'})
     return render(request, 'create_group.html')
 
 @csrf_exempt
+@login_required
 def travel_name_page(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -78,9 +83,8 @@ def travel_name_page(request):
         end_date = data.get('travelEndDate')
         
         if len(travel_name) <= 15 and start_date and end_date:
-            user_profile_id = request.session.get('user_profile_id')
-            if user_profile_id:
-                user_profile = UserProfile.objects.get(id=user_profile_id)
+            try:
+                user_profile = request.user.userprofile
                 travel_group = TravelGroup(
                     user_profile=user_profile,
                     travel_name=travel_name,
@@ -89,7 +93,7 @@ def travel_name_page(request):
                 )
                 travel_group.save()
                 return JsonResponse({'success': True, 'message': '여행 모임 저장 완료'})
-            else:
+            except UserProfile.DoesNotExist:
                 return JsonResponse({'success': False, 'error': '사용자 프로필이 존재하지 않습니다.'})
         else:
             return JsonResponse({'success': False, 'error': '여행 이름은 15글자 이내로 작성해야 하며, 모든 날짜를 입력해야 합니다.'})
