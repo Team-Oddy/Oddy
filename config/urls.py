@@ -16,8 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from apps.plans import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.plans.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/logout/', views.kakao_logout, name='account_logout'),
 ]

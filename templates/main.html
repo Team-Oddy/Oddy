@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}Oddy-my_page{% endblock %}
 
@@ -9,4 +10,12 @@
 <a href="#" class="main-kakao">카카오 로그인</a><br>
 <a href="{% url 'plans:create_group' %}">여행 모임 생성(소셜 로그인 성공하면 이 링크 지워주세요(^o^))</a><br>
 <a href="{% url 'plans:my_page' %}">로그인 후 계정이 있다면->마이페이지</a>
+{% if user.is_authenticated %}
+    <p>환영합니다, {{ user.username }}님!</p>
+    <a href="{% url 'plans:kakao_logout' %}">로그아웃</a>
+    <a href="{% url 'plans:create_group' %}">여행 모임 생성</a>
+{% else %}
+    <a href="{% provider_login_url 'kakao' %}" class="main-kakao">카카오 로그인</a>
+{% endif %}
+
 {% endblock %}
