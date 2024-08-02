@@ -7,11 +7,11 @@
 <div id="profilePage">
     <div>
         <img src="#" alt="프로필 사진">
-        <p id="userName">로그인한 유저 이름</p>
+        <p id="userName">{{ user_profile.nickname }}</p>
     </div>
 
     <div>
-        <a href="#">로그아웃</a><br>
+        <a href="{% url 'plans:kakao_logout' %}">로그아웃</a><br>
         <a href="javascript:void(0);" onclick="nicknameEdit()">닉네임 수정</a><br> <!-- 닉네임 수정 링크 -->
         <a href="{% url 'plans:test' %}">여행 유형테스트 다시 하기</a><br>
     </div>
@@ -36,8 +36,8 @@
 
 <!--닉네임 수정-->
 <div id="nicknameEditPage" style="display:none;">
-    <h2>닉네임을 수정</h2><br>
-    <input type="text" id="nicknameInput" placeholder="닉네임을 입력하세요 0/5" value="{{ nickname }}"><br>
+    <h2>닉네임을 수정하세요!</h2><br>
+    <input type="text" id="nicknameInput" placeholder="닉네임을 입력하세요 0/5" value="{{ user_profile.nickname }}"><br>
     <p id="nicknameError" style="color: red; display: none;">닉네임은 5글자 이내로 작성해주세요.</p><br>
     <button onclick="submitNickname()">수정완료</button><br>
     <button type="button" onclick="showProfilePage()">취소</button>
@@ -60,10 +60,34 @@
             document.getElementById('nicknameError').style.display = 'block';
             return;
         }
-        document.getElementById('nicknameError').style.display = 'none';
-        showProfilePage();  //지금은 변경내용 저장되진 않음. 
+
+        fetch("{% url 'plans:update_nickname' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                nickname: nickname
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('userName').innerText = nickname;
+                showProfilePage();
+            } else {
+                document.getElementById('nicknameError').innerText = data.error;
+                document.getElementById('nicknameError').style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 </script>
 {% endblock %}
+
+
 
 

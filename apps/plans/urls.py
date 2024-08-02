@@ -10,6 +10,6 @@ urlpatterns=[
     path('complete/', complete_page, name='complete_page'),
     path('test/', test, name='test'),
     path('my_page/', my_page, name='my_page'),
-    
+    path('update_nickname/', update_nickname, name='update_nickname'),
     path('logout/', kakao_logout, name='kakao_logout'),
 ]

@@ -92,8 +92,29 @@ def complete_page(request):
 def test(request):
     return render(request, 'test.html')
 
+
 def my_page(request):
     return render(request, 'my_page.html')
+
+@login_required 
+@csrf_exempt
+def update_nickname(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        new_nickname = data.get('nickname')
+        if new_nickname and len(new_nickname) <= 5:
+            try:
+                user_profile = UserProfile.objects.get(user=request.user) 
+            except UserProfile.DoesNotExist:
+                return JsonResponse({'success': False, 'error': '사용자 프로필이 존재하지 않습니다.'})
+            user_profile.nickname = new_nickname  
+            user_profile.save()
+            return JsonResponse({'success': True, 'message': '닉네임이 성공적으로 변경되었습니다.'})
+        else:
+            return JsonResponse({'success': False, 'error': '닉네임은 5글자 이내로 작성해주세요.'})
+    return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
+
+
 
 
 
