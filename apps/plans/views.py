@@ -5,7 +5,7 @@ from .models import UserProfile, TravelGroup
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-
+from .forms import NicknameForm
 import requests
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
@@ -44,7 +44,16 @@ def kakao_logout(request):
 
 
 
-
+@login_required
+def set_nickname(request):
+    if request.method == 'POST':
+        form = NicknameForm(request.POST, instance=request.user.userprofile)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # 홈 페이지로 리다이렉트
+    else:
+        form = NicknameForm(instance=request.user.userprofile)
+    return render(request, 'set_nickname.html', {'form': form})
 
 # Create your views here.
 
