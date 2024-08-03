@@ -5,7 +5,6 @@ from .models import UserProfile, TravelGroup
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .forms import NicknameForm
 import requests
 from django.conf import settings
 from django.contrib.auth import logout as django_logout
@@ -44,17 +43,27 @@ def kakao_logout(request):
 
 
 @login_required
+@require_http_methods(["GET", "POST"])
 def set_nickname(request):
     if request.method == 'POST':
-        form = NicknameForm(request.POST, instance=request.user.userprofile)
-        if form.is_valid():
-            form.save()
-            return redirect('home')  # 홈 페이지로 리다이렉트
+        data = json.loads(request.body)
+        nickname = data.get('nickname')
+        if nickname and len(nickname) <= 5:
+            user_profile, created = UserProfile.objects.update_or_create(
+                user=request.user,
+                defaults={'nickname': nickname}
+            )
+            return JsonResponse({'success': True, 'message': '닉네임 저장 완료'})
+        else:
+            return JsonResponse({'success': False, 'error': '닉네임은 5글자 이내로 작성해주세요.'})
     else:
-        form = NicknameForm(instance=request.user.userprofile)
-    return render(request, 'set_nickname.html', {'form': form})
+        try:
+            current_nickname = request.user.userprofile.nickname
+        except UserProfile.DoesNotExist:
+            current_nickname = ""
+        return JsonResponse({'nickname': current_nickname})
 
-# Create your views here.
+# POST 요청으로 새 닉네임 설정, 기존 닉네임 수정// Get 요청으로 현재 설정된 닉네임 조회할 수 있음
 
 @login_required
 @require_http_methods(["GET", "POST"])
@@ -98,6 +107,15 @@ def travel_name_page(request):
         else:
             return JsonResponse({'success': False, 'error': '여행 이름은 15글자 이내로 작성해야 하며, 모든 날짜를 입력해야 합니다.'})
     return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
+
+@login_required
+@require_http_methods(["POST"])
+def delete_travel_group(request, travel_group_id):
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id, user_profile=request.user.userprofile)
+    travel_group.delete()
+    return JsonResponse({'success': True, 'message': '여행 모임이 삭제되었습니다.'})
+
+# 생성된 여행 모임 삭제 로직 추가
 
 def complete_page(request):
     return render(request, 'create_group.html', {'completed': True})
