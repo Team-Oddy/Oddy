@@ -1,40 +1,3 @@
-:root {
-    --pink01: #F4B4CF;
-    --pink02: #F29EC2;
-    --blue01: #ADCAEA;
-    --blue02: #7FABDA;
-    --gray01: #EBEBEB;
-    --gray02: #CECECE;
-    --gray03: #939292;
-    --gray04: #616161;
-    --white: #FFFFFF;
-    --black: #000000;
-
-    --text-style-pretendard-regular-14: 400 14px/normal 'Pretendard', sans-serif;
-    
-    --text-style-pretendard-semibold-16: 600 16px/normal 'Pretendard', sans-serif;
-    --text-style-pretendard-semibold-18: 600 18px/normal 'Pretendard', sans-serif;
-    --text-style-pretendard-semibold-20: 600 20px/normal 'Pretendard', sans-serif;
-    --text-style-pretendard-semibold-24: 600 24px/normal 'Pretendard', sans-serif;
-}
-
-/*base.html*/
-.container {
-    width: 393px; /* 모바일 화면 너비 유지 */
-    height: 100vh; /* 뷰포트 높이의 100%를 사용 */
-    position: fixed; /* fixed를 사용하여 스크롤에 영향받지 않음 */
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 가능 */
-}
-body {
-    margin: 0;
-    padding: 0;
-    background-color: skyblue;
-}
-
 /*create_group.html nickname*/
 .create_group-nickname-top, .create_group-travelName-top, .create_group-travelDate-top {
     display: flex;
@@ -64,27 +27,18 @@ body {
     background-color: transparent;
 }
 .create_group-nickname-top-content, .create_group-travelName-top-content, .create_group-travelDate-top-content{
-    width: 71px;
-    height: 17px;
     display: flex;
     flex-shrink: 0;
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
-    line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 63px;
-    left: 155px;
+    left: 153px;
     white-space: nowrap;
 }
 .create_group-nickname-comment, .create_group-travelName-comment, .create_group-travelDate-comment {
-    width: 260px;
-    height: 24px;
-    flex-shrink: 0;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
-    line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 141px;
     left: 34px;
@@ -95,12 +49,22 @@ body {
     height: 46px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1px solid var(--pink02);
+    border: 1.5px solid var(--pink02);
     position: absolute;
     top: 175px;
     left: 34px;
-    margin-top: 15px;
 }
+
+.create_group-nickname-input::placeholder,
+.create_group-travelName-input::placeholder
+{
+    position: static;
+    left: 44px;
+    top: 191px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--gray03);
+}
+
 .create_group-nickname-input-p, .create_group-travelName-p, .create_group-travelDate-p {
     width: 110px;
     height: 14px;
@@ -134,9 +98,23 @@ body {
     border-color: var(--gray02);
     background: var(--gray02);
     position: absolute;
-    bottom: 99px;
+    top: 705px;
     left: 34px;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    text-decoration: none; 
 }
+
+#submitButton span,
+#travelNameButton span,
+#travelDateButton span
+{
+    position: static;  
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+}
+
 .create_group-nickname-button.active, .create_group-travelName-button.active, .create_group-travelDate-button.active {
     background: var(--pink02);
     cursor: pointer;
@@ -185,30 +163,49 @@ body {
     height: 46px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1px solid var(--pink02);
+    border: 1.5px solid var(--pink02);
     position: absolute;
     top: 175px;
     left: 34px;
-    margin-top: 15px;
 }
 .create_group-travelDate-input-end {
     width: 152px;
     height: 46px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1px solid var(--pink02);
+    border: 1.5px solid var(--pink02);
     position: absolute;
     top: 175px;
     right: 34px;
-    margin-top: 15px;
 }
 .create_group-travelDate-input-center {
-    width: 4px;
-    height: 1px;
+    width: 8px;
+    height: 1.5px;
     background: var(--pink02);
     position: absolute;
-    top: 197px;
-    left: 195px;
+    top: 199px;
+    left: 193px;
+}
+
+#travelStartDate, #travelEndDate {
+    display: flex;
+    align-items: center; 
+}
+
+#travelStartDate::placeholder {
+    position: static;
+    left: 44px;
+    top: 191px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--gray03);
+}
+
+#travelEndDate::placeholder {
+    position: static;
+    left: 224px;
+    top: 191px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--gray03);
 }
 
 .create_group-joinCode {
