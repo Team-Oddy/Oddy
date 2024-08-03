@@ -27,14 +27,12 @@
     background-color: transparent;
 }
 .create_group-nickname-top-content, .create_group-travelName-top-content, .create_group-travelDate-top-content{
-    display: flex;
     flex-shrink: 0;
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
     top: 63px;
     left: 153px;
-    white-space: nowrap;
 }
 .create_group-nickname-comment, .create_group-travelName-comment, .create_group-travelDate-comment {
     font: var(--text-style-pretendard-semibold-18);
@@ -42,7 +40,6 @@
     position: absolute;
     top: 141px;
     left: 34px;
-    white-space: nowrap;
 }
 .create_group-nickname-input, .create_group-travelName-input {
     width: 325px;
@@ -72,7 +69,6 @@
     color: var(--gray03, #939292);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 191px;
     left: 44px;
@@ -84,7 +80,6 @@
     color: var(--gray03);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 191px;
     left: 328px;
@@ -127,7 +122,7 @@
     stroke-width: 1px;
     stroke: var(--pink02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 186px;
 }
 .create_group-travelName-top-circle2 {
@@ -136,7 +131,7 @@
     flex-shrink: 0;
     fill: var(--gray02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 202px;
 }
 .create_group-travelDate-top-circle1 {
@@ -145,8 +140,9 @@
     flex-shrink: 0;
     fill: var(--gray02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 186px;
+    stroke: none;
 }
 .create_group-travelDate-top-circle2 {
     width: 6px;
@@ -155,9 +151,10 @@
     stroke-width: 1px;
     stroke: var(--pink02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 202px;
 }
+
 .create_group-travelDate-input-start {
     width: 152px;
     height: 46px;
@@ -233,11 +230,9 @@
     color: var(--black);
     font: var(--text-style-pretendard-semibold-20);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 55px;
     left: 60px;
-    white-space: nowrap;
 }
 .create_group-joinCode-input {
     width: 235px;
@@ -260,18 +255,13 @@
 }
 
 .testResult-top p {
-    width: 71px;
-    height: 17px;
     display: flex;
     flex-shrink: 0;
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
-    line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 63px;
-    left: 155px;
-    white-space: nowrap;
+    left: 153px;
 }
 .testResult-svg {
     width: 122.262px;
@@ -389,22 +379,18 @@
     text-align: center;
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 275px;
     left: 99px;
 }
 .testResult-result-type {
-    height: 22px;
-    align-self: stretch;
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-20);
     line-height: normal;
-    letter-spacing: -0.4px;
+    left: 50%;  
+    transform: translateX(-50%);  
     position: absolute;
     top: 300px;
-    left: 86px;
-    margin-top: 15px;
 }
 .testResult-keywords1 {
     width: 73px;
@@ -416,7 +402,6 @@
     position: absolute;
     top: 333px;
     left: 113px;
-    margin-top: 17px;
 }
 .testResult-keyword1 {
     width: 44px;
@@ -425,11 +410,9 @@
     color: var(--black);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 2px;
     left: 9.5px;
-    white-space: nowrap;
     margin: 0;
     text-align: center;
 }
@@ -443,7 +426,6 @@
     position: absolute;
     top: 333px;
     left: 209px;
-    margin-top: 17px;
 }
 .testResult-keyword2 {
     width: 44px;
@@ -452,11 +434,9 @@
     color: var(--black);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 2px;
     left: 9.5px;
-    white-space: nowrap;
     margin: 0;
     text-align: center;
 }
@@ -465,24 +445,17 @@
     height: 30px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1px solid var(--pink02);
+    border: 1.5px solid var(--pink02);
     position: absolute;
     top: 400px;
     left: 34px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
 }
 .testResult-characteristics {
-    width: 290px;
-    height: 17px;
-    flex-shrink: 0;
     color: var(--gray04);
     font: var(--text-style-pretendard-regular-14);
-    line-height: normal;
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 7px;
-    left: 18px;
-    margin: 0;
-    text-align: center;
 }
 .testResult-advantages {
     display: flex;
@@ -490,7 +463,7 @@
     height: 95px;
     flex-shrink: 0;
     border-radius: 20px;
-    border: 1px solid var(--pink02);
+    border: 1.5px solid var(--pink02);
     position: absolute;
     top: 461px;
     left: 34px;
@@ -502,12 +475,10 @@
     color: var(--black);
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 38px;
     left: 31px;
     margin: 0;
-    white-space: nowrap;
 }
 .testResult-advantages-ul {
     width: 166px;
@@ -516,7 +487,6 @@
     color: var(--gray04);
     font: var(--text-style-pretendard-regular-14);
     line-height: 20px; /* 142.857% */
-    letter-spacing: -0.4px;
     position: absolute;
     top: 18px;
     left: 138px;
@@ -529,7 +499,7 @@
     height: 95px;
     flex-shrink: 0;
     border-radius: 20px;
-    border: 1px solid var(--pink02);
+    border: 1.5px solid var(--pink02);
     position: absolute;
     top: 577px;
     left: 34px;
@@ -541,12 +511,10 @@
     color: var(--black);
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 38px;
     left: 31px;
     margin: 0;
-    white-space: nowrap;
 }
 .testResult-disadvantages-ul {
     width: 166px;
@@ -555,7 +523,6 @@
     color: var(--gray04);
     font: var(--text-style-pretendard-regular-14);
     line-height: 20px; /* 142.857% */
-    letter-spacing: -0.4px;
     position: absolute;
     top: 27px;
     left: 138px;
@@ -567,28 +534,31 @@
     height: 48px;
     flex-shrink: 0;
     border-radius: 5px;
-    border: 0;
     background: var(--pink02);
     position: absolute;
-    bottom: 99px;
-    left: 34px;
     color: var(--black);
     text-align: center;
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    letter-spacing: -0.4px;
+    left: 34px;
+    top: 755px;
 }
 .testResult-restart {
-    width: 64px;
-    height: 17px;
-    flex-shrink: 0;
     color: var(--gray03);
-    text-align: center;
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
-    bottom: 172.5px;
-    left: 167px;
-    white-space: nowrap;
+    left: 165px;
+    top: 707px;
+}
+
+.testResult-restart::after {
+    content: ""; 
+    position: absolute;  
+    width: 61.008px;
+    height: 1px;
+    background-color: var(--gray03); 
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -1px;
 }
