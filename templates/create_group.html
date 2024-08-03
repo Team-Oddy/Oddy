@@ -21,8 +21,13 @@
 </div>
 
 <div id="optionsPage" class="create_group-page">
-    <button onclick="showPage('travelNamePage')">여행 모임 만들기</button><br>
-    <button onclick="showPage('joinGroupPage')">초대받은 여행 모임 입장하기</button>
+    <p>설레는 여행 계획하기, 오디와 함께해요!</p>
+    <img src="{% static 'image/Group 615.png' %}" alt="white cloud" width="178.37" height="175" class="create_group-white_cloud"> 
+    <img src="{% static 'image/Group 616.png' %}" alt="pink cloud" width="159" height="156" class="create_group-pink_cloud">    
+    <button class="create-travelgroup" onclick="showPage('travelNamePage')">
+        <span>여행 모임 만들기</span></button>
+    <button class="enter-invitedgroup" onclick="showPage('joinGroupPage')">
+        <span>초대받은 여행 모임 입장하기</span></button>
 </div>
 
 <div id="travelNamePage" class="create_group-page">
@@ -83,18 +88,24 @@
 </div>
 
 <div id="completePage" class="create_group-page">
-    <svg class="create_group-completePage-check" xmlns="http://www.w3.org/2000/svg" width="57" height="57" viewBox="0 0 57 57" fill="none">
-        <path d="M57 28.5C57 44.2401 44.2401 57 28.5 57C12.7599 57 0 44.2401 0 28.5C0 12.7599 12.7599 0 28.5 0C44.2401 0 57 12.7599 57 28.5Z" fill="#F29EC2"/>
-        <path d="M24.2163 38.1253L14.25 28.159L16.7416 25.6675L24.2163 33.1422L40.2584 17.1L42.75 19.5915L24.2163 38.1253Z" fill="white"/>
-    </svg>
-    <h2 class="create_group-completePage-h2">여행 모임 생성이 완료</h2><br>
-    <p>설레는 여행을 함께 준비해봐요!</p>
-    <a href="#">초대 링크 공유하기</a><br>
-    <button onclick="showPage('entryPage')">여행 모임 입장하기</button>
+    <img src="{% static 'image/Group 8.png' %}" alt="check icon" width="57" height="57" class="complete_page-check_icon"> 
+    <p class="complete_create_group">여행 모임 생성 완료</p>
+    <p class="together_trip">설레는 여행을 함께 준비해봐요!</p>
+    <img src="{% static 'image/Group 618.png' %}" alt="pink cloud" width="224" height="219.77" class="complete_page-pink_cloud"> 
+    <button class="share-link" onclick="showPage('entrypage')">
+    <span>초대 링크 공유하기</span></button>
+    <button class="enter-group" onclick="showPage('entryPage')">
+    <span>여행 모임 입장하기</span></button>
 </div>
 
 <div id="entryPage" class="create_group-page">
-    <a href="{% url 'plans:test' %}">여행 유형 테스트 진행하기</a>
+    <img src="{% static 'image/Group 687.png' %}" alt="cloud icon" width="192.46" height="112.36"> 
+    <p class="question">당신의 여행 유형이 궁금하지 않으신가요?</p>
+    <p class="findyourstyle">5개의 질문으로<br>나만의 여행 스타일을 발견해보세요!</p>
+    <a href="{}" class="skip-test"> <!-- url 추가 -->
+        <span>테스트 건너뛰기</span></a>
+    <a href="{% url 'plans:test' %}" class="test-start-btn">
+        <span>여행 유형 테스트 시작하기</span></a>
 </div>
 
 <div id="joinGroupPage" class="create_group-page">
