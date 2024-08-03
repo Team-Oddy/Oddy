@@ -122,3 +122,59 @@ def complete_page(request):
 
 def test(request):
     return render(request, 'test.html')
+
+#여행유형 저장(선아)
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+import json
+from .models import UserProfile
+
+@login_required
+@csrf_exempt
+def save_test_result(request): 
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        answers = data.get('answers')
+        user = request.user
+        nickname = get_object_or_404(UserProfile, user=request.user).nickname
+        # 여행 유형 결정 로직
+        travel_type = determine_travel_type(answers)
+        try:
+            user_profile = UserProfile.objects.get(id=user.id)
+            user_profile.travel_type = travel_type
+            user_profile.save()
+            return JsonResponse({'success': True, 'travel_type': travel_type, 'nickname': nickname})
+        except UserProfile.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'UserProfile matching query does not exist.'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+
+def determine_travel_type(answers):
+
+    count_a = answers.count('a')
+    count_b = answers.count('b')
+    count_c = answers.count('c')
+    print(count_a, count_b, count_c);
+
+    if count_a >= 3:
+        return '완벽주의 플래너형'
+    elif count_b >= 3:
+        return '자유로운 모험가형'
+    elif count_c >= 3:
+        if answers[3] == 'c) 충분한 휴식과 여유':
+            return '휴식 추구형'
+        elif answers[1] == 'c) 현지 맛집 탐방하기':
+            return '미식 탐험가형'
+        else:
+            return '휴식 추구형 / 미식 탐험가형'
+    elif count_c >= 3 and answers[2] == 'c) 현지 맛집 탐방하기':
+        return '미식 탐험가형'
+    elif count_c >= 3 and answers[4] == 'c) 휴양과 힐링이 가능한 리조트':
+        return '휴식 추구형'
+    else:
+        return '균형 잡힌 탐험가형'
+

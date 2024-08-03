@@ -6,6 +6,8 @@ from django.dispatch import receiver
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     nickname = models.CharField(max_length=5)
+    #여행 유형 저장하는 것
+    travel_type = models.CharField(max_length=30)
 
     def __str__(self):
         return self.nickname

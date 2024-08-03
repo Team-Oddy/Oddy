@@ -10,4 +10,5 @@ urlpatterns=[
     path('complete/', complete_page, name='complete_page'),
     path('test/', test, name='test'),
     path('logout/', kakao_logout, name='kakao_logout'),
+    path('save_test_result/', save_test_result, name='save_test_result'),
 ]
