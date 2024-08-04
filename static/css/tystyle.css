@@ -291,3 +291,8 @@
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
+/*a), b), c)숨기기*/
+.test-page button .hidden-prefix {
+    color: var(--gray01);
+}

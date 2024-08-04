@@ -9,37 +9,47 @@
     <span class="test-page-container-top">여행 유형 테스트</span>
 </div>
 
+<style>
+.next-link.active, .complete-btn.active {
+    background: var(--pink02);
+}
+.test-selected {
+    background-color: var(--white);
+    border: 1px solid var(--pink02);
+}
+</style>
+
 <script>
 let questions = [
     {
         question: '여행 계획을 세울 때 당신의 스타일은?',
-        answers: ['세세한 부분까지 꼼꼼히 계획한다',
-        '대략적인 일정만 잡고 즉흥적으로 결정한다',
-        '주요 명소 위주로 효율적으로 계획한다']
+        answers: ['a)세세한 부분까지 꼼꼼히 계획한다',
+        'b)대략적인 일정만 잡고 즉흥적으로 결정한다',
+        'c)주요 명소 위주로 효율적으로 계획한다']
     },
     {
         question: '새로운 여행지에서 가장 하고 싶은 것은?',
-        answers: ['유명 관광지 방문하기',
-        '현지 시장이나 골목 탐험하기',
-        '현지 맛집 탐방하기']
+        answers: ['a)유명 관광지 방문하기',
+        'b)현지 시장이나 골목 탐험하기',
+        'c)현지 맛집 탐방하기']
     },
     {
-        question: '여행 중 예상치 못한 상황이 발생했을 때 당신은?',
-        answers: ['당황하고 스트레스를 받는다',
-        '새로운 모험의 기회로 받아들인다',
-        '빠르게 대안을 찾아 해결한다']
+        question: '여행 중 예상치 못한 상황이 발생했을 때 당신의 반응은?',
+        answers: ['a)당황하고 스트레스를 받는다',
+        'b)새로운 모험의 기회로 받아들인다',
+        'c)빠르게 대안을 찾아 해결한다']
     },
     {
         question: '여행에서 가장 중요하게 생각하는 것은?',
-        answers: ['효율적인 일정 소화',
-        '새로운 문화 체험',
-        '충분한 휴식과 여유']
+        answers: ['a)효율적인 일정 소화',
+        'b)새로운 문화 체험',
+        'c)충분한 휴식과 여유']
     },
     {
         question: '이상적인 숙소는?',
-        answers: ['편안하고 안전한 호텔',
-        '현지 문화를 느낄 수 있는 게스트하우스',
-        '휴양과 힐링이 가능한 리조트']
+        answers: ['a)편안하고 안전한 호텔',
+        'b)현지 문화를 느낄 수 있는 게스트하우스',
+        'c)휴양과 힐링이 가능한 리조트']
     }
 ];
 
@@ -90,12 +100,25 @@ function createPage(index) {
     pageDiv.appendChild(question);
 
     questions[index].answers.forEach(answer => {
+        let prefix = answer.substring(0, 2); //a), b), c) 가져옴
+        let answerText = answer.substring(2); // 선택지 텍스트 추출
+
         let answerButton = document.createElement('button');
-        answerButton.textContent = answer;
+        
+        let prefixSpan = document.createElement('span');
+        prefixSpan.textContent = prefix;
+        prefixSpan.classList.add('hidden-prefix'); // 숨길 문자에 클래스명: 'hidden-prefix'
+        
+        let answerSpan = document.createElement('span');
+        answerSpan.textContent = answerText;
+
+        answerButton.appendChild(prefixSpan);
+        answerButton.appendChild(answerSpan);
         answerButton.onclick = (event) => selectAnswer(event.target, index, answer);
+        
         pageDiv.appendChild(answerButton);
         pageDiv.appendChild(document.createElement('br'));
-    });
+});
 
     let completeButton = document.createElement('button');
     completeButton.classList.add('complete-btn');
@@ -138,6 +161,10 @@ function selectAnswer(button, questionIndex, answer) {
     buttons.forEach(btn => btn.classList.remove('test-selected'));
     button.classList.add('test-selected');
     answers[questionIndex] = answer;
+
+    // 다음 버튼 색 바꾸기
+    let completeButton = button.parentNode.querySelector('.complete-btn');
+    completeButton.classList.add('active');
 }
 
 
@@ -179,19 +206,24 @@ function completeTest() {
             </ul>
         </div>
         <a class="testResult-restart" href="javascript:void(0)" onclick="restartTest()">다시 할래요</a>
-        <button class="testResult-button">오디 시작하기</button>
+        <button class="testResult-button" onclick="startOddy()">오디 시작하기</button>
     </div>
     `;
     document.getElementById('test-page-container').innerHTML = '';
     document.getElementById('test-page-container').appendChild(resultPage);
 }
 
-function restartTest() {
-    currentPage = 0;
-    answers = [];
-    showPage(currentPage);
+function startOddy() {
+    window.location.href = "{% url 'plans:create_group' %}#optionsPage";
 }
 
+function restartTest() {
+    document.getElementById('test-page-container').innerHTML = '';
+    answers = [];
+    currentPage = 0;
+    questions.forEach((question, index) => createPage(index));
+    showPage(currentPage);
+}
 //테스트 결과
 function determineTravelType(answers) {
     let travelTypes = {
@@ -357,8 +389,6 @@ function determineTravelType(answers) {
     };
 
     return travelTypes['e']; //현재는 질문에 대한 답변 선택결과와 상관없이 'a'유형(완벽주의 플래너형)이라고 나옴
-    
-    //알고리즘 만들어서 views.py에 추가하면 위의 부분 더 간단하게 바꿀 수 있을 것 같아요!^.^
 }
 
 document.addEventListener('DOMContentLoaded', () => {

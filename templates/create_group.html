@@ -17,7 +17,7 @@
     <p class="create_group-nickname-comment">오디에서 사용할 닉네임을 알려주세요!</p><br>
     <input class="create_group-nickname-input" type="text" id="nickname" placeholder="  닉네임을 입력하세요 0/5">
     <p id="nicknameError" class="create_group-error">닉네임은 5글자 이내로 작성해주세요.</p><br>
-    <button onclick="nextStep('nickname', 'optionsPage')" class="create_group-nickname-button" id="submitButton">
+    <button onclick="nextStep('nickname', 'entryPage')" class="create_group-nickname-button" id="submitButton">
         <span>다음</span>
     </button>
 </div>
@@ -96,9 +96,9 @@
     <p class="complete_create_group">여행 모임 생성 완료</p>
     <p class="together_trip">설레는 여행을 함께 준비해봐요!</p>
     <img src="{% static 'image/Group 618.png' %}" alt="pink cloud" width="224" height="219.77" class="complete_page-pink_cloud"> 
-    <button class="share-link" onclick="showPage('entrypage')">
+    <button class="share-link">
     <span>초대 링크 공유하기</span></button>
-    <button class="enter-group" onclick="showPage('entryPage')">
+    <button class="enter-group">
     <span>여행 모임 입장하기</span></button>
 </div>
 
@@ -106,7 +106,7 @@
     <img src="{% static 'image/Group 687.png' %}" alt="cloud icon" width="192.46" height="112.36"> 
     <p class="question">당신의 여행 유형이 궁금하지 않으신가요?</p>
     <p class="findyourstyle">5개의 질문으로<br>나만의 여행 스타일을 발견해보세요!</p>
-    <a href="{}" class="skip-test"> <!-- url 추가 -->
+    <a href="javascript:void(0)" onclick="showPage('optionsPage')" class="skip-test">
         <span>테스트 건너뛰기</span></a>
     <a href="{% url 'plans:test' %}" class="test-start-btn">
         <span>여행 유형 테스트 시작하기</span></a>
@@ -129,7 +129,7 @@
         <h2 class="create_group-joinCode-h2">초대 코드 입력하기</h2><br>
         <input class="create_group-joinCode-input" type="text" id="inviteCode" placeholder="초대 코드 6자리를 입력해주세요"><br>
         <p id="inviteCodeError" class="create_group-error">초대 코드는 6자리 숫자로 입력해주세요.</p><br>
-        <button class="create_group-joinCode-button" onclick="nextStep('inviteCode', 'joinCompletePage')">
+        <button class="create_group-joinCode-button">
             <span>완료</span></button><br>
     </div>
     </div>
@@ -191,9 +191,7 @@ function nextStep(inputId, nextPageId) {
     formData[inputId] = value;
 
     if (inputId === 'nickname') {
-        submitNickname();
-    } else if (nextPageId === 'travelDatePage') {
-        showPage(nextPageId);
+        showPage('entryPage');
     } else {
         showPage(nextPageId);
     }
@@ -209,9 +207,17 @@ function nextStepDates(startInputId, endInputId) {
     formData[startInputId] = startValue;
     formData[endInputId] = endValue;
 
+    showPage('completePage');
+
     // 여행 정보 저장
     submitTravelInfo();
 }
+
+window.addEventListener('load', function() {
+    if (window.location.hash) {
+        showPage(window.location.hash.substring(1));
+    }
+});
 
 // CSRF 토큰을 가져오는 함수
 function getCookie(name) {
@@ -242,7 +248,7 @@ function submitNickname() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showPage('optionsPage');
+            showPage('entryPage');
         } else {
             alert(data.error);
         }
