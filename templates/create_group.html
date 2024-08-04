@@ -17,7 +17,9 @@
     <p class="create_group-nickname-comment">오디에서 사용할 닉네임을 알려주세요!</p><br>
     <input class="create_group-nickname-input" type="text" id="nickname" placeholder="  닉네임을 입력하세요 0/5">
     <p id="nicknameError" class="create_group-error">닉네임은 5글자 이내로 작성해주세요.</p><br>
-    <button onclick="nextStep('nickname', 'optionsPage')" class="create_group-nickname-button" id="submitButton">다음</button><br>
+    <button onclick="nextStep('nickname', 'optionsPage')" class="create_group-nickname-button" id="submitButton">
+        <span>다음</span>
+    </button>
 </div>
 
 <div id="optionsPage" class="create_group-page">
@@ -47,9 +49,10 @@
     </div>
     <div class="create_group-travelName-bottom">
         <p class="create_group-travelName-comment">여행 이름을 알려주세요!</p><br>
-        <input class="create_group-travelName-input" type="text" id="travelName" placeholder="  여행 이름을 입력하세요                                       0/15  ">
+        <input class="create_group-travelName-input" type="text" id="travelName" placeholder="  여행 이름을 입력하세요 0/15">
         <p id="travelNameError" class="create_group-error">여행 이름은 15글자 이내로 작성해주세요.</p><br>
-        <button onclick="nextStep('travelName', 'travelDatePage')" class="create_group-travelName-button" id="travelNameButton">다음</button><br>
+        <button onclick="nextStep('travelName', 'travelDatePage')" class="create_group-travelName-button" id="travelNameButton">
+            <span>다음</span></button>
     </div>
 </div>
 
@@ -83,7 +86,8 @@
         <p class="create_group-travelDate-comment">여행 일정을 알려주세요!</p><br>
         <input type="text" id="travelStartDate" placeholder="  시작일" class="create_group-travelDate-input-start"><p class="create_group-travelDate-input-center"></p><input type="text" id="travelEndDate" placeholder="  종료일" class="create_group-travelDate-input-end"><br>
         <p id="travelDateError" class="create_group-error">여행 이름은 15글자 이내로 작성해주세요.</p><br>
-        <button onclick="nextStepDates('travelStartDate', 'travelEndDate')" class="create_group-travelDate-button" id="travelDateButton">완료</button><br>
+        <button onclick="nextStepDates('travelStartDate', 'travelEndDate')" class="create_group-travelDate-button" id="travelDateButton">
+        <span>완료</span></button>
     </div>
 </div>
 
