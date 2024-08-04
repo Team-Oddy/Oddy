@@ -228,6 +228,15 @@
     top: 16.49px;  
 }
 
+
+.test-page-container-top {
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--pink02);
+    position: absolute;
+    top: 63px;
+    left: 146px;
+}
+
 .test-page-number {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--gray03);
@@ -250,7 +259,8 @@
 
 .test-page {
     position: relative;
-    padding-top: 180px; /
+    padding-top: 180px; 
+    padding-left: 34px;
 }
 
 .test-page button:not(:last-child) {
@@ -264,8 +274,20 @@
     color: var(--gray04); 
 }
 
-
-
-
-
-
+.next-link, .complete-btn {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 0px;
+    border-color: var(--gray02);
+    background: var(--gray02);
+    position: absolute;
+    top: 705px;
+    left: 34px;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+}

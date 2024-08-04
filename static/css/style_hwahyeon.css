@@ -26,23 +26,25 @@
     border: 0;
     background-color: transparent;
 }
-.create_group-nickname-top-content, .create_group-travelName-top-content, .create_group-travelDate-top-content{
+.create_group-nickname-top-content, .create_group-travelName-top-content, .create_group-travelDate-top-content{width: 71px;
+    height: 17px;
     display: flex;
     flex-shrink: 0;
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
-    top: 63px;
-    left: 153px;
+    top: 63px;left: 155px;
     white-space: nowrap;
 }
+
+
+
 .create_group-nickname-comment, .create_group-travelName-comment, .create_group-travelDate-comment {
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
     position: absolute;
     top: 141px;
     left: 34px;
-    white-space: nowrap;
 }
 .create_group-nickname-input, .create_group-travelName-input {
     width: 325px;
@@ -72,7 +74,6 @@
     color: var(--gray03, #939292);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 191px;
     left: 44px;
@@ -84,7 +85,6 @@
     color: var(--gray03);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 191px;
     left: 328px;
@@ -127,7 +127,7 @@
     stroke-width: 1px;
     stroke: var(--pink02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 186px;
 }
 .create_group-travelName-top-circle2 {
@@ -136,7 +136,7 @@
     flex-shrink: 0;
     fill: var(--gray02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 202px;
 }
 .create_group-travelDate-top-circle1 {
@@ -145,8 +145,9 @@
     flex-shrink: 0;
     fill: var(--gray02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 186px;
+    stroke: none;
 }
 .create_group-travelDate-top-circle2 {
     width: 6px;
@@ -155,9 +156,10 @@
     stroke-width: 1px;
     stroke: var(--pink02);
     position: absolute;
-    top: 110px;
+    top: 95px;
     left: 202px;
 }
+
 .create_group-travelDate-input-start {
     width: 152px;
     height: 46px;
@@ -208,37 +210,40 @@
     color: var(--gray03);
 }
 
-.create_group-joinCode {
+.create_group-joinCode-container {
     width: 273px;
-    height: 200px;
+    height: 207px;
     flex-shrink: 0;
     border-radius: 30px;
     background: var(--pink01);
     position: absolute;
     top: 270px;
-    left: 60px;
+    left: 50%;
+    transform: translateX(-50%);
 }
+
 .create_group-joinCode-char {
     width: 46.827px;
     height: 45.943px;
     flex-shrink: 0;
     position: absolute;
     top: 19px;
-    left: 113px;
+    left: 50%;
+    transform: translateX(-50%);
 }
+
 .create_group-joinCode-h2 {
-    width: 141px;
-    height: 24px;
     flex-shrink: 0;
     color: var(--black);
     font: var(--text-style-pretendard-semibold-20);
-    line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
-    top: 55px;
-    left: 60px;
-    white-space: nowrap;
+    top: 76px; 
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%; 
 }
+
 .create_group-joinCode-input {
     width: 235px;
     height: 45px;
@@ -250,28 +255,33 @@
     top: 114px;
     left: 19px;
 }
-.create_group-joinCode-button {
+
+#inviteCode::placeholder {
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--gray03);
+    text-align: left;
+    padding-left: 10px; 
+}
+
+.create_group-joinCode-button span {
     position: absolute;
-    top: 170px;
-    left: 113px;
-    background: var(--white);
-    border: 0 solid var(--white);
-    border-radius: 5px;
+    bottom: 17px;  
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--gray04);
+    width: 100%;  
 }
 
 .testResult-top p {
-    width: 71px;
-    height: 17px;
     display: flex;
     flex-shrink: 0;
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
-    line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 63px;
-    left: 155px;
-    white-space: nowrap;
+    left: 153px;
 }
 .testResult-svg {
     width: 122.262px;
@@ -389,74 +399,45 @@
     text-align: center;
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
     top: 275px;
     left: 99px;
 }
 .testResult-result-type {
-    height: 22px;
-    align-self: stretch;
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-20);
     line-height: normal;
-    letter-spacing: -0.4px;
+    left: 50%;  
+    transform: translateX(-50%);  
     position: absolute;
     top: 300px;
-    left: 86px;
-    margin-top: 15px;
 }
+.testResult-keywords1, .testResult-keywords2 {
+    width: 69px;
+    height: 20px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    border: 1px solid var(--pink02);
+    background: var(--pink01);
+    position: absolute;
+    top: 333px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .testResult-keywords1 {
-    width: 73px;
-    height: 20px;
-    flex-shrink: 0;
-    border-radius: 20px;
-    border: 1px solid var(--pink02);
-    background: var(--pink01);
-    position: absolute;
-    top: 333px;
-    left: 113px;
-    margin-top: 17px;
+    left: 123px;
 }
-.testResult-keyword1 {
-    width: 44px;
-    height: 16px;
-    flex-shrink: 0;
-    color: var(--black);
-    font: var(--text-style-pretendard-regular-14);
-    line-height: normal;
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 2px;
-    left: 9.5px;
-    white-space: nowrap;
-    margin: 0;
-    text-align: center;
-}
+
 .testResult-keywords2 {
-    width: 73px;
-    height: 20px;
-    flex-shrink: 0;
-    border-radius: 20px;
-    border: 1px solid var(--pink02);
-    background: var(--pink01);
-    position: absolute;
-    top: 333px;
-    left: 209px;
-    margin-top: 17px;
+    left: 201px;
 }
-.testResult-keyword2 {
-    width: 44px;
-    height: 16px;
-    flex-shrink: 0;
+
+.testResult-keyword1, .testResult-keyword2 {
     color: var(--black);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 2px;
-    left: 9.5px;
-    white-space: nowrap;
     margin: 0;
     text-align: center;
 }
@@ -465,130 +446,99 @@
     height: 30px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1px solid var(--pink02);
+    border: 1.5px solid var(--pink02);
     position: absolute;
-    top: 400px;
+    top: 385px;
     left: 34px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
 }
 .testResult-characteristics {
-    width: 290px;
-    height: 17px;
-    flex-shrink: 0;
     color: var(--gray04);
     font: var(--text-style-pretendard-regular-14);
-    line-height: normal;
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 7px;
-    left: 18px;
-    margin: 0;
-    text-align: center;
 }
+.testResult-advantages, .testResult-disadvantages {
+    display: flex;
+    width: 325px;
+    height: 95px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    border: 1.5px solid var(--pink02);
+    position: absolute;
+    left: 34px;
+    padding: 15px;
+    box-sizing: border-box;
+    align-items: center;
+}
+
 .testResult-advantages {
-    display: flex;
-    width: 325px;
-    height: 95px;
-    flex-shrink: 0;
-    border-radius: 20px;
-    border: 1px solid var(--pink02);
-    position: absolute;
-    top: 461px;
-    left: 34px;
+    top: 445px;
 }
-.testResult-advantages-p {
-    width: 85px;
-    height: 18px;
-    flex-shrink: 0;
-    color: var(--black);
-    font: var(--text-style-pretendard-semibold-16);
-    line-height: normal;
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 38px;
-    left: 31px;
-    margin: 0;
-    white-space: nowrap;
-}
-.testResult-advantages-ul {
-    width: 166px;
-    height: 57px;
-    flex-shrink: 0;
-    color: var(--gray04);
-    font: var(--text-style-pretendard-regular-14);
-    line-height: 20px; /* 142.857% */
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 18px;
-    left: 138px;
-    margin: 0;
-    padding-left: 29px;
-}
+
 .testResult-disadvantages {
-    display: flex;
-    width: 325px;
-    height: 95px;
-    flex-shrink: 0;
-    border-radius: 20px;
-    border: 1px solid var(--pink02);
-    position: absolute;
-    top: 577px;
-    left: 34px;
+    top: 561px;
 }
-.testResult-disadvantages-p {
+
+.testResult-advantages-p, .testResult-disadvantages-p {
     width: 85px;
-    height: 18px;
     flex-shrink: 0;
     color: var(--black);
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 38px;
-    left: 31px;
     margin: 0;
-    white-space: nowrap;
 }
-.testResult-disadvantages-ul {
-    width: 166px;
-    height: 57px;
-    flex-shrink: 0;
+
+.testResult-advantages-ul, .testResult-disadvantages-ul {
+    flex-grow: 1;
     color: var(--gray04);
     font: var(--text-style-pretendard-regular-14);
-    line-height: 20px; /* 142.857% */
-    letter-spacing: -0.4px;
-    position: absolute;
-    top: 27px;
-    left: 138px;
     margin: 0;
-    padding-left: 29px;
+    padding-left: 25px;
+    list-style-type: disc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    height: 100%; 
+}
+
+.testResult-advantages-ul li, .testResult-disadvantages-ul li {
+    margin-bottom: 5px;
+}
+
+.testResult-advantages-ul li:last-child, .testResult-disadvantages-ul li:last-child {
+    margin-bottom: 0;
 }
 .testResult-button {
     width: 325px;
     height: 48px;
     flex-shrink: 0;
     border-radius: 5px;
-    border: 0;
     background: var(--pink02);
     position: absolute;
-    bottom: 99px;
-    left: 34px;
     color: var(--black);
     text-align: center;
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    letter-spacing: -0.4px;
+    left: 34px;
+    top: 755px;
 }
 .testResult-restart {
-    width: 64px;
-    height: 17px;
-    flex-shrink: 0;
     color: var(--gray03);
-    text-align: center;
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    letter-spacing: -0.4px;
     position: absolute;
-    bottom: 172.5px;
-    left: 167px;
-    white-space: nowrap;
+    left: 165px;
+    top: 707px;
+}
+
+.testResult-restart::after {
+    content: ""; 
+    position: absolute;  
+    width: 61.008px;
+    height: 1px;
+    background-color: var(--gray03); 
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -1px;
 }

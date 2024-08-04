@@ -114,6 +114,7 @@
 
 <div id="joinGroupPage" class="create_group-page">
     <div class="create_group-joinCode">
+        <div class="create_group-joinCode-container">
         <svg class="create_group-joinCode-char" xmlns="http://www.w3.org/2000/svg" width="47" height="46" viewBox="0 0 47 46" fill="none">
             <ellipse cx="21.2049" cy="10.3078" rx="10.6023" ry="10.3078" fill="white"/>
             <circle cx="10.6023" cy="20.9101" r="10.6023" fill="white"/>
@@ -128,7 +129,9 @@
         <h2 class="create_group-joinCode-h2">초대 코드 입력하기</h2><br>
         <input class="create_group-joinCode-input" type="text" id="inviteCode" placeholder="초대 코드 6자리를 입력해주세요"><br>
         <p id="inviteCodeError" class="create_group-error">초대 코드는 6자리 숫자로 입력해주세요.</p><br>
-        <button class="create_group-joinCode-button" onclick="nextStep('inviteCode', 'joinCompletePage')">완료</button><br>
+        <button class="create_group-joinCode-button" onclick="nextStep('inviteCode', 'joinCompletePage')">
+            <span>완료</span></button><br>
+    </div>
     </div>
 </div>
 
