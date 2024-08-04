@@ -64,6 +64,7 @@ function createPage(index) {
         prevLink.onclick = () => showPage(index - 1);
         nav.appendChild(prevLink);
     }
+
     let pageNumber = document.createElement('span');
     pageNumber.classList.add('test-page-number');
     pageNumber.textContent = `${index + 1} / ${totalPages}`;
@@ -154,7 +155,7 @@ function completeTest() {
         ${travelType.svg_tool1}
         ${travelType.svg_tool2}
         ${travelType.svg_tool3}
-        <p class="testResult-text">00의 여행 유형은</p>
+        <p class="testResult-text">00님의 여행 유형은</p>
         <strong class="testResult-result-type">${travelType.name}입니다!</strong>
         <div class="testResult-keywords1">
             <p class="testResult-keyword1">${travelType.keyword1}</p>
@@ -224,9 +225,9 @@ function determineTravelType(answers) {
             name: '완벽주의 플래너형',
             keyword1: '#효율적',
             keyword2: '#체계적',
-            characteristics: '주요 관광지를 빠짐없이 방문',
-            advantages: ['시간 관리 탁월', '예산 통제력 우수', '주요 명소 놓치지 않음'],
-            disadvantages: ['융통성 부족', '예상 밖 상황에 스트레스']
+            characteristics: '세세한 계획을 세우고 주요 관광지를 빠짐없이 방문해요',
+            advantages: ['시간 관리에 탁월해요', '예산 통제력이 우수해요', '주요 명소를 놓치지 않아요'],
+            disadvantages: ['융통성이 부족해요', '예상 밖 상황에 스트레스를 받아요']
         },
         'b': {
             className: 'free-planner',
@@ -252,9 +253,9 @@ function determineTravelType(answers) {
             name: '자유로운 모험가형',
             keyword1: '#즉흥적',
             keyword2: '#문화체험',
-            characteristics: '현지 문화에 깊이 몰입하며 새로운 경험을 추구',
-            advantages: ['독특한 경험 발견', '현지인과 쉽게 교류', '예상 밖 상황을 즐김'],
-            disadvantages: ['중요 일정 놓칠 수 있음', '안전 문제 발생 가능성']
+            characteristics: '현지 문화에 깊이 몰입하며 새로운 경험을 추구해요',
+            advantages: ['독특한 경험을 발견해요', '현지인과 쉽게 교류해요', '예상 밖 상황을 즐겨요'],
+            disadvantages: ['중요 일정을 놓칠 수 있어요', '안전 문제가 발생할 수 있어요']
         },
         'c': {
             className: 'rest',
@@ -326,9 +327,9 @@ function determineTravelType(answers) {
             name: '미식 탐험가형',
             keyword1: '#맛집투어',
             keyword2: '#현지음식',
-            characteristics: '현지 음식과 맛집 위주로 여행 일정을 구성',
-            advantages: ['음식으로 문화 이해', '독특한 맛집 발굴', '현지 시장 탐방 능숙'],
-            disadvantages: ['다른 관광 요소 소홀', '식비 초과 가능성']
+            characteristics: '현지 음식과 맛집 위주로 여행 일정을 구성해요',
+            advantages: ['음식으로 문화를 이해해요', '독특한 맛집을 발굴해요', '현지 시장 탐방이 능숙해요'],
+            disadvantages: ['다른 관광 요소를 놓칠 수 있어요', '식비 초과 가능성이 있어요']
         },
         'e': {
             className: 'explorer',
@@ -349,13 +350,13 @@ function determineTravelType(answers) {
             name: '균형잡힌 탐험가형',
             keyword1: '#다재다능',
             keyword2: '#융통성',
-            characteristics: '계획과 즉흥성의 균형을 맞추며 다양한 경험 추구',
-            advantages: ['다양한 여행 요소 체험', '상황에 따른 유연한 대처', '동행자와 조화로운 여행'],
-            disadvantages: ['우선순위 설정 어려움', '깊이 있는 경험 부족할 수 있음']
+            characteristics: '계획과 즉흥성의 균형을 맞추며 다양한 경험을 추구해요',
+            advantages: ['다양한 여행 요소 체험이 가능해요', '상황에 따른 대처가 가능해요', '친구와 조화롭게 여행할 수 있어요'],
+            disadvantages: ['우선순위 설정이 어려워요', '깊이 있는 경험이 부족할 수 있어요']
         },
     };
 
-    return travelTypes['c']; //현재는 질문에 대한 답변 선택결과와 상관없이 'a'유형(완벽주의 플래너형)이라고 나옴
+    return travelTypes['e']; //현재는 질문에 대한 답변 선택결과와 상관없이 'a'유형(완벽주의 플래너형)이라고 나옴
     
     //알고리즘 만들어서 views.py에 추가하면 위의 부분 더 간단하게 바꿀 수 있을 것 같아요!^.^
 }
