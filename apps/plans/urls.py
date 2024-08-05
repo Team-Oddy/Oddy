@@ -12,4 +12,5 @@ urlpatterns=[
     path('my_page/', my_page, name='my_page'),
     path('update_nickname/', update_nickname, name='update_nickname'),
     path('logout/', kakao_logout, name='kakao_logout'),
+    path('save_test_result/', save_test_result, name='save_test_result'),
 ]

@@ -105,8 +105,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 
-import my_settings
-DATABASES = my_settings.DATABASES
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',  # 또는 사용 중인 다른 데이터베이스 백엔드
+        'NAME': BASE_DIR / "db.sqlite3",  # 데이터베이스 파일 경로
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

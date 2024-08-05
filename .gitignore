@@ -1,2 +1,14 @@
 /venv/
 my_settings.py
+**/__pycache__/
+*.pyc
+# Ignore .pyc files
+*.pyc
+
+# Ignore all __pycache__ directories
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+
+*.sql
+*.dump
