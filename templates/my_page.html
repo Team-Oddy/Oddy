@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Oddy-my_page{% endblock %}
+
+{% block content %}
+<div id="profilePage">
+    <div>
+        <img src="#" alt="프로필 사진">
+        <p id="userName">{{ user_profile.nickname }}</p>
+    </div>
+
+    <div>
+        <a href="{% url 'plans:kakao_logout' %}">로그아웃</a><br>
+        <a href="javascript:void(0);" onclick="nicknameEdit()">닉네임 수정</a><br> <!-- 닉네임 수정 링크 -->
+        <a href="{% url 'plans:test' %}">여행 유형테스트 다시 하기</a><br>
+    </div>
+
+    <div>
+        <h2>진행 중인 여행 모임</h2>
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+        </ul>
+    </div>
+    <div>
+        <h2>종료된 여행 모임</h2>
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+        </ul>
+    </div>
+</div>
+
+<!--닉네임 수정-->
+<div id="nicknameEditPage" style="display:none;">
+    <h2>닉네임을 수정하세요!</h2><br>
+    <input type="text" id="nicknameInput" placeholder="닉네임을 입력하세요 0/5" value="{{ user_profile.nickname }}"><br>
+    <p id="nicknameError" style="color: red; display: none;">닉네임은 5글자 이내로 작성해주세요.</p><br>
+    <button onclick="submitNickname()">수정완료</button><br>
+    <button type="button" onclick="showProfilePage()">취소</button>
+</div>
+
+<script>
+    function nicknameEdit() {
+        document.getElementById('profilePage').style.display = 'none';
+        document.getElementById('nicknameEditPage').style.display = 'block';
+    }
+    
+    function showProfilePage() {
+        document.getElementById('profilePage').style.display = 'block';
+        document.getElementById('nicknameEditPage').style.display = 'none';
+    }
+
+    function submitNickname() {
+        const nickname = document.getElementById('nicknameInput').value;
+        if (nickname.length > 5) {
+            document.getElementById('nicknameError').style.display = 'block';
+            return;
+        }
+
+        fetch("{% url 'plans:update_nickname' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                nickname: nickname
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('userName').innerText = nickname;
+                showProfilePage();
+            } else {
+                document.getElementById('nicknameError').innerText = data.error;
+                document.getElementById('nicknameError').style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+{% endblock %}
+
+
+
+

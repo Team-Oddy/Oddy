@@ -1,3 +1,71 @@
+:root {
+    --pink01: #F4B4CF;
+    --pink02: #F29EC2;
+    --blue01: #ADCAEA;
+    --blue02: #7FABDA;
+    --gray01: #EBEBEB;
+    --gray02: #CECECE;
+    --gray03: #939292;
+    --gray04: #616161;
+    --white: #FFFFFF;
+    --black: #000000;
+
+    --text-style-pretendard-regular-14: 400 14px/normal 'Pretendard', sans-serif;
+    
+    --text-style-pretendard-semibold-16: 600 16px/normal 'Pretendard', sans-serif;
+    --text-style-pretendard-semibold-18: 600 18px/normal 'Pretendard', sans-serif;
+    --text-style-pretendard-semibold-20: 600 20px/normal 'Pretendard', sans-serif;
+    --text-style-pretendard-semibold-24: 600 24px/normal 'Pretendard', sans-serif;
+}
+
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+  
+  html, body {
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif; 
+    background-color: #ffffff; 
+    color: #000000; 
+    line-height: 1.5; 
+}
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+  
+  ul, ol {
+    list-style: none;
+}
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+}
+  
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+  
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
 .create_group-page {
     display: none;
 }
@@ -22,3 +90,24 @@
 .test-selected {
     background-color: lightblue;
 }
+
+.container {
+    width: 393px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    background-color: white;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    letter-spacing: -0.4px;
+  }

@@ -5,34 +5,58 @@
 
 {% block content %}
 
-<div id="test-page-container"></div>
+<div id="test-page-container">
+    <span class="test-page-container-top">여행 유형 테스트</span>
+</div>
+
+<style>
+.next-link.active, .complete-btn.active {
+    background: var(--pink02);
+}
+.test-selected {
+    background-color: var(--white);
+    border: 1px solid var(--pink02);
+}
+</style>
 
 <script>
 let questions = [
     {
-        question: '질문 1',
-        answers: ['답변 1-1', '답변 1-2', '답변 1-3']
+        question: '여행 계획을 세울 때 당신의 스타일은?',
+        answers: ['a)세세한 부분까지 꼼꼼히 계획한다',
+        'b)대략적인 일정만 잡고 즉흥적으로 결정한다',
+        'c)주요 명소 위주로 효율적으로 계획한다']
     },
     {
-        question: '질문 2',
-        answers: ['답변 2-1', '답변 2-2', '답변 2-3']
+        question: '새로운 여행지에서 가장 하고 싶은 것은?',
+        answers: ['a)유명 관광지 방문하기',
+        'b)현지 시장이나 골목 탐험하기',
+        'c)현지 맛집 탐방하기']
     },
     {
-        question: '질문 3',
-        answers: ['답변 3-1', '답변 3-2', '답변 3-3']
+        question: '여행 중 예상치 못한 상황이 발생했을 때 당신은?',
+        answers: ['a)당황하고 스트레스를 받는다',
+        'b)새로운 모험의 기회로 받아들인다',
+        'c)빠르게 대안을 찾아 해결한다']
     },
     {
-        question: '질문 4',
-        answers: ['답변 4-1', '답변 4-2', '답변 4-3']
+        question: '여행에서 가장 중요하게 생각하는 것은?',
+        answers: ['a)효율적인 일정 소화',
+        'b)새로운 문화 체험',
+        'c)충분한 휴식과 여유']
     },
     {
-        question: '질문 5',
-        answers: ['답변 5-1', '답변 5-2', '답변 5-3']
+        question: '이상적인 숙소는?',
+        answers: ['a)편안하고 안전한 호텔',
+        'b)현지 문화를 느낄 수 있는 게스트하우스',
+        'c)휴양과 힐링이 가능한 리조트']
     }
 ];
 
+let answers = [];
 let currentPage = 0;
 
+//페이지 생성, 답변 선택 함수+답변 선택하지 않고 다음 누르면 alert창 뜸
 function createPage(index) {
     let totalPages = questions.length;
     let pageContainer = document.getElementById('test-page-container');
@@ -40,25 +64,33 @@ function createPage(index) {
     let pageDiv = document.createElement('div');
     pageDiv.id = `test-page${index + 1}`;
     pageDiv.classList.add('test-page');
-    if (index === 0) pageDiv.classList.add('test-active');
+    if (index == 0) pageDiv.classList.add('test-active');
 
     let nav = document.createElement('h2');
     if (index > 0) {
         let prevLink = document.createElement('a');
-        prevLink.innerHTML = '&lt;';
+        //prevLink.innerHTML = '&lt;'; 
         prevLink.href = 'javascript:void(0)';
         prevLink.onclick = () => showPage(index - 1);
         nav.appendChild(prevLink);
     }
+
     let pageNumber = document.createElement('span');
     pageNumber.classList.add('test-page-number');
-    pageNumber.textContent = `${index + 1}/${totalPages}`;
+    pageNumber.textContent = `${index + 1} / ${totalPages}`;
     nav.appendChild(pageNumber);
     if (index < totalPages - 1) {
         let nextLink = document.createElement('a');
-        nextLink.innerHTML = '&gt;';
+        nextLink.classList.add('next-link');
+        nextLink.innerHTML = '다음';
         nextLink.href = 'javascript:void(0)';
-        nextLink.onclick = () => showPage(index + 1);
+        nextLink.onclick = () => {
+            if (validateAnswer(index)) {
+                showPage(index + 1);
+            } else {
+                alert("답변을 선택하세요.");
+            }
+        };
         nav.appendChild(nextLink);
     }
     pageDiv.appendChild(nav);
@@ -68,20 +100,42 @@ function createPage(index) {
     pageDiv.appendChild(question);
 
     questions[index].answers.forEach(answer => {
+        let prefix = answer.substring(0, 2); //a), b), c) 가져옴
+        let answerText = answer.substring(2); // 선택지 텍스트 추출
+
         let answerButton = document.createElement('button');
-        answerButton.textContent = answer;
-        answerButton.onclick = (event) => highlightButton(event.target);
+        
+        let prefixSpan = document.createElement('span');
+        prefixSpan.textContent = prefix;
+        prefixSpan.classList.add('hidden-prefix'); // 숨길 문자에 클래스명: 'hidden-prefix'
+        
+        let answerSpan = document.createElement('span');
+        answerSpan.textContent = answerText;
+
+        answerButton.appendChild(prefixSpan);
+        answerButton.appendChild(answerSpan);
+        answerButton.onclick = (event) => selectAnswer(event.target, index, answer);
+        
         pageDiv.appendChild(answerButton);
         pageDiv.appendChild(document.createElement('br'));
-    });
+});
 
     let completeButton = document.createElement('button');
+    completeButton.classList.add('complete-btn');
     completeButton.textContent = (index === totalPages - 1) ? '완료하기' : '다음';
     completeButton.onclick = () => {
         if (index === totalPages - 1) {
-            completeTest();
+            if (validateAnswer(index)) {
+                completeTest();
+            } else {
+                alert("답변을 선택하세요.");
+            }
         } else {
-            showPage(index + 1);
+            if (validateAnswer(index)) {
+                showPage(index + 1);
+            } else {
+                alert("답변을 선택하세요.");
+            }
         }
     };
     pageDiv.appendChild(completeButton);
@@ -89,28 +143,252 @@ function createPage(index) {
     pageContainer.appendChild(pageDiv);
 }
 
+//답변 선택 확인 함수
+function validateAnswer(index) {
+    return answers[index] !== undefined;
+}
+
+//페이지 전환
 function showPage(pageIndex) {
     currentPage = pageIndex;
     document.querySelectorAll('.test-page').forEach(page => page.classList.remove('test-active'));
     document.getElementById(`test-page${pageIndex + 1}`).classList.add('test-active');
 }
 
+//선택한 답변만 answers배열에 저장되게
+function selectAnswer(button, questionIndex, answer) {
+    let buttons = button.parentNode.querySelectorAll('button');
+    buttons.forEach(btn => btn.classList.remove('test-selected'));
+    button.classList.add('test-selected');
+    answers[questionIndex] = answer;
+
+    // 다음 버튼 색 바꾸기
+    let completeButton = button.parentNode.querySelector('.complete-btn');
+    completeButton.classList.add('active');
+}
+
+
 function completeTest() {
+    let travelType = determineTravelType(answers);
+
     let resultPage = document.createElement('div');
     resultPage.classList.add('test-page', 'test-active');
     resultPage.innerHTML = `
-        <h2>테스트 결과</h2>
-        <p>00님의 여행 유형은 ~이에요!</p>
-        <p>여행 모임 입장하기</p>
+    <div class="testResult-top">
+        <p>나의 여행 유형</p>
+    </div>
+    <div class="testResult-bottom">
+        ${travelType.svg}
+        ${travelType.svg_tool1}
+        ${travelType.svg_tool2}
+        ${travelType.svg_tool3}
+        <p class="testResult-text">00님의 여행 유형은</p>
+        <strong class="testResult-result-type">${travelType.name}입니다!</strong>
+        <div class="testResult-keywords1">
+            <p class="testResult-keyword1">${travelType.keyword1}</p>
+        </div>
+        <div class="testResult-keywords2">
+            <p class="testResult-keyword2">${travelType.keyword2}</p>
+        </div>
+        <div class="testResult-characteristics-box">
+            <p class="testResult-characteristics">${travelType.characteristics}</p>
+        </div>
+        <div class="testResult-advantages">
+            <p class="testResult-advantages-p">이런걸 잘해요</p>
+            <ul class="testResult-advantages-ul">
+                ${travelType.advantages.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+        <div class="testResult-disadvantages">
+            <p class="testResult-disadvantages-p">아쉬운 점은</p>
+            <ul class="testResult-disadvantages-ul">
+                ${travelType.disadvantages.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+        </div>
+        <a class="testResult-restart" href="javascript:void(0)" onclick="restartTest()">다시 할래요</a>
+        <button class="testResult-button" onclick="startOddy()">오디 시작하기</button>
+    </div>
     `;
     document.getElementById('test-page-container').innerHTML = '';
     document.getElementById('test-page-container').appendChild(resultPage);
 }
 
-function highlightButton(button) {
-    let buttons = button.parentNode.querySelectorAll('button');
-    buttons.forEach(btn => btn.classList.remove('test-selected'));
-    button.classList.add('test-selected');
+function startOddy() {
+    window.location.href = "{% url 'plans:create_group' %}#optionsPage";
+}
+
+function restartTest() {
+    document.getElementById('test-page-container').innerHTML = '';
+    answers = [];
+    currentPage = 0;
+    questions.forEach((question, index) => createPage(index));
+    showPage(currentPage);
+}
+//테스트 결과
+function determineTravelType(answers) {
+    let travelTypes = {
+        'a': {
+            className: 'perfect-planner',
+            svg: `<svg class="testResult-svg" xmlns="http://www.w3.org/2000/svg" width="123" height="121" viewBox="0 0 123 121" fill="none">
+                    <ellipse cx="55.9505" cy="27.2717" rx="27.6819" ry="26.913" fill="#F4B4CF"/>
+                    <circle cx="28.2683" cy="54.9537" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="95.1663" cy="44.9574" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="85.1707" cy="87.2493" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="46.7234" cy="92.6318" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="57.4886" cy="59.5673" r="27.6819" fill="#F4B4CF"/>
+                    <path d="M40.5718 48.8021C50.8603 64.9889 68.2117 56.296 71.3295 48.802" stroke="#525566" stroke-width="3.91092"/>
+                    <ellipse cx="63.0628" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                    <ellipse cx="50.7606" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                </svg>`,
+            svg_tool1: `<svg class="testResult-a-svg_tool1" xmlns="http://www.w3.org/2000/svg" width="37" height="37" viewBox="0 0 37 37" fill="none">
+                    <g clip-path="url(#clip0_5_691)">
+                    <path d="M14.0904 20.8054L21.3509 22.5749M15.27 15.9653L22.5305 17.7348M22.7952 11.3893L17.9545 10.2096C17.6337 10.1314 17.357 9.9289 17.1854 9.6467C17.0138 9.36451 16.9613 9.0257 17.0395 8.70482L17.3345 7.49436C17.4127 7.17348 17.6152 6.89681 17.8974 6.72521C18.1796 6.55361 18.5184 6.50114 18.8393 6.57935L23.68 7.7591C23.8389 7.79782 23.9886 7.86746 24.1205 7.96404C24.2525 8.06062 24.3642 8.18224 24.4491 8.32197C24.5341 8.4617 24.5907 8.6168 24.6157 8.7784C24.6408 8.94001 24.6337 9.10497 24.595 9.26385L24.3 10.4743C24.2218 10.7952 24.0193 11.0719 23.7371 11.2435C23.4549 11.4151 23.1161 11.4675 22.7952 11.3893Z" stroke="#939292" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M28.2245 10.1489C28.3834 10.1876 28.5331 10.2573 28.6651 10.3539C28.7971 10.4505 28.9088 10.5722 28.9938 10.712C29.0787 10.8518 29.1353 11.007 29.1603 11.1686C29.1853 11.3303 29.1781 11.4953 29.1393 11.6542L24.7156 29.8054C24.6374 30.1262 24.4349 30.4029 24.1527 30.5745C23.8705 30.7461 23.5317 30.7986 23.2108 30.7204L8.68993 27.1814C8.36905 27.1032 8.09237 26.9007 7.92078 26.6185C7.74918 26.3363 7.69671 25.9975 7.77491 25.6766L12.1986 7.52549C12.2373 7.36654 12.3069 7.21676 12.4035 7.08471C12.5 6.95267 12.6216 6.84094 12.7614 6.75591C12.9012 6.67089 13.0563 6.61423 13.2179 6.58917C13.3796 6.56412 13.5446 6.57116 13.7035 6.60989" stroke="#7FABDA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_5_691">
+                    <rect width="29.8919" height="29.8919" fill="white" transform="translate(7.62402) rotate(13.6969)"/>
+                    </clipPath>
+                    </defs>
+                </svg>`,
+            svg_tool2: `<svg class="testResult-a-svg_tool2" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <path d="M22.5485 26.8824L27.1461 21.466C27.299 21.2859 27.4149 21.0775 27.4872 20.8525C27.5595 20.6276 27.5868 20.3907 27.5676 20.1552C27.5483 19.9197 27.4828 19.6904 27.3749 19.4802C27.2669 19.27 27.1187 19.0832 26.9385 18.9303L11.9893 6.2447C11.8097 6.09108 11.6014 5.97468 11.3765 5.90228C11.1515 5.82987 10.9144 5.8029 10.679 5.82294L5.67145 6.2329C5.19597 6.27183 4.75543 6.49805 4.44674 6.86179C4.13805 7.22553 3.98649 7.697 4.02542 8.17248L4.43539 13.18C4.45392 13.4156 4.51909 13.6451 4.62712 13.8553C4.73514 14.0655 4.88387 14.2521 5.06465 14.4043L20.0128 27.09C20.1929 27.2429 20.4013 27.3588 20.6263 27.4311C20.8512 27.5034 21.0881 27.5307 21.3236 27.5115C21.5591 27.4922 21.7884 27.4267 21.9986 27.3188C22.2088 27.2108 22.3956 27.0626 22.5485 26.8824ZM11.227 7.95627L21.4934 16.6689L19.7764 18.6921L9.51111 9.9794L11.227 7.95627ZM9.03295 7.76252L6.08141 11.2404L5.81823 8.02571L9.03295 7.76252ZM6.62944 13.3738L8.34645 11.3505L18.6129 20.0632L16.8959 22.0864L6.62944 13.3738ZM18.2669 23.2499L22.8645 17.8324L25.7739 20.3015L21.1774 25.7189L18.2669 23.2499Z" fill="#939292"/>
+                </svg>`,
+            name: '완벽주의 플래너형',
+            keyword1: '#효율적',
+            keyword2: '#체계적',
+            characteristics: '세세한 계획을 세우고 주요 관광지를 빠짐없이 방문해요',
+            advantages: ['시간 관리에 탁월해요', '예산 통제력이 우수해요', '주요 명소를 놓치지 않아요'],
+            disadvantages: ['융통성이 부족해요', '예상 밖 상황에 스트레스를 받아요']
+        },
+        'b': {
+            className: 'free-planner',
+            svg: `<svg class="testResult-svg" xmlns="http://www.w3.org/2000/svg" width="123" height="121" viewBox="0 0 123 121" fill="none">
+                    <ellipse cx="55.9505" cy="27.2717" rx="27.6819" ry="26.913" fill="#F4B4CF"/>
+                    <circle cx="28.2683" cy="54.9537" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="95.1663" cy="44.9574" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="85.1707" cy="87.2493" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="46.7234" cy="92.6318" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="57.4886" cy="59.5673" r="27.6819" fill="#F4B4CF"/>
+                    <path d="M40.5718 48.8021C50.8603 64.9889 68.2117 56.296 71.3295 48.802" stroke="#525566" stroke-width="3.91092"/>
+                    <ellipse cx="63.0628" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                    <ellipse cx="50.7606" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                </svg>`,
+            svg_tool1: `<svg class="testResult-b-svg_tool1" xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 49 49" fill="none">
+                    <path d="M16.5124 38.9073L16.4311 35.0212C16.3555 31.4139 17.7161 27.9244 20.2134 25.3202C22.7108 22.7161 26.1403 21.2107 29.7476 21.1351C33.3549 21.0596 36.8445 22.4202 39.4487 24.9175C42.0528 27.4148 43.5583 30.8443 43.6338 34.4516L43.7152 38.3377L16.5124 38.9073ZM16.5124 38.9073L6.79719 39.1107L16.5124 38.9073ZM29.6667 17.2685L29.6857 17.2467L29.6667 17.2685Z" fill="#7FABDA"/>
+                    <path d="M16.5124 38.9073L16.4311 35.0212C16.3555 31.4139 17.7161 27.9244 20.2134 25.3202C22.7108 22.7161 26.1403 21.2107 29.7476 21.1351C33.3549 21.0596 36.8445 22.4202 39.4487 24.9175C42.0528 27.4148 43.5583 30.8443 43.6338 34.4516L43.7152 38.3377L16.5124 38.9073ZM16.5124 38.9073L6.79719 39.1107M29.6667 17.2685L29.6857 17.2467" stroke="#7FABDA" stroke-width="2.91521" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`,
+            svg_tool2: `<svg class="testResult-b-svg_tool2" xmlns="http://www.w3.org/2000/svg" width="30" height="31" viewBox="0 0 30 31" fill="none">
+                    <path d="M11.7111 22.65C17.4224 23.2937 22.5741 19.1858 23.2179 13.4745C23.8616 7.76316 19.7537 2.61153 14.0423 1.96776C8.33097 1.32398 3.17931 5.4319 2.53553 11.1432C1.89176 16.8546 5.99969 22.0062 11.7111 22.65Z" stroke="#939292" stroke-width="2.44862" stroke-linejoin="round"/>
+                    <path d="M17.8691 8.35152C17.4061 7.76076 16.8321 7.26898 16.1803 6.90443C15.5285 6.53989 14.8116 6.30977 14.0709 6.22729C13.3305 6.14281 12.5804 6.20758 11.8638 6.41788C11.1472 6.62818 10.4781 6.97986 9.8952 7.45272M20.9749 22.3682L26.2713 29.1075" stroke="#939292" stroke-width="2.44862" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`,
+            name: '자유로운 모험가형',
+            keyword1: '#즉흥적',
+            keyword2: '#문화체험',
+            characteristics: '현지 문화에 깊이 몰입하며 새로운 경험을 추구해요',
+            advantages: ['독특한 경험을 발견해요', '현지인과 쉽게 교류해요', '예상 밖 상황을 즐겨요'],
+            disadvantages: ['중요 일정을 놓칠 수 있어요', '안전 문제가 발생할 수 있어요']
+        },
+        'c': {
+            className: 'rest',
+            svg: `<svg class="testResult-svg" xmlns="http://www.w3.org/2000/svg" width="123" height="121" viewBox="0 0 123 121" fill="none">
+                    <ellipse cx="55.9505" cy="27.2717" rx="27.6819" ry="26.913" fill="#F4B4CF"/>
+                    <circle cx="28.2683" cy="54.9537" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="95.1663" cy="44.9574" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="85.1707" cy="87.2493" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="46.7234" cy="92.6318" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="57.4886" cy="59.5673" r="27.6819" fill="#F4B4CF"/>
+                    <path d="M40.5718 48.8021C50.8603 64.9889 68.2117 56.296 71.3295 48.802" stroke="#525566" stroke-width="3.91092"/>
+                    <ellipse cx="63.0628" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                    <ellipse cx="50.7606" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                </svg>`,
+            svg_tool1: `<svg class="testResult-c-svg_tool1" xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M23.4597 5.87973C23.7842 5.71807 24.14 5.62902 24.5024 5.61878C24.8648 5.60854 25.2251 5.67734 25.5582 5.82041C25.8913 5.96348 26.1893 6.17738 26.4314 6.44725C26.6735 6.71711 26.8539 7.03646 26.9601 7.3831L31.2773 21.4929C31.5986 22.5441 31.5642 23.6719 31.1793 24.7015C30.7944 25.731 30.0805 26.6048 29.1484 27.1874C28.2162 27.7699 27.118 28.0286 26.0238 27.9233C24.9297 27.818 23.9009 27.3547 23.0969 26.6051C22.293 25.8556 21.7588 24.8617 21.5772 23.7776C21.3957 22.6936 21.5769 21.5799 22.0928 20.6093C22.6086 19.6387 23.4303 18.8654 24.4305 18.4094C25.4306 17.9534 26.5532 17.8401 27.6243 18.0872L26.0336 12.8885L14.7052 18.5309L17.3178 27.0696C17.3397 27.1412 17.355 27.2123 17.3635 27.2828C17.73 28.1745 17.7914 29.1624 17.5379 30.0926C17.2844 31.0228 16.7304 31.8431 15.9621 32.4256C15.1939 33.0081 14.2545 33.3201 13.2904 33.3131C12.3263 33.306 11.3916 32.9803 10.6319 32.3866C9.87227 31.7929 9.3303 30.9646 9.09047 30.0308C8.85064 29.097 8.92641 28.1101 9.30599 27.2238C9.68556 26.3375 10.3476 25.6017 11.189 25.1309C12.0304 24.6602 13.0039 24.481 13.9577 24.6212L10.8568 14.4864C10.6838 13.9213 10.7169 13.3131 10.9502 12.7701C11.1835 12.2271 11.6019 11.7844 12.1309 11.5209L23.4597 5.87973ZM13.9649 16.1112L25.2933 10.4688L24.5727 8.11359L13.2443 13.756L13.9649 16.1112Z" fill="black"/>
+                </svg>`,
+            svg_tool2: `<svg class="testResult-c-svg_tool2" xmlns="http://www.w3.org/2000/svg" width="38" height="37" viewBox="0 0 38 37" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M30.3559 10.0477C30.7164 10.0852 31.0645 10.2009 31.3759 10.3865C31.6873 10.5722 31.9545 10.8235 32.159 11.1229C32.3635 11.4222 32.5003 11.7626 32.56 12.1202C32.6196 12.4778 32.6007 12.8441 32.5044 13.1936L28.5829 27.4185C28.2905 28.4781 27.6567 29.4116 26.7798 30.0742C25.9028 30.7369 24.8317 31.0917 23.7326 31.0836C22.6334 31.0755 21.5677 30.7049 20.7006 30.0294C19.8335 29.3539 19.2135 28.4112 18.9368 27.3474C18.6601 26.2836 18.7421 25.1583 19.1701 24.1459C19.5981 23.1334 20.3482 22.2905 21.3041 21.7479C22.26 21.2052 23.3682 20.9931 24.4569 21.1445C25.5456 21.2958 26.554 21.8021 27.3256 22.585L28.7704 17.3439L16.1828 16.0323L13.8096 24.6407C13.7897 24.7129 13.7645 24.781 13.7339 24.8451C13.5651 25.7943 13.0872 26.6611 12.3744 27.3104C11.6617 27.9597 10.7542 28.355 9.79342 28.4347C8.83259 28.5145 7.87237 28.2742 7.06236 27.7513C6.25235 27.2284 5.63805 26.4522 5.31515 25.5438C4.99225 24.6353 4.9789 23.6456 5.27717 22.7287C5.57544 21.8119 6.16859 21.0195 6.9642 20.4749C7.75981 19.9304 8.71319 19.6642 9.67582 19.718C10.6384 19.7718 11.5562 20.1425 12.2862 20.7723L15.103 10.555C15.26 9.98518 15.614 9.48957 16.1021 9.1563C16.5902 8.82304 17.1807 8.67372 17.7685 8.73493L30.3559 10.0477ZM16.8553 13.5929L29.4429 14.9045L30.0975 12.5301L17.5099 11.2185L16.8553 13.5929Z" fill="black"/>
+                </svg>`,
+            svg_tool3: `<svg class="testResult-c-svg_tool3" xmlns="http://www.w3.org/2000/svg" width="41" height="41" viewBox="0 0 41 41" fill="none">
+                    <g clip-path="url(#clip0_5_805)">
+                    <path d="M40.0914 13.7717C39.5245 13.1881 32.4548 12.5485 25.262 13.3592C23.8275 13.5202 23.7381 13.9294 20.3144 14.0636C16.8919 13.9305 16.8025 13.5213 15.3669 13.3592C8.17412 12.5485 1.10437 13.1892 0.537493 13.7717C0.255732 14.0636 0.255732 16.094 0.537493 16.3859C0.82149 16.6777 1.69473 17.0634 2.10619 18.4286C2.37118 19.3086 2.65965 24.9852 4.65657 26.6768C6.63337 28.3518 12.9998 28.0376 15.084 26.9698C17.9195 25.5185 18.3175 20.5016 18.7648 18.4286C18.9917 17.3787 20.064 17.2926 20.3133 17.2926C20.5627 17.2926 21.6349 17.3787 21.8619 18.4286C22.3103 20.5005 22.7083 25.5174 25.5427 26.9698C27.6279 28.0376 33.9933 28.3518 35.9701 26.6768C37.967 24.9852 38.2555 19.3086 38.5205 18.4286C38.9319 17.0645 39.8052 16.6777 40.0892 16.3859C40.3732 16.0951 40.3732 14.0636 40.0914 13.7717Z" fill="#31373D"/>
+                    <path d="M16.5648 17.9853C16.4552 19.3885 15.9823 23.5378 14.6003 24.7867C13.0618 26.1765 7.61217 26.5399 5.8903 24.8359C4.98687 23.9425 4.13823 20.3434 4.20979 17.2149C4.25228 15.3376 6.75235 14.9563 10.3169 14.9563C13.8366 14.9563 16.7605 15.4796 16.5648 17.9853ZM24.0639 17.9853C24.1735 19.3885 24.6464 23.5378 26.0284 24.7867C27.5669 26.1765 33.0165 26.5399 34.7384 24.8359C35.6418 23.9425 36.4905 20.3434 36.4189 17.2149C36.3764 15.3376 33.8763 14.9563 30.3118 14.9563C26.7932 14.9563 23.8682 15.4796 24.0639 17.9853Z" fill="#7FABDA"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_5_805">
+                    <rect width="40.2516" height="40.2516" fill="white" transform="translate(0.191895 0.431847)"/>
+                    </clipPath>
+                    </defs>
+                </svg>`,
+            name: '휴식 추구형',
+            keyword1: '#힐링',
+            keyword2: '#여유',
+            characteristics: '편안한 숙소에서 여유롭게 시간을 보내며 휴식해요',
+            advantages: ['충분한 휴식과 재충전이 가능해요', '스트레스 없는 여행을 추구해요', '여유로운 일정 진행이 가능해요'],
+            disadvantages: ['새로운 경험이 부족할 수 있어요', '현지 문화 체험 제한적이에요']
+        },
+        'd': {
+            className: 'eat',
+            svg: `<svg class="testResult-svg" xmlns="http://www.w3.org/2000/svg" width="123" height="121" viewBox="0 0 123 121" fill="none">
+                    <ellipse cx="55.9505" cy="27.2717" rx="27.6819" ry="26.913" fill="#F4B4CF"/>
+                    <circle cx="28.2683" cy="54.9537" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="95.1663" cy="44.9574" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="85.1707" cy="87.2493" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="46.7234" cy="92.6318" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="57.4886" cy="59.5673" r="27.6819" fill="#F4B4CF"/>
+                    <path d="M40.5718 48.8021C50.8603 64.9889 68.2117 56.296 71.3295 48.802" stroke="#525566" stroke-width="3.91092"/>
+                    <ellipse cx="63.0628" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                    <ellipse cx="50.7606" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                </svg>`,
+            svg_tool1: `<svg class="testResult-d-svg_tool1" xmlns="http://www.w3.org/2000/svg" width="52" height="51" viewBox="0 0 52 51" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M28.9665 24.7941L22.3677 40.129C22.144 40.6497 21.8127 41.1172 21.3956 41.5007C20.9784 41.8843 20.4848 42.1753 19.9472 42.3546C19.4097 42.5339 18.8402 42.5974 18.2763 42.541C17.7124 42.4846 17.1668 42.3096 16.6754 42.0274C16.1839 41.7452 15.7578 41.3623 15.4248 40.9037C15.0919 40.4451 14.8597 39.9213 14.7435 39.3666C14.6274 38.8119 14.6299 38.239 14.7509 37.6853C14.8719 37.1317 15.1086 36.6099 15.4456 36.1542L25.3631 22.7251C23.8288 20.8123 22.8064 17.5393 24.8375 13.9996C26.068 11.859 27.8455 10.2526 29.7102 9.36354C31.5245 8.4988 33.7144 8.1932 35.5108 9.22472C37.3068 10.2546 38.1472 12.3016 38.3145 14.3028C38.4866 16.3614 37.9957 18.7079 36.7652 20.8485C34.7329 24.3903 31.392 25.1551 28.9665 24.7941Z" fill="#939292"/>
+                </svg>`,
+            svg_tool2: `<svg class="testResult-d-svg_tool2" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.48918 13.1335C6.67818 13 6.89164 12.9051 7.11735 12.8542C7.34306 12.8032 7.57661 12.7973 7.80462 12.8367C8.03263 12.876 8.25065 12.96 8.44621 13.0836C8.64176 13.2073 8.81102 13.3684 8.94431 13.5575L13.0697 19.3997C13.6087 20.1643 14.3747 20.7398 15.259 21.0446C16.1434 21.3495 17.1013 21.3682 17.9969 21.0981L17.1573 19.9328L10.1089 12.1996C9.80386 11.853 9.64716 11.4005 9.67253 10.9395C9.69791 10.4785 9.90332 10.0459 10.2445 9.73493C10.5858 9.42393 11.0355 9.2594 11.4968 9.27675C11.9582 9.29411 12.3943 9.49198 12.7112 9.82775L19.7596 17.561L20.8439 18.5049C21.1955 17.6379 21.2652 16.6822 21.0431 15.7734C20.821 14.8646 20.3185 14.0488 19.6067 13.4416L14.1692 8.79364C13.8261 8.48683 13.6167 8.05787 13.586 7.59861C13.5553 7.13935 13.7056 6.68632 14.0048 6.33654C14.304 5.98677 14.7283 5.76805 15.1867 5.72724C15.6452 5.68643 16.1014 5.82676 16.4577 6.1182L21.8952 10.7662C23.3219 11.9862 24.2731 13.6701 24.5815 15.5218C24.89 17.3736 24.536 19.2748 23.5818 20.8915L35.0637 30.8977C35.5015 31.2788 35.8537 31.7481 36.0973 32.2749C36.3408 32.8018 36.4702 33.3741 36.4768 33.9545C36.4835 34.5349 36.3673 35.1101 36.1358 35.6423C35.9044 36.1746 35.563 36.6519 35.1341 37.0428C34.7051 37.4338 34.1983 37.7296 33.6469 37.9108C33.0955 38.092 32.5121 38.1545 31.9348 38.0943C31.3576 38.034 30.7996 37.8523 30.2975 37.5611C29.7955 37.2699 29.3607 36.8757 29.0218 36.4046L20.1201 24.0466C18.4221 24.8473 16.4963 25.0239 14.681 24.5456C12.8657 24.0672 11.277 22.9645 10.1941 21.431L6.06704 15.587C5.79799 15.2054 5.6915 14.7326 5.77099 14.2725C5.85048 13.8124 6.10769 13.4027 6.48918 13.1335Z" fill="#939292"/>
+                </svg>`,
+            svg_tool3: `<svg class="testResult-d-svg_tool3" xmlns="http://www.w3.org/2000/svg" width="44" height="43" viewBox="0 0 44 43" fill="none">
+                    <g clip-path="url(#clip0_5_859)">
+                    <path d="M29.2211 38.1344C29.676 38.09 30.097 37.8914 30.3915 37.5821C30.6861 37.2728 30.83 36.8783 30.7917 36.4853L30.0187 28.5577C29.9527 27.8805 30.4387 27.2542 31.1152 26.8935C32.5161 26.1496 33.5825 25.0082 34.1264 23.6707C34.6703 22.3332 34.6565 20.8856 34.0876 19.5834C33.5187 18.2811 32.4312 17.2079 31.0171 16.5532C29.6029 15.8985 27.953 15.7043 26.3585 16.005C25.5663 14.7392 24.3566 13.713 22.8789 13.0531C21.4011 12.3932 19.7202 12.1286 18.0439 12.2921C16.3676 12.4555 14.7695 13.0398 13.447 13.9728C12.1246 14.9057 11.1359 16.1463 10.6032 17.5413C8.98146 17.5553 7.40126 18.0649 6.1412 18.9803C4.88114 19.8958 4.02213 21.1583 3.71564 22.5452C3.40914 23.9321 3.67483 25.3544 4.46587 26.5613C5.25691 27.7682 6.52249 28.6822 8.03949 29.1421C8.77302 29.3668 9.37093 29.8874 9.43682 30.5631L10.21 38.4923C10.2483 38.8853 10.4658 39.2445 10.8145 39.4911C11.1633 39.7376 11.6147 39.8512 12.0696 39.8068L29.2211 38.1344ZM9.77652 34.0468L30.3582 32.0399L9.77652 34.0468Z" fill="white"/>
+                    <path d="M9.77652 34.0468L30.3582 32.0399M29.2211 38.1344C29.676 38.09 30.097 37.8914 30.3915 37.5821C30.6861 37.2728 30.83 36.8783 30.7917 36.4853L30.0187 28.5576C29.9527 27.8805 30.4387 27.2542 31.1152 26.8935C32.5161 26.1496 33.5825 25.0082 34.1264 23.6707C34.6703 22.3332 34.6565 20.8856 34.0876 19.5834C33.5187 18.2811 32.4312 17.2079 31.0171 16.5532C29.6029 15.8985 27.953 15.7043 26.3585 16.005C25.5663 14.7392 24.3566 13.713 22.8789 13.0531C21.4011 12.3932 19.7202 12.1286 18.0439 12.2921C16.3676 12.4555 14.7695 13.0398 13.447 13.9728C12.1246 14.9057 11.1359 16.1463 10.6032 17.5413C8.98146 17.5553 7.40126 18.0649 6.1412 18.9803C4.88114 19.8958 4.02213 21.1583 3.71564 22.5452C3.40914 23.9321 3.67483 25.3544 4.46587 26.5613C5.25691 27.7682 6.52249 28.6822 8.03949 29.1421C8.77302 29.3668 9.37093 29.8874 9.43682 30.5631L10.21 38.4923C10.2483 38.8853 10.4658 39.2445 10.8145 39.4911C11.1633 39.7376 11.6147 39.8512 12.0696 39.8068L29.2211 38.1344Z" stroke="#F29EC2" stroke-width="2.97767" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_5_859">
+                    <rect width="39.2076" height="39.2076" fill="white" transform="translate(0.411621 3.80505) rotate(-5.56938)"/>
+                    </clipPath>
+                    </defs>
+                </svg>`,
+            name: '미식 탐험가형',
+            keyword1: '#맛집투어',
+            keyword2: '#현지음식',
+            characteristics: '현지 음식과 맛집 위주로 여행 일정을 구성해요',
+            advantages: ['음식으로 문화를 이해해요', '독특한 맛집을 발굴해요', '현지 시장 탐방이 능숙해요'],
+            disadvantages: ['다른 관광 요소를 놓칠 수 있어요', '식비 초과 가능성이 있어요']
+        },
+        'e': {
+            className: 'explorer',
+            svg: `<svg class="testResult-svg" xmlns="http://www.w3.org/2000/svg" width="123" height="121" viewBox="0 0 123 121" fill="none">
+                    <ellipse cx="55.9505" cy="27.2717" rx="27.6819" ry="26.913" fill="#F4B4CF"/>
+                    <circle cx="28.2683" cy="54.9537" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="95.1663" cy="44.9574" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="85.1707" cy="87.2493" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="46.7234" cy="92.6318" r="27.6819" fill="#F4B4CF"/>
+                    <circle cx="57.4886" cy="59.5673" r="27.6819" fill="#F4B4CF"/>
+                    <path d="M40.5718 48.8021C50.8603 64.9889 68.2117 56.296 71.3295 48.802" stroke="#525566" stroke-width="3.91092"/>
+                    <ellipse cx="63.0628" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                    <ellipse cx="50.7606" cy="38.0368" rx="4.03695" ry="5.3826" fill="#525566"/>
+                </svg>`,
+            svg_tool1: `<svg class="testResult-e-svg_tool1" xmlns="http://www.w3.org/2000/svg" width="61" height="60" viewBox="0 0 61 60" fill="none">
+                    <path d="M18.2043 54.9272V52.4535C16.8438 52.4535 15.6794 51.9695 14.7114 51.0014C13.7433 50.0334 13.2585 48.8682 13.2568 47.506V20.2949C13.2568 18.9344 13.7417 17.7701 14.7114 16.802C15.6811 15.8339 16.8454 15.3491 18.2043 15.3474H23.1518V7.92622C23.1518 7.22533 23.3893 6.63823 23.8642 6.16492C24.3392 5.69161 24.9263 5.45413 25.6255 5.45248H35.5205C36.2214 5.45248 36.8093 5.68996 37.2843 6.16492C37.7592 6.63988 37.9959 7.22698 37.9942 7.92622V15.3474H42.9417C44.3022 15.3474 45.4674 15.8323 46.4371 16.802C47.4068 17.7717 47.8908 18.936 47.8892 20.2949V47.506C47.8892 48.8666 47.4051 50.0317 46.4371 51.0014C45.469 51.9711 44.3039 52.4552 42.9417 52.4535V54.9272H37.9942V52.4535H23.1518V54.9272H18.2043ZM28.0993 15.3474H33.0467V10.4H28.0993V15.3474ZM30.573 30.1899C32.7581 30.1899 34.8922 29.912 36.975 29.3562C39.0579 28.8004 41.0468 27.9652 42.9417 26.8503V20.2949H18.2043V26.8503C20.1008 27.9635 22.0906 28.7988 24.1734 29.3562C26.2563 29.9136 28.3895 30.1915 30.573 30.1899ZM28.0993 37.6111V35.0137C26.3676 34.8075 24.6773 34.4983 23.0281 34.086C21.3789 33.6737 19.771 33.1171 18.2043 32.4162V47.506H42.9417V32.4162C41.375 33.1171 39.7671 33.6737 38.1179 34.086C36.4687 34.4983 34.7784 34.8075 33.0467 35.0137V37.6111H28.0993Z" fill="#939292"/>
+                </svg>`,
+            name: '균형잡힌 탐험가형',
+            keyword1: '#다재다능',
+            keyword2: '#융통성',
+            characteristics: '계획과 즉흥성의 균형을 맞추며 다양한 경험을 추구해요',
+            advantages: ['다양한 여행 요소 체험이 가능해요', '상황에 따른 대처가 가능해요', '친구와 조화롭게 여행할 수 있어요'],
+            disadvantages: ['우선순위 설정이 어려워요', '깊이 있는 경험이 부족할 수 있어요']
+        },
+    };
+
+    return travelTypes['e']; //현재는 질문에 대한 답변 선택결과와 상관없이 'a'유형(완벽주의 플래너형)이라고 나옴
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -118,96 +396,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
 {% endblock %}
-
-
-
-
-
-
-
-{% comment %}
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Oddy-test{% endblock %}
-
-{% block content %}
-
-<div id="page1" class="page active">
-    <h2>
-        <button onclick="showPage('page2')">></button>
-        <span class="page-number">1/5</span>
-    </h2>
-    <h3>질문</h3>
-    <button onclick="showPage('page2')">답변 1</button><br>
-    <button onclick="showPage('page2')">답변 2</button><br>
-    <button onclick="showPage('page2')">답변 3</button><br>
-    <button onclick="completeTest()">완료</button>
-</div>
-
-<div id="page2" class="page">
-    <h2>
-        <button onclick="showPage('page1')"><</button>
-        <span class="page-number">2/5</span>
-        <button onclick="showPage('page3')">></button>
-    </h2>
-    <h3>질문</h3>
-    <button onclick="showPage('page3')">답변 1</button><br>
-    <button onclick="showPage('page3')">답변 2</button><br>
-    <button onclick="showPage('page3')">답변 3</button><br>
-    <button onclick="completeTest()">완료</button>
-</div>
-
-<div id="page3" class="page">
-    <h2>
-        <button onclick="showPage('page2')"><</button>
-        <span class="page-number">3/5</span>
-        <button onclick="showPage('page4')">></button>
-    </h2>
-    <h3>질문</h3>
-    <button onclick="showPage('page4')">답변 1</button><br>
-    <button onclick="showPage('page4')">답변 2</button><br>
-    <button onclick="showPage('page4')">답변 3</button><br>
-    <button onclick="completeTest()">완료</button>
-</div>
-
-<div id="page4" class="page">
-    <h2>
-        <button onclick="showPage('page3')"><</button>
-        <span class="page-number">4/5</span>
-        <button onclick="showPage('page5')">></button>
-    </h2>
-    <h3>질문</h3>
-    <button onclick="showPage('page5')">답변 1</button><br>
-    <button onclick="showPage('page5')">답변 2</button><br>
-    <button onclick="showPage('page5')">답변 3</button><br>
-    <button onclick="completeTest()">완료</button>
-</div>
-
-<div id="page5" class="page">
-    <h2>
-        <button onclick="showPage('page4')"><</button>
-        <span class="page-number">5/5</span>
-    </h2>
-    <h3>질문</h3>
-    <button onclick="showPage('page5')">답변 1</button><br>
-    <button onclick="showPage('page5')">답변 2</button><br>
-    <button onclick="showPage('page5')">답변 3</button><br>
-    <button onclick="completeTest()">완료</button>
-</div>
-
-<script>
-function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-}
-
-function completeTest() {
-    alert('테스트가 완료되었습니다!');
-}
-</script>
-{%  endcomment%}
-
-
