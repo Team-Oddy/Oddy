@@ -51,10 +51,15 @@
     height: 46px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1.5px solid var(--pink02);
+    border: 1.5px solid var(--gray03);
     position: absolute;
     top: 175px;
     left: 34px;
+}
+
+.create_group-nickname-input:focus-visible, .create_group-travelName-input:focus-visible {
+    border: 1.5px solid var(--pink02);
+    outline: none;
 }
 
 .create_group-nickname-input::placeholder,
@@ -165,7 +170,7 @@
     height: 46px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1.5px solid var(--pink02);
+    border: 1.5px solid var(--gray03);
     position: absolute;
     top: 175px;
     left: 34px;
@@ -175,11 +180,17 @@
     height: 46px;
     flex-shrink: 0;
     border-radius: 10px;
-    border: 1.5px solid var(--pink02);
+    border: 1.5px solid var(--gray03);
     position: absolute;
     top: 175px;
     right: 34px;
 }
+
+.create_group-travelDate-input-start:focus-visible, .create_group-travelDate-input-end:focus-visible {
+    border: 1.5px solid var(--pink02);
+    outline: none;
+}
+
 .create_group-travelDate-input-center {
     width: 8px;
     height: 1.5px;
@@ -327,32 +338,16 @@
     top: 102.55px;
     left: 170.57px;
 }
-.testResult-c-svg_tool2 {
-    width: 29.96px;
-    height: 29.96px;
-    transform: rotate(-39.012deg);
-    flex-shrink: 0;
+
+.create_group-pink_cloud-c {
     position: absolute;
-    top: 154.1px;
-    left: 135px;
+    top: 132px;
+    left: 50%;
+    transform: translateX(-50%);
 }
-.testResult-c-svg_tool1 {
-    width: 29.96px;
-    height: 29.96px;
-    transform: rotate(34.413deg);
-    flex-shrink: 0;
-    position: absolute;
-    top: 136.99px;
-    left: 227.99px;
-}
-.testResult-c-svg_tool3 {
-    width: 40.252px;
-    height: 40.252px;
-    flex-shrink: 0;
-    position: absolute;
-    top: 151.43px;
-    left: 180.19px;
-}
+
+
+
 .testResult-d-svg_tool2 {
     width: 42.258px;
     height: 42.258px;

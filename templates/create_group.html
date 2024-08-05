@@ -15,8 +15,9 @@
     </div>
     <div class="create_group-nickname-bottom"></div>
     <p class="create_group-nickname-comment">오디에서 사용할 닉네임을 알려주세요!</p><br>
-    <input class="create_group-nickname-input" type="text" id="nickname" placeholder="  닉네임을 입력하세요 0/5">
+    <input class="create_group-nickname-input" type="text" id="nickname" placeholder="  닉네임을 입력하세요">
     <p id="nicknameError" class="create_group-error">닉네임은 5글자 이내로 작성해주세요.</p><br>
+    <p id="nicknameLength" class="create_group-nickname-length">0/5</p>
     <button onclick="nextStep('nickname', 'entryPage')" class="create_group-nickname-button" id="submitButton">
         <span>다음</span>
     </button>
@@ -143,6 +144,10 @@
 let formData = {};
 
 document.getElementById('nickname').addEventListener('input', function() {
+    let input = this.value;
+    let length = input.length;
+    document.getElementById('nicknameLength').textContent = `${length}/5`;
+    
     let button = document.getElementById('submitButton');
     if (this.value.trim() !== "") {
         button.classList.add('active');
