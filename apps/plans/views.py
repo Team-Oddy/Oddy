@@ -97,18 +97,19 @@ def travel_name_page(request):
             try:
                 user_profile = request.user.userprofile
                 travel_group = TravelGroup(
-                    user_profile=user_profile,
                     travel_name=travel_name,
                     start_date=start_date,
-                    end_date=end_date
+                    end_date=end_date,
                 )
                 travel_group.save()
-                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료', 'invite_code': travel_group.invite_code})
+                travel_group.user_profiles.add(user_profile)  # Many-to-Many 필드에 사용자 프로필 추가
+                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료'})
             except UserProfile.DoesNotExist:
                 return JsonResponse({'success': False, 'error': '사용자 프로필이 존재하지 않습니다.'})
         else:
             return JsonResponse({'success': False, 'error': '여행 이름은 15글자 이내로 작성해야 하며, 모든 날짜를 입력해야 합니다.'})
     return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
+
 
 def generate_invite_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
@@ -128,8 +129,12 @@ def complete_page(request):
 def test(request):
     return render(request, 'test.html')
 
+@login_required
 def my_page(request):
-    return render(request, 'my_page.html')
+    user_profile = request.user.userprofile
+    travel_groups = user_profile.travel_groups.all()
+    return render(request, 'my_page.html', {'user_profile': user_profile, 'travel_groups': travel_groups})
+
 
 @login_required 
 @csrf_exempt
@@ -194,3 +199,31 @@ def determine_travel_type(answers):
             return '미식 탐험가형'
     else:
         return '균형 잡힌 탐험가형'
+    
+#초대코드 처리로직
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import InviteCodeForm
+from .models import TravelGroup
+
+@login_required
+def join_group_page(request):
+    if request.method == 'POST':
+        form = InviteCodeForm(request.POST)
+        if form.is_valid():
+            invite_code = form.cleaned_data['invite_code']
+            try:
+                travel_group = TravelGroup.objects.get(invite_code=invite_code)
+                user_profile = request.user.userprofile
+                if travel_group.user_profiles.filter(id=user_profile.id).exists():
+                    form.add_error('invite_code', 'You are already in this group.')
+                else:
+                    travel_group.user_profiles.add(user_profile)
+                    travel_group.save()
+                    return redirect('plans:my_page')
+            except TravelGroup.DoesNotExist:
+                form.add_error('invite_code', 'Invalid invite code.')
+    else:
+        form = InviteCodeForm()
+    
+    return render(request, 'join_group.html', {'form': form})

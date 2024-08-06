@@ -14,15 +14,15 @@ class UserProfile(models.Model):
         return self.nickname if self.nickname else self.user.username  # 닉네임이 없으면 카카오톡이름을 반환
 
 class TravelGroup(models.Model):
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='travel_groups')
+    user_profiles = models.ManyToManyField(UserProfile, related_name='travel_groups')
     travel_name = models.CharField(max_length=15)
     start_date = models.DateField()
     end_date = models.DateField()
-    invite_code = models.CharField(max_length=6, null=True)
+    invite_code = models.CharField(max_length=6, unique=True, null=True)
 
     def __str__(self):
         return self.travel_name
-    
+
     def save(self, *args, **kwargs):
         if not self.invite_code:
             self.invite_code = self.generate_invite_code()
@@ -33,7 +33,7 @@ class TravelGroup(models.Model):
             code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             if not TravelGroup.objects.filter(invite_code=code).exists():
                 return code
-
+            
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
