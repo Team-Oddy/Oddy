@@ -186,16 +186,97 @@ function completeTest() {
         }
         */
         if (data.success) {
-            console.log(determineTravelType(data.travel_type));//받은 데이터의 traveType을 인자값으로 해당 함수에 전달, 함수의 반환 값을 콘솔에 출력
+            //받은 데이터의 traveType을 인자값으로 해당 함수에 전달, 함수의 반환 값을 콘솔에 출력
+
+            let travelTypes = {
+                '완벽주의 플래너형': {
+                    className: 'perfect-planner',
+                    svg: `<img src="{% static 'image/Group 686 (1).png' %}" alt="pink cloud" width="136.67" height="121.31" class="create_group-pink_cloud-a">`,
+                    name: '완벽주의 플래너형',
+                    keyword1: '#효율적',
+                    keyword2: '#체계적',
+                    characteristics: '세세한 계획을 세우고 주요 관광지를 빠짐없이 방문해요',
+                    advantages: ['시간 관리에 탁월해요', '예산 통제력이 우수해요', '주요 명소를 놓치지 않아요'],
+                    disadvantages: ['융통성이 부족해요', '예상 밖 상황에 스트레스를 받아요']
+                },
+                '자유로운 모험가형': {
+                    className: 'free-planner',
+                    svg: `<img src="{% static 'image/Group 686 (2).png' %}" alt="pink cloud" width="135.02" height="151.29" class="create_group-pink_cloud-b">`,
+                    name: '자유로운 모험가형',
+                    keyword1: '#즉흥적',
+                    keyword2: '#문화체험',
+                    characteristics: '현지 문화에 깊이 몰입하며 새로운 경험을 추구해요',
+                    advantages: ['독특한 경험을 발견해요', '현지인과 쉽게 교류해요', '예상 밖 상황을 즐겨요'],
+                    disadvantages: ['중요 일정을 놓칠 수 있어요', '안전 문제가 발생할 수 있어요']
+                },
+                '휴식 추구형': {
+                    className: 'rest',
+                    svg: `<img src="{% static 'image/Group 686.png' %}" alt="pink cloud" width="134.83" height="122.54" class="create_group-pink_cloud-c">`,
+                    name: '휴식 추구형',
+                    keyword1: '#힐링',
+                    keyword2: '#여유',
+                    characteristics: '편안한 숙소에서 여유롭게 시간을 보내며 휴식해요',
+                    advantages: ['충분한 휴식과 재충전이 가능해요', '스트레스 없는 여행을 추구해요', '여유로운 일정 진행이 가능해요'],
+                    disadvantages: ['새로운 경험이 부족할 수 있어요', '현지 문화 체험 제한적이에요']
+                },
+                '미식 탐험가형': {
+                    className: 'eat',
+                    svg: `<img src="{% static 'image/Group 686 (3).png' %}" alt="pink cloud" width="156.4" height="150.85" class="create_group-pink_cloud-d">`,
+                    name: '미식 탐험가형',
+                    keyword1: '#맛집투어',
+                    keyword2: '#현지음식',
+                    characteristics: '현지 음식과 맛집 위주로 여행 일정을 구성해요',
+                    advantages: ['음식으로 문화를 이해해요', '독특한 맛집을 발굴해요', '현지 시장 탐방이 능숙해요'],
+                    disadvantages: ['다른 관광 요소를 놓칠 수 있어요', '식비 초과 가능성이 있어요']
+                },
+                '균형 잡힌 탐험가형': {
+                    className: 'explorer',
+                    svg: `<img src="{% static 'image/Group 686 (4).png' %}" alt="pink cloud" width="127.2" height="132.88" class="create_group-pink_cloud-e">`,
+                    name: '균형잡힌 탐험가형',
+                    keyword1: '#다재다능',
+                    keyword2: '#융통성',
+                    characteristics: '계획과 즉흥성의 균형을 맞추며 다양한 경험을 추구해요',
+                    advantages: ['다양한 여행 요소 체험이 가능해요', '상황에 따른 대처가 가능해요', '친구와 조화롭게 여행할 수 있어요'],
+                    disadvantages: ['우선순위 설정이 어려워요', '깊이 있는 경험이 부족할 수 있어요']
+                },
+            };
+
+            let travelType = travelTypes[data.travel_type];
 
             let resultPage = document.createElement('div');
             resultPage.classList.add('test-page', 'test-active');
             resultPage.innerHTML = `
-                <p>${data.nickname}의 여행 유형은 <strong>${data.travel_type}</strong>입니다.</p>
-                <div class="result-box">
-                    <p>특징</p>
+                <div class="testResult-top">
+                    <p>나의 여행 유형</p>
                 </div>
-                <a href="#">여행 모임 입장하기</a>
+                <div class="testResult-bottom">
+                    ${travelType.svg}
+                    <p class="testResult-text">${data.nickname}님의 여행 유형은</p>
+                    <strong class="testResult-result-type">${travelType.name}입니다!</strong>
+                    <div class="testResult-keywords1">
+                        <p class="testResult-keyword1">${travelType.keyword1}</p>
+                    </div>
+                    <div class="testResult-keywords2">
+                        <p class="testResult-keyword2">${travelType.keyword2}</p>
+                    </div>
+                    <div class="testResult-characteristics-box">
+                        <p class="testResult-characteristics">${travelType.characteristics}</p>
+                    </div>
+                    <div class="testResult-advantages">
+                        <p class="testResult-advantages-p">이런걸 잘해요</p>
+                        <ul class="testResult-advantages-ul">
+                            ${travelType.advantages.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="testResult-disadvantages">
+                        <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                        <ul class="testResult-disadvantages-ul">
+                            ${travelType.disadvantages.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <a class="testResult-restart" href="javascript:void(0)" onclick="restartTest()">다시 할래요</a>
+                    <button class="testResult-button">오디 시작하기</button>
+                </div>
             `;
             document.getElementById('test-page-container').innerHTML = '';
             document.getElementById('test-page-container').appendChild(resultPage);
@@ -221,7 +302,7 @@ function restartTest() {
     showPage(currentPage);
 }
 //테스트 결과
-function determineTravelType(answers) {
+/*function determineTravelType(answers) {
     let travelTypes = {
         '완벽주의 플래너형': {
             name: '완벽주의 플래너형',
@@ -262,7 +343,7 @@ function determineTravelType(answers) {
     };
 
     return travelTypes[answers];
-}
+}*/
 
 document.addEventListener('DOMContentLoaded', () => {
     questions.forEach((_, index) => createPage(index));

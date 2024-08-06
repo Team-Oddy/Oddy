@@ -149,6 +149,7 @@ def update_nickname(request):
 
 
 #여행유형 저장(선아)
+#여행유형 저장(선아)
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -188,12 +189,7 @@ def determine_travel_type(answers):
     count_c = first_letters.count('c')
     print(count_a, count_b, count_c)
 
-    count_a = answers.count('a')
-    count_b = answers.count('b')
-    count_c = answers.count('c')
-    print(count_a, count_b, count_c)
-
-    if count_a >= 3:
+    if count_a >= 3: #a가 3개 이상인 사람 - "완벽주의 플래너형"
         return '완벽주의 플래너형'
     elif count_b >= 3: # b가 3개 이상인 사람 - "자유로운 모험가 형"
         return '자유로운 모험가형'
