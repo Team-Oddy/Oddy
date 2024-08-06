@@ -149,6 +149,7 @@ def update_nickname(request):
 
 
 #여행유형 저장(선아)
+#여행유형 저장(선아)
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -179,27 +180,32 @@ def save_test_result(request):
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 def determine_travel_type(answers):
+    # answers의 각 항목에서 첫 번째 글자만 추출하여 리스트를 만들어야 함
+    #왜냐?! answers를 test.html에서 문자열로 받아왔기 때문..
+    first_letters = [answer[0] for answer in answers]
+    
+    count_a = first_letters.count('a')
+    count_b = first_letters.count('b')
+    count_c = first_letters.count('c')
+    print(count_a, count_b, count_c)
 
-    count_a = answers.count('a')
-    count_b = answers.count('b')
-    count_c = answers.count('c')
-    print(count_a, count_b, count_c);
-
-    if count_a >= 3:
+    if count_a >= 3: #a가 3개 이상인 사람 - "완벽주의 플래너형"
         return '완벽주의 플래너형'
-    elif count_b >= 3:
+    elif count_b >= 3: # b가 3개 이상인 사람 - "자유로운 모험가 형"
         return '자유로운 모험가형'
     elif count_c >= 3:
-        if answers[3] == 'c) 충분한 휴식과 여유':
+        # 휴식 추구형 조건
+        if (
+            (answers[1].startswith('c') and answers[4].startswith('c')) or
+            (answers[1].startswith('c') and answers[2].startswith('c') and answers[3].startswith('c')) or
+            (answers[1].startswith('c') and answers[2].startswith('c') and answers[3].startswith('c') and answers[4].startswith('c')) or
+            (answers[1].startswith('c') and answers[3].startswith('c') and answers[4].startswith('c'))
+        ):
             return '휴식 추구형'
-        elif answers[1] == 'c) 현지 맛집 탐방하기':
+        # 미식 탐험가형 조건
+        elif answers[1].startswith('c'): #c가 3개 이상 + 2번 문항 c 선택
             return '미식 탐험가형'
-        else:
-            return '휴식 추구형 / 미식 탐험가형'
-    elif count_c >= 3 and answers[2] == 'c) 현지 맛집 탐방하기':
-        return '미식 탐험가형'
-    elif count_c >= 3 and answers[4] == 'c) 휴양과 힐링이 가능한 리조트':
-        return '휴식 추구형'
+        else: #c가 3개 이상 + 그외의 것들..?
+            return '미식 탐험가형' 
     else:
         return '균형 잡힌 탐험가형'
-

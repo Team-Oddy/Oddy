@@ -294,95 +294,38 @@
     top: 63px;
     left: 153px;
 }
-.testResult-svg {
-    width: 122.262px;
-    height: 119.955px;
-    flex-shrink: 0;
-    position: absolute;
-    top: 134.36px;
-    left: 142.59px;
-}
-.testResult-a-svg_tool2 {
-    width: 28.781px;
-    height: 28.781px;
-    transform: rotate(6.32deg);
-    flex-shrink: 0;
-    position: absolute;
-    top: 157.74px;
-    left: 129px;
-}
-.testResult-a-svg_tool1 {
-    width: 29.892px;
-    height: 29.892px;
-    transform: rotate(13.697deg);
-    flex-shrink: 0;
+
+.create_group-pink_cloud-a {
     position: absolute;
     top: 133px;
-    left: 229.55px;
+    left: 50%;
+    transform: translateX(-50%);
 }
-.testResult-b-svg_tool2 {
-    width: 25.599px;
-    height: 25.599px;
-    transform: rotate(6.431deg);
-    flex-shrink: 0;
+.create_group-pink_cloud-b {
     position: absolute;
-    top: 157.74px;
-    left: 129px;
+    top: 103.59px;
+    left: 50%;
+    transform: translateX(-50%);
 }
-.testResult-b-svg_tool1 {
-    width: 46.643px;
-    height: 46.643px;
-    transform: rotate(-1.2deg);
-    flex-shrink: 0;
-    position: absolute;
-    top: 102.55px;
-    left: 170.57px;
-}
-
 .create_group-pink_cloud-c {
     position: absolute;
     top: 132px;
     left: 50%;
     transform: translateX(-50%);
 }
+.create_group-pink_cloud-d {
+    position: absolute;
+    top: 103px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.create_group-pink_cloud-e {
+    position: absolute;
+    top: 126px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-
-
-.testResult-d-svg_tool2 {
-    width: 42.258px;
-    height: 42.258px;
-    transform: rotate(-1.347deg);
-    flex-shrink: 0;
-    position: absolute;
-    top: 149.64px;
-    left: 119px;
-}
-.testResult-d-svg_tool1 {
-    width: 41.262px;
-    height: 41.262px;
-    transform: rotate(-1.135deg);
-    flex-shrink: 0;
-    position: absolute;
-    top: 131.32px;
-    left: 224.79px;
-}
-.testResult-d-svg_tool3 {
-    width: 39.208px;
-    height: 39.208px;
-    transform: rotate(-5.569deg);
-    flex-shrink: 0;
-    position: absolute;
-    top: 109px;
-    left: 173.41px;
-}
-.testResult-e-svg_tool1 {
-    width: 59.37px;
-    height: 59.37px;
-    flex-shrink: 0;
-    position: absolute;
-    top: 199.51px;
-    left: 183.89px;
-}
 .testResult-bottom {
     color: var(--white);
 }
