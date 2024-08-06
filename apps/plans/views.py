@@ -183,7 +183,7 @@ def determine_travel_type(answers):
     count_a = answers.count('a')
     count_b = answers.count('b')
     count_c = answers.count('c')
-    print(count_a, count_b, count_c);
+    print(count_a, count_b, count_c)
 
     if count_a >= 3:
         return '완벽주의 플래너형'

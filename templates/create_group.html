@@ -196,7 +196,7 @@ function nextStep(inputId, nextPageId) {
     formData[inputId] = value;
 
     if (inputId === 'nickname') {
-        showPage('entryPage');
+        submitNickname();
     } else {
         showPage(nextPageId);
     }
