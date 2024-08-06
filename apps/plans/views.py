@@ -10,6 +10,10 @@ from django.conf import settings
 from django.contrib.auth import logout as django_logout
 from allauth.socialaccount.models import SocialToken
 from django.views.decorators.http import require_http_methods
+
+import random
+import string
+
 #선아 작성 부분
 def main(request):
     if request.user.is_authenticated:
@@ -63,8 +67,6 @@ def set_nickname(request):
             current_nickname = ""
         return JsonResponse({'nickname': current_nickname})
 
-# POST 요청으로 새 닉네임 설정, 기존 닉네임 수정// Get 요청으로 현재 설정된 닉네임 조회할 수 있음
-
 @login_required
 @require_http_methods(["GET", "POST"])
 def create_group(request):
@@ -101,12 +103,17 @@ def travel_name_page(request):
                     end_date=end_date
                 )
                 travel_group.save()
-                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료'})
+                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료', 'invite_code': travel_group.invite_code})
             except UserProfile.DoesNotExist:
                 return JsonResponse({'success': False, 'error': '사용자 프로필이 존재하지 않습니다.'})
         else:
             return JsonResponse({'success': False, 'error': '여행 이름은 15글자 이내로 작성해야 하며, 모든 날짜를 입력해야 합니다.'})
     return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
+
+def generate_invite_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+
+
 
 @login_required
 @require_http_methods(["POST"])
@@ -115,14 +122,11 @@ def delete_travel_group(request, travel_group_id):
     travel_group.delete()
     return JsonResponse({'success': True, 'message': '여행 모임이 삭제되었습니다.'})
 
-# 생성된 여행 모임 삭제 로직 추가
-
 def complete_page(request):
     return render(request, 'create_group.html', {'completed': True})
 
 def test(request):
     return render(request, 'test.html')
-
 
 def my_page(request):
     return render(request, 'my_page.html')
@@ -145,17 +149,6 @@ def update_nickname(request):
             return JsonResponse({'success': False, 'error': '닉네임은 5글자 이내로 작성해주세요.'})
     return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
 
-
-
-
-#여행유형 저장(선아)
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-import json
-from .models import UserProfile
-
 @login_required
 @csrf_exempt
 def save_test_result(request): 
@@ -164,7 +157,6 @@ def save_test_result(request):
         answers = data.get('answers')
         user = request.user
         nickname = get_object_or_404(UserProfile, user=request.user).nickname
-        # 여행 유형 결정 로직
         travel_type = determine_travel_type(answers)
         try:
             user_profile = UserProfile.objects.get(id=user.id)
@@ -175,25 +167,20 @@ def save_test_result(request):
             return JsonResponse({'success': False, 'error': 'UserProfile matching query does not exist.'})
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
-
     return JsonResponse({'success': False, 'error': 'Invalid request method.'})
 
 def determine_travel_type(answers):
-    # answers의 각 항목에서 첫 번째 글자만 추출하여 리스트를 만들어야 함
-    #왜냐?! answers를 test.html에서 문자열로 받아왔기 때문..
     first_letters = [answer[0] for answer in answers]
-    
     count_a = first_letters.count('a')
     count_b = first_letters.count('b')
     count_c = first_letters.count('c')
     print(count_a, count_b, count_c)
 
-    if count_a >= 3: #a가 3개 이상인 사람 - "완벽주의 플래너형"
+    if count_a >= 3:
         return '완벽주의 플래너형'
-    elif count_b >= 3: # b가 3개 이상인 사람 - "자유로운 모험가 형"
+    elif count_b >= 3:
         return '자유로운 모험가형'
     elif count_c >= 3:
-        # 휴식 추구형 조건
         if (
             (answers[1].startswith('c') and answers[4].startswith('c')) or
             (answers[1].startswith('c') and answers[2].startswith('c') and answers[3].startswith('c')) or
@@ -201,10 +188,9 @@ def determine_travel_type(answers):
             (answers[1].startswith('c') and answers[3].startswith('c') and answers[4].startswith('c'))
         ):
             return '휴식 추구형'
-        # 미식 탐험가형 조건
-        elif answers[1].startswith('c'): #c가 3개 이상 + 2번 문항 c 선택
+        elif answers[1].startswith('c'):
             return '미식 탐험가형'
-        else: #c가 3개 이상 + 그외의 것들..?
-            return '미식 탐험가형' 
+        else:
+            return '미식 탐험가형'
     else:
         return '균형 잡힌 탐험가형'
