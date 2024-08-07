@@ -1,0 +1,21 @@
+{% load static %}
+
+{% block title %}초대코드 입력하기{% endblock %}
+
+{% block content %}
+<div id="joinGroupPage" class="create_group-page">
+    <div class="create_group-joinCode">
+        <div class="create_group-joinCode-container">
+            <h2 class="create_group-joinCode-h2">초대 코드 입력하기</h2>
+            <form method="post" action="{% url 'plans:join_group_page' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% if form.errors %}
+                    <p id="inviteCodeError" class="create_group-error">{{ form.errors.invite_code }}</p>
+                {% endif %}
+                <button type="submit" class="create_group-joinCode-button">완료</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

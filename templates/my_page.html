@@ -19,9 +19,11 @@
     <div>
         <h2>진행 중인 여행 모임</h2>
         <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
+            {% for group in travel_groups %}
+                <li>{{ group.travel_name }}</li>
+            {% empty %}
+                <li>진행 중인 여행 모임이 없습니다.</li>
+            {% endfor %}
         </ul>
     </div>
     <div>
