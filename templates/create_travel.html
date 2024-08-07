@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Oddy-create_travel{% endblock %}
+
+{% block content %}
+
+<!--여행 모임 입장하기 누르면 나오는 메인-->
+<div class="create_travel-main create_travel-page active">
+    <div class="create_travel-main-header">
+        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day != None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3>
+        <a href="#" class="create_travel-main-info">여행 정보 확인하기</a><hr>
+    </div>
+    
+    <div class="create_travel-main-members-container">
+        <div class="create_travel-main-members-text">함께 여행가는 친구</div>
+        <ul>
+            <li><a href="#">친구1</a></li>
+            <li><a href="#">친구2</a></li>
+        </ul>
+    </div><br>
+    
+    <div class="create_travel-main-addPlans" onclick="showPage('addPlansPage')">
+        <p>여행 계획 추가하기</p>
+    </div><br>
+    
+    <div class="create_travel-main-card" onclick="showPage('viewSchedulePage')">
+        <p>여행 계획 확인하기</p>
+    </div><br>
+    
+    <a href="{% url 'plans:travel_map' %}" class="create_travel-main-button">여행 지도 보기</a>
+    <a href="{% url 'plans:timetable' %}" class="create_travel-main-button">여행 시간표 보기</a>
+</div>
+
+<!--메인->여행 계획 추가하기 누르면-->
+<div id="addPlansPage" class="create_travel-addPlans-container create_travel-page">
+    <h2 class="create_travel-addPlans-title">추가할 여행 계획을 선택해주세요!</h2>
+    <div class="create_travel-addPlans-play" onclick="selectPlan('play')">
+        <p>PLAY</p>
+        <p>노는게 제일 좋아!</p>
+    </div>
+    <div class="create_travel-addPlans-eat" onclick="selectPlan('eat')">
+        <p>EAT</p>
+        <p>먹기 위해 여행한다!</p>
+    </div>
+    <div class="create_travel-addPlans-stay" onclick="selectPlan('stay')">
+        <p>STAY</p>
+        <p>잠은 편하게 자야지!</p>
+    </div>
+    <div class="create_travel-addPlans-othrers" onclick="selectPlan('others')">
+        <p>OTHERS</p>
+        <p>다른 활동도 하고 싶어요!</p>
+    </div>
+    
+    <button onclick="moveSelectedPlan()">다음으로</button>
+</div>
+
+<!--여행 계획 추가하기->play 누르면-->
+<div id="playPage" class="create_travel-play-container create_travel-page">
+    <h3 class="create_travel-play-title">PLAY</h3>
+    <div class="create_travel-play-place">
+        <label for="play-place">장소를 알려주세요!</label>
+        <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
+        <button onclick="showPage('placeSearchPage')">검색</button>
+    </div>
+    <div class="create_travel-play-place-info">
+        <label for="play-description">장소를 소개해주세요!</label>
+        <textarea id="play-description" name="description" placeholder="."></textarea>
+    </div>
+    <div class="create_travel-play-startTime">
+        <label for="play-start-time">시작 시간</label>
+        <input type="time" id="start-time" name="start-time">
+    </div>
+    <div class="create_travel-play-endTime">
+        <label for="play-end-time">종료 시간</label>
+        <input type="time" id="end-time" name="end-time">
+    </div>
+    <button class="btn-submit" onclick="submitForm()">완료하기</button>
+</div>
+
+<!--여행 계획 추가하기->eat 누르면-->
+<div id="eatPage" class="create_travel-eat-container create_travel-page">
+    <h3 class="create_travel-eat-title">EAT</h3>
+</div>
+
+<!--여행 계획 추가하기->stay 누르면-->
+<div id="stayPage" class="create_travel-stay-container create_travel-page">
+    <h3 class="create_travel-stay-title">STAY</h3>
+</div>
+
+<!--여행 계획 추가하기->others 누르면-->
+<div id="othersPage" class="create_travel-others-container create_travel-page">
+    <h3 class="create_travel-others-title">OTHERS</h3>
+</div>
+
+<!--play-> 장소검색-->
+<div id="placeSearchPage" class="create_travel-play-place-search create_travel-page">
+    <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
+    <button>검색</button><br>
+    <button class="btn-submit" onclick="showPage('playPage')">완료하기</button>
+</div>
+
+<!--메인->여행 계획 확인하기 누르면-->
+<div id="viewSchedulePage" class="create_travel-all-container create_travel-page">
+    <h3 class="create_travel-all-title">여행 계획 확인하기</h3>
+    <div class="create_travel-all-menu">
+        <a href="#" onclick="showContent('playContent')" class="create_travel-all-play">PLAY</a>
+        <a href="#" onclick="showContent('eatContent')" class="create_travel-all-eat">EAT</a>
+        <a href="#" onclick="showContent('stayContent')" class="create_travel-all-stay">STAY</a>
+        <a href="#" onclick="showContent('othersContent')" class="create_travel-all-others">OTHERS</a>
+    </div><hr>
+    <div id="playContent" class="create_travel-all-content"></div>
+    <div id="eatContent" class="create_travel-all-content"></div>
+    <div id="stayContent" class="create_travel-all-content"></div>
+    <div id="othersContent" class="create_travel-all-content"></div>
+</div>
+
+
+
+<script>
+    let selectedPlan = '';
+
+    //각 페이지에서 pageId에 해당하는 페이지로 넘어가는 함수
+    function showPage(pageId) {
+        document.querySelectorAll('.create_travel-page').forEach(page => {
+            page.classList.remove('active');
+        });
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    //추가할 여행 계획 선택 페이지(id="addPlansPage")에서 선택된 여행 계획 종류 저장
+    function selectPlan(plan) {
+        selectedPlan = plan;
+    }
+
+    //위 함수에서 선택된 여행 클릭 후 다음으로 누르면 이동
+    function moveSelectedPlan() {
+        if (selectedPlan) {
+            showPage(selectedPlan + 'Page');
+        } else {
+            alert('추가할 여행 계획을 선택해주세요.');
+        }
+    }
+
+    //id="playPage"에서 모든 내용 입력 후 완료하기 누르면 id="viewSchedulePage"에 해당하는 유형 아래 내용 추가
+    function submitForm() {
+        let place = document.getElementById('play-place').value;
+        let description = document.getElementById('play-description').value;
+        let startTime = document.getElementById('start-time').value;
+        let endTime = document.getElementById('end-time').value;
+
+        if (!place || !description || !startTime || !endTime) {
+            alert('모든 내용을 채워주세요.');
+            return;
+        }
+
+        let playContent = `
+            <p>
+                <a href="{% url 'plans:update_content' %}">장소:</a> ${place}<br>  
+                <p>좋아요</p>
+                <p>댓글</p>
+            </p>
+        `;
+
+        document.getElementById('playContent').innerHTML += playContent;
+        showPage('viewSchedulePage');
+        showContent(category + 'Content');
+    }
+
+    //id="viewSchedulePage"에 특정 콘텐츠만 표시하고 다른 영역은 안 보이게
+    function showContent(contentId) {
+        document.querySelectorAll('.create_travel-all-content').forEach(content => {
+            content.style.display = 'none';
+        });
+        document.getElementById(contentId).style.display = 'block';
+    }
+    
+</script>
+
+<style>
+    .create_travel-page {
+        display: none;
+    }
+    .create_travel-page.active {
+        display: block;
+    }
+    .create_travel-all-content {
+        display: none;
+    }
+
+    .create_travel-addPlans-container div,
+    .create_travel-main-addPlans,
+    .create_travel-main-card,
+    .create_travel-main-button,
+    .create_travel-all-menu a,
+    button {
+        cursor: pointer;
+    }
+</style>
+
+{% endblock %}
