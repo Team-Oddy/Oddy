@@ -264,3 +264,4 @@ def timetable(request):
 
 def update_content(request):
     return render(request, 'update_content.html')
+
