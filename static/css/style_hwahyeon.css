@@ -72,6 +72,14 @@
     color: var(--gray03);
 }
 
+.create_group-nickname-length {
+    position: absolute;
+    left: 328px;
+    top: 191px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--gray03);
+}
+
 .create_group-nickname-input-p, .create_group-travelName-p, .create_group-travelDate-p {
     width: 110px;
     height: 14px;
