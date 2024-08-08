@@ -165,7 +165,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import json
 from .models import UserProfile
-
 @login_required
 @csrf_exempt
 def save_test_result(request): 
@@ -239,3 +238,28 @@ def join_group_page(request):
         form = InviteCodeForm()
     
     return render(request, 'join_group.html', {'form': form})
+
+
+#여행 계획
+def create_travel(request):
+    #여행 모임 이름 가져오기
+    travel_group = TravelGroup.objects.order_by('-id').first()
+    travel_name = travel_group.travel_name if travel_group else '여행 이름 없음'
+
+    #종료일-시작일 구해서 D-?로 표시
+    if travel_group:
+        start_date = travel_group.start_date
+        end_date = travel_group.end_date
+        d_day = (end_date - start_date).days
+    else:
+        d_day = None
+
+    return render(request, 'create_travel.html', {'travel_name': travel_name, 'd_day': d_day})
+
+def travel_map(request):
+    return render(request, 'travel_map.html')
+
+def timetable(request):
+    return render(request, 'timetable.html')
+
+

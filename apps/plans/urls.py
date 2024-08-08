@@ -13,7 +13,9 @@ urlpatterns=[
     path('update_nickname/', update_nickname, name='update_nickname'),
     path('logout/', kakao_logout, name='kakao_logout'),
     path('save_test_result/', save_test_result, name='save_test_result'),
-    
+    path('create_travel/', create_travel, name='create_travel'),
+    path('travel_map/', travel_map, name='travel_map'),
+    path('timetable/', timetable, name='timetable'),
     #초대코드를 입력하는 페이지
     path('join_group_page/', join_group_page, name='join_group_page'),
 ]
