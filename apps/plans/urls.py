@@ -16,7 +16,6 @@ urlpatterns=[
     path('create_travel/', create_travel, name='create_travel'),
     path('travel_map/', travel_map, name='travel_map'),
     path('timetable/', timetable, name='timetable'),
-    path('update_content/', update_content, name='update_content'),
     #초대코드를 입력하는 페이지
     path('join_group_page/', join_group_page, name='join_group_page'),
 ]

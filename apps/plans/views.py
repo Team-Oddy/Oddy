@@ -262,6 +262,4 @@ def travel_map(request):
 def timetable(request):
     return render(request, 'timetable.html')
 
-def update_content(request):
-    return render(request, 'update_content.html')
 
