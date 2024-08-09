@@ -29,7 +29,7 @@
     <img src="{% static 'image/Group 616.png' %}" alt="pink cloud" width="159" height="156" class="create_group-pink_cloud">    
     <button class="create-travelgroup" onclick="showPage('travelNamePage')">
         <span>여행 모임 만들기</span></button>
-    <button class="enter-invitedgroup" onclick="showPage('joinGroupPage')">
+    <button class="enter-invitedgroup" onclick="joinGroup()">
         <span>초대받은 여행 모임 입장하기</span></button>
 </div>
 
@@ -56,17 +56,6 @@
             <span>다음</span></button>
     </div>
 </div>
-
-<!--
-<div id="travelDatePage" class="create_group-page">
-    <button onclick="showPage('travelNamePage')">이전</button><br>
-    <h2>여행 모임 생성하기</h2>
-    <h3>여행 일정을 알려주세요!</h3><br>
-    <input type="text" id="travelStartDate" placeholder="2024/07/31"> - <input type="text" id="travelEndDate" placeholder="2024/07/31"><br>
-    <p id="travelDateError" class="create_group-error">여행 시작일과 종료일을 모두 입력해주세요.</p><br>
-    <button onclick="nextStepDates('travelStartDate', 'travelEndDate')">완료</button><br>
-    <p>나중에 만드시겠어요? <a href="{% url 'plans:main' %}">나가기</a></p>
-</div>-->
 
 <div id="travelDatePage" class="create_group-page">
     <div class="create_group-travelDate-top">
@@ -100,8 +89,8 @@
     <button class="share-link">
     <span>초대 링크 공유하기</span></button>
     <b class="enter-group">
-    <span>여행 모임 입장하기</span></b
-    utton>
+        <span onclick="startTravel()">여행 모임 입장하기</span></b
+        utton>
 </div>
 
 <div id="entryPage" class="create_group-page">
@@ -174,6 +163,14 @@ document.getElementById('travelStartDate').addEventListener('input', function() 
         button.classList.remove('active');
     }
 });
+
+function joinGroup() {
+    window.location.href = "{% url 'plans:join_group_page' %}";
+}
+
+function startTravel() {
+    window.location.href = "{% url 'plans:create_travel' %}";
+}
 
 function showPage(pageId) {
     document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));

@@ -154,6 +154,17 @@ def update_nickname(request):
             return JsonResponse({'success': False, 'error': '닉네임은 5글자 이내로 작성해주세요.'})
     return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
 
+
+
+
+#여행유형 저장(선아)
+#여행유형 저장(선아)
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
+import json
+from .models import UserProfile
 @login_required
 @csrf_exempt
 def save_test_result(request): 
@@ -227,6 +238,31 @@ def join_group_page(request):
         form = InviteCodeForm()
     
     return render(request, 'join_group.html', {'form': form})
+
+
+#여행 계획
+def create_travel(request):
+    #여행 모임 이름 가져오기
+    travel_group = TravelGroup.objects.order_by('-id').first()
+    travel_name = travel_group.travel_name if travel_group else '여행 이름 없음'
+
+    #종료일-시작일 구해서 D-?로 표시
+    if travel_group:
+        start_date = travel_group.start_date
+        end_date = travel_group.end_date
+        d_day = (end_date - start_date).days
+    else:
+        d_day = None
+
+    return render(request, 'create_travel.html', {'travel_name': travel_name, 'd_day': d_day})
+
+def travel_map(request):
+    return render(request, 'travel_map.html')
+
+def timetable(request):
+    return render(request, 'timetable.html')
+
+
 
 #map예제 추가해봤으나 검색은 안되는 중.. 지도는 잘 불러와짐
 from django.shortcuts import render
