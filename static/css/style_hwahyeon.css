@@ -33,7 +33,8 @@
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
-    top: 63px;left: 155px;
+    top: 63px;
+    left: 155px;
     white-space: nowrap;
 }
 
