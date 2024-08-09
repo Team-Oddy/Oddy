@@ -273,27 +273,29 @@ function searchPlace() {
         return;
     }
 
-    naver.maps.Service.geocode({
-        query: query
-    }, function(status, response) {
-        if (status === naver.maps.Service.Status.ERROR) {
-            alert('검색 결과를 가져오는데 실패했습니다.');
-            return;
-        }
-
-        if (response.v2.meta.totalCount === 0) {
-            alert('검색 결과가 없습니다.');
-            return;
-        }
-
-        let items = response.v2.addresses;
+    fetch(`/search/?query=${encodeURIComponent(query)}`)
+    .then(response => response.json())  // JSON으로 파싱
+    .then(data => {
         let resultsHtml = '<ul>';
-        items.forEach(function(item) {
-            resultsHtml += `<li onclick="selectPlace('${item.roadAddress}')">${item.roadAddress}</li>`;
-        });
+        if (data.results && data.results.length > 0) {
+            data.results.forEach(function(item) {
+                let title = item.title.replace(/<[^>]*>/g, '');
+                let address = item.address;
+                resultsHtml += `<li onclick="selectPlace('${item.title.replace(/'/g, "\\'")}', '${item.address.replace(/'/g, "\\'")}')">
+                                    <h3>${item.title}</h3>
+                                    <p>${item.address}</p>
+                                </li>`;
+            });
+        } else {
+            resultsHtml += '<li>검색 결과가 없습니다.</li>';
+        }
         resultsHtml += '</ul>';
 
         document.getElementById('searchResults').innerHTML = resultsHtml;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('검색 결과를 가져오는데 실패했습니다.');
     });
 }
 
@@ -317,8 +319,10 @@ function searchPlace() {
     
 //     showPage(previousPage);
 // }
-function selectPlace(address) {
-    console.log("selectPlace 함수 호출됨, 주소:", address);
+function selectPlace(title, address) {
+    title = title.replace(/<[^>]*>/g, '');
+    address = address.replace(/<[^>]*>/g, '');
+    console.log("selectPlace 함수 호출됨, 상호명:", title, "주소:", address);
     console.log("이전 페이지:", previousPage);
 
     if (!previousPage) {
@@ -330,8 +334,9 @@ function selectPlace(address) {
     let inputField = document.getElementById(`${type}-place`);
     
     if (inputField) {
-        inputField.value = address;
-        console.log(`주소 "${address}"가 ${type} 페이지에 저장되었습니다.`);
+        inputField.value = title;  // 상호명을 입력 필드에 설정
+        inputField.dataset.address = address;  // 주소를 데이터 속성에 저장
+        console.log(`상호명 "${title}"와 주소 "${address}"가 ${type} 페이지에 저장되었습니다.`);
     } else {
         console.error(`${type}-place 입력 필드를 찾을 수 없습니다.`);
     }

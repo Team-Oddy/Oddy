@@ -160,3 +160,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
+
+NAVER_CLIENT_ID = 'CCPz3A4MX0wjDBDaMgcH'
+NAVER_CLIENT_SECRET = 'PqCmky7EJL'
