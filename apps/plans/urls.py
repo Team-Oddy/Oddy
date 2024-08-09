@@ -20,4 +20,9 @@ urlpatterns=[
     path('join_group_page/', join_group_page, name='join_group_page'),
     #map view
     path('map/', map_view, name='map_view'),
+    #travel plans
+    path('group/<int:group_id>/add_plan/', add_travel_plan, name='add_travel_plan'),
+    path('group/<int:group_id>/get_plans/', get_travel_plans, name='get_travel_plans'),
+    path('plan/<int:plan_id>/delete/', delete_travel_plan, name='delete_travel_plan'),
+    path('plan/<int:plan_id>/detail/', travel_plan_detail, name='travel_plan_detail'),
 ]

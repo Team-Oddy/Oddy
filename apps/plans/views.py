@@ -97,19 +97,19 @@ def travel_name_page(request):
             try:
                 user_profile = request.user.userprofile
                 travel_group = TravelGroup(
+                    creator=user_profile,  # creator 필드 설정
                     travel_name=travel_name,
                     start_date=start_date,
                     end_date=end_date,
                 )
                 travel_group.save()
-                travel_group.user_profiles.add(user_profile)  # Many-to-Many 필드에 사용자 프로필 추가
+                travel_group.members.add(user_profile)  # members ManyToMany 필드에 사용자 프로필 추가
                 return JsonResponse({'success': True, 'message': '여행 모임 저장 완료'})
             except UserProfile.DoesNotExist:
                 return JsonResponse({'success': False, 'error': '사용자 프로필이 존재하지 않습니다.'})
         else:
             return JsonResponse({'success': False, 'error': '여행 이름은 15글자 이내로 작성해야 하며, 모든 날짜를 입력해야 합니다.'})
     return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
-
 
 def generate_invite_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
@@ -119,7 +119,7 @@ def generate_invite_code():
 @login_required
 @require_http_methods(["POST"])
 def delete_travel_group(request, travel_group_id):
-    travel_group = get_object_or_404(TravelGroup, id=travel_group_id, user_profile=request.user.userprofile)
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id, creator=request.user.userprofile)
     travel_group.delete()
     return JsonResponse({'success': True, 'message': '여행 모임이 삭제되었습니다.'})
 
@@ -132,9 +132,8 @@ def test(request):
 @login_required
 def my_page(request):
     user_profile = request.user.userprofile
-    travel_groups = user_profile.travel_groups.all()
+    travel_groups = user_profile.joined_travel_groups.all()
     return render(request, 'my_page.html', {'user_profile': user_profile, 'travel_groups': travel_groups})
-
 
 @login_required 
 @csrf_exempt
@@ -226,10 +225,10 @@ def join_group_page(request):
             try:
                 travel_group = TravelGroup.objects.get(invite_code=invite_code)
                 user_profile = request.user.userprofile
-                if travel_group.user_profiles.filter(id=user_profile.id).exists():
+                if travel_group.members.filter(id=user_profile.id).exists():
                     form.add_error('invite_code', 'You are already in this group.')
                 else:
-                    travel_group.user_profiles.add(user_profile)
+                    travel_group.members.add(user_profile)
                     travel_group.save()
                     return redirect('plans:my_page')
             except TravelGroup.DoesNotExist:
@@ -245,6 +244,7 @@ def create_travel(request):
     #여행 모임 이름 가져오기
     travel_group = TravelGroup.objects.order_by('-id').first()
     travel_name = travel_group.travel_name if travel_group else '여행 이름 없음'
+    group_id = travel_group.id if travel_group else None
 
     #종료일-시작일 구해서 D-?로 표시
     if travel_group:
@@ -254,7 +254,11 @@ def create_travel(request):
     else:
         d_day = None
 
-    return render(request, 'create_travel.html', {'travel_name': travel_name, 'd_day': d_day})
+    return render(request, 'create_travel.html', {
+        'travel_name': travel_name, 
+        'd_day': d_day,
+        'travel_group': travel_group
+    })
 
 def travel_map(request):
     return render(request, 'travel_map.html')
@@ -269,3 +273,89 @@ from django.shortcuts import render
 
 def map_view(request):
     return render(request, 'map.html')
+
+
+##의진// 새로운 여행 계획(4가지카테고리)추가[add_travel_plan], 특정 여행 그룹 필터링[get_travel_plans], 특정 여행 계획 삭제[delete_travel_plan], 특정 여행 그룹의 상세 계획[trave_plans]
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from .models import TravelGroup, TravelPlan
+import json
+
+@login_required
+@require_POST
+def add_travel_plan(request, group_id):
+    travel_group = get_object_or_404(TravelGroup, id=group_id)
+    if request.user.userprofile not in travel_group.members.all():
+        return JsonResponse({'status': 'error', 'message': 'Permission denied'})
+    
+    data = json.loads(request.body)
+    category = data.get('category')
+    place = data.get('place')
+    description = data.get('description')
+    
+    if not all([category, place, description]):
+        return JsonResponse({'status': 'error', 'message': 'Missing required fields'})
+    
+    plan = TravelPlan.objects.create(
+        travel_group=travel_group,
+        creator=request.user.userprofile,
+        category=category,
+        place=place,
+        description=description
+    )
+    
+    return JsonResponse({
+        'status': 'success',
+        'id': plan.id,
+        'category': plan.category,
+        'place': plan.place,
+        'description': plan.description,
+        'creator': plan.creator.nickname or plan.creator.user.username
+    })
+
+@login_required
+def get_travel_plans(request, group_id):
+    travel_group = get_object_or_404(TravelGroup, id=group_id)
+    if request.user.userprofile not in travel_group.members.all():
+        return JsonResponse({'status': 'error', 'message': 'Permission denied'})
+    
+    category = request.GET.get('category')
+    if category:
+        plans = TravelPlan.objects.filter(travel_group=travel_group, category=category).order_by('-created_at')
+    else:
+        plans = TravelPlan.objects.filter(travel_group=travel_group).order_by('category', '-created_at')
+    
+    plans_data = [{
+        'id': plan.id,
+        'category': plan.category,
+        'place': plan.place,
+        'description': plan.description,
+        'creator': plan.creator.nickname or plan.creator.user.username,
+        'created_at': plan.created_at.isoformat()
+    } for plan in plans]
+    
+    return JsonResponse({'status': 'success', 'plans': plans_data})
+
+@login_required
+@require_POST
+def delete_travel_plan(request, plan_id):
+    plan = get_object_or_404(TravelPlan, id=plan_id)
+    if request.user.userprofile != plan.creator and request.user.userprofile != plan.travel_group.creator:
+        return JsonResponse({'status': 'error', 'message': 'Permission denied'})
+    
+    plan.delete()
+    return JsonResponse({'status': 'success', 'message': 'Plan deleted successfully'})
+
+@login_required
+def travel_plan_detail(request, group_id):
+    travel_group = get_object_or_404(TravelGroup, id=group_id)
+    if request.user.userprofile not in travel_group.members.all():
+        return JsonResponse({'status': 'error', 'message': 'Permission denied'})
+    
+    plans = TravelPlan.objects.filter(travel_group=travel_group).order_by('category', '-created_at')
+    context = {
+        'travel_group': travel_group,
+        'plans': plans,
+    }
+    return render(request, 'travel_plan_detail.html', context)

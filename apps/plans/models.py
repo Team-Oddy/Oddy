@@ -11,10 +11,11 @@ class UserProfile(models.Model):
     travel_type = models.CharField(max_length=30, null=True)
 
     def __str__(self):
-        return self.nickname if self.nickname else self.user.username  # 닉네임이 없으면 카카오톡이름을 반환
+        return self.nickname if self.nickname else self.user.username
 
 class TravelGroup(models.Model):
-    user_profiles = models.ManyToManyField(UserProfile, related_name='travel_groups')
+    creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='created_travel_groups', null =True)
+    members = models.ManyToManyField(UserProfile, related_name='joined_travel_groups')
     travel_name = models.CharField(max_length=15)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -33,7 +34,26 @@ class TravelGroup(models.Model):
             code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             if not TravelGroup.objects.filter(invite_code=code).exists():
                 return code
-            
+
+class TravelPlan(models.Model):
+    CATEGORY_CHOICES = [
+        ('play', 'PLAY'),
+        ('eat', 'EAT'),
+        ('stay', 'STAY'),
+        ('others', 'OTHERS'),
+    ]
+    
+    travel_group = models.ForeignKey(TravelGroup, on_delete=models.CASCADE, related_name='travel_plans')
+    creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='created_plans')
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
+    place = models.CharField(max_length=200)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.travel_group.travel_name} - {self.category}: {self.place}"
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

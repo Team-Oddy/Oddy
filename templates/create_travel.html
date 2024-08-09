@@ -4,7 +4,6 @@
 {% block title %}Oddy-create_travel{% endblock %}
 
 {% block content %}
-
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <div class="create_travel-main-header">
@@ -36,13 +35,15 @@
     <div class="create_travel-play-place">
         <label for="play-place">여행지를 알려주세요!</label><br>
         <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <button onclick="showPage('placeSearchPage')">검색</button>
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='playPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('play-place').value;">검색</button>
     </div>
     <div class="create_travel-play-place-info">
         <label for="play-description">여행지를 한줄로 소개해주세요!</label><br>
         <textarea id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></textarea>
     </div>
     <button class="btn-submit" onclick="submitForm('play')">완료</button>
+
 </div>
 
 <!--여행 계획 추가하기->eat->추가하기-->
@@ -51,7 +52,8 @@
     <div class="create_travel-eat-place">
         <label for="eat-place">여행지를 알려주세요!</label><br>
         <input type="text" id="eat-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <button onclick="showPage('placeSearchPage')">검색</button>
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='eatPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('eat-place').value;">검색</button>
     </div>
     <div class="create_travel-eat-place-info">
         <label for="eat-description">여행지를 한줄로 소개해주세요!</label><br>
@@ -66,13 +68,15 @@
     <div class="create_travel-stay-place">
         <label for="stay-place">여행지를 알려주세요!</label><br>
         <input type="text" id="stay-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <button onclick="showPage('placeSearchPage')">검색</button>
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='stayPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('stay-place').value;">검색</button>
     </div>
     <div class="create_travel-stay-place-info">
         <label for="stay-description">여행지를 한줄로 소개해주세요!</label><br>
         <textarea id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></textarea>
     </div>
     <button class="btn-submit" onclick="submitForm('stay')">완료</button>
+
 </div>
 
 <!--여행 계획 추가하기->others->추가하기-->
@@ -81,7 +85,8 @@
     <div class="create_travel-others-place">
         <label for="others-place">여행지를 알려주세요!</label><br>
         <input type="text" id="others-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <button onclick="showPage('placeSearchPage')">검색</button>
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='othersPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('others-place').value;">검색</button>
     </div>
     <div class="create_travel-others-place-info">
         <label for="others-description">여행지를 한줄로 소개해주세요!</label><br>
@@ -91,10 +96,17 @@
 </div>
 
 <!--장소검색-->
-<div id="placeSearchPage" class="create_travel-play-place-search create_travel-page">
+<!-- <div id="placeSearchPage" class="create_travel-play-place-search create_travel-page">
     <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
     <button>검색</button><br>
     <button class="btn-submit" onclick="showPage('playPage')">완료</button>
+</div> -->
+
+<div id="placeSearchPage" class="create_travel-play-place-search create_travel-page">
+    <input type="text" id="search-place" name="place" placeholder="장소 이름을 검색해보세요">
+    <button onclick="searchPlace()">검색</button><br>
+    <div id="searchResults"></div>
+    <button class="btn-submit" onclick="showPage('previousPage')">이전</button>
 </div>
 
 <!--메인->여행 계획 추가하기-->
@@ -138,31 +150,63 @@
     <div id="travelDetailComments"></div>
 </div>
 
+<div id="groupIdContainer" data-group-id="{{ travel_group.id }}"></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=asqg2o00lg&submodules=geocoder"></script>
 <script>
+    const groupId = document.getElementById('groupIdContainer').dataset.groupId;
+    let previousPage = '';
     let selectedPlan = '';
     let itemIdCounter = 0;
     let currentItemId = null;
     let currentType = null;
 
     // 각 페이지에서 pageId에 해당하는 페이지로 넘어가는 함수
-    function showPage(pageId) {
-        document.querySelectorAll('.create_travel-page').forEach(page => {
-            page.classList.remove('active');
-        });
-        document.getElementById(pageId).classList.add('active');
+    // function showPage(pageId) {
+    //     document.querySelectorAll('.create_travel-page').forEach(page => {
+    //         page.classList.remove('active');
+    //     });
+    //     document.getElementById(pageId).classList.add('active');
 
-        // 메인 페이지로 돌아갈 때 모든 폼을 초기화
-        if (pageId === 'travelMain') {
-            clearForm('play');
-            clearForm('eat');
-            clearForm('stay');
-            clearForm('others');
-        }
+    //     if (pageId === 'placeSearchPage') {
+    //         previousPage = document.querySelector('.create_travel-page.active').id;
+    //     } else if (pageId === 'travelMain') {
+    //         clearForm('play');
+    //         clearForm('eat');
+    //         clearForm('stay');
+    //         clearForm('others');
+    //     }
+    // }
+
+    
+    function showPage(pageId) {
+    document.querySelectorAll('.create_travel-page').forEach(page => {
+        page.classList.remove('active');
+    });
+    if (pageId === 'previousPage') {
+        document.getElementById(previousPage).classList.add('active');
+    } else {
+        document.getElementById(pageId).classList.add('active');
     }
+}
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
 
     // id="playPage"에서 모든 내용 입력 후 완료하기 누르면 id="viewSchedulePage"에 해당하는 유형 아래 내용 추가
     function submitForm(type) {
-        // 각 유형의 입력 필드 값 가져오기
         let place = document.getElementById(`${type}-place`).value;
         let description = document.getElementById(`${type}-description`).value;
         if (!place || !description) {
@@ -170,28 +214,192 @@
             return;
         }
 
-        let itemId = itemIdCounter++;
+        fetch(`/group/${groupId}/add_plan/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({category: type, place, description})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                addPlanToUI(data);
+                clearForm(type);
+                showPage('viewSchedulePage');
+                showContent(`${type}Content`);
+            } else {
+                alert('계획 추가 실패: ' + data.message);
+            }
+        });
+    }
+
+//     function searchPlace() {
+//     let query = document.getElementById('search-place').value;
+//     if (!query) {
+//         alert('장소를 입력해주세요.');
+//         return;
+//     }
+
+//     naver.maps.Service.geocode({
+//         query: query
+//     }, function(status, response) {
+//         if (status === naver.maps.Service.Status.ERROR) {
+//             alert('검색 결과를 가져오는데 실패했습니다.');
+//             return;
+//         }
+
+//         if (response.v2.meta.totalCount === 0) {
+//             alert('검색 결과가 없습니다.');
+//             return;
+//         }
+
+//         let items = response.v2.addresses;
+//         let resultsHtml = '<ul>';
+//         items.forEach(function(item) {
+//             resultsHtml += `<li onclick="selectPlace('${item.roadAddress}')">${item.roadAddress}</li>`;
+//         });
+//         resultsHtml += '</ul>';
+
+//         document.getElementById('searchResults').innerHTML = resultsHtml;
+//     });
+// }
+
+function searchPlace() {
+    let query = document.getElementById('search-place').value;
+    if (!query) {
+        alert('장소를 입력해주세요.');
+        return;
+    }
+
+    naver.maps.Service.geocode({
+        query: query
+    }, function(status, response) {
+        if (status === naver.maps.Service.Status.ERROR) {
+            alert('검색 결과를 가져오는데 실패했습니다.');
+            return;
+        }
+
+        if (response.v2.meta.totalCount === 0) {
+            alert('검색 결과가 없습니다.');
+            return;
+        }
+
+        let items = response.v2.addresses;
+        let resultsHtml = '<ul>';
+        items.forEach(function(item) {
+            resultsHtml += `<li onclick="selectPlace('${item.roadAddress}')">${item.roadAddress}</li>`;
+        });
+        resultsHtml += '</ul>';
+
+        document.getElementById('searchResults').innerHTML = resultsHtml;
+    });
+}
+
+// function selectPlace(address) {
+//     console.log("selectPlace 함수 호출됨, 주소:", address);
+    
+//     if (!previousPage) {
+//         console.error("이전 페이지 정보가 없습니다.");
+//         return;
+//     }
+
+//     let type = previousPage.replace('Page', '');
+//     let inputField = document.getElementById(`${type}-place`);
+    
+//     if (inputField) {
+//         inputField.value = address;
+//         console.log(`주소 "${address}"가 ${type} 페이지에 저장되었습니다.`);
+//     } else {
+//         console.error(`${type}-place 입력 필드를 찾을 수 없습니다.`);
+//     }
+    
+//     showPage(previousPage);
+// }
+function selectPlace(address) {
+    console.log("selectPlace 함수 호출됨, 주소:", address);
+    console.log("이전 페이지:", previousPage);
+
+    if (!previousPage) {
+        console.error("이전 페이지 정보가 없습니다.");
+        return;
+    }
+
+    let type = previousPage.replace('Page', '');
+    let inputField = document.getElementById(`${type}-place`);
+    
+    if (inputField) {
+        inputField.value = address;
+        console.log(`주소 "${address}"가 ${type} 페이지에 저장되었습니다.`);
+    } else {
+        console.error(`${type}-place 입력 필드를 찾을 수 없습니다.`);
+    }
+    
+    showPage(previousPage);
+}
+
+    function addPlanToUI(plan) {
         let content = `
-            <div class="${type}-item" id="${type}-item-${itemId}" onclick="viewDetail('${type}', '${place}', '${description}', '00', ${itemId})">
+            <div class="${plan.category}-item" id="${plan.category}-item-${plan.id}" onclick="viewDetail('${plan.category}', '${plan.place}', '${plan.description}', '${plan.creator}', ${plan.id})">
                 <p>시간표에 추가 여부 o/x</p>
-                <p>유형: ${type.toUpperCase()}</p>
-                <p>작성자: 00</p>
-                <p>장소: ${place}</p>
-                <p>설명: ${description}</p>
-                <button class="post__like" onclick="event.stopPropagation(); onClickLike(${itemId})">
-                    <i class="bi bi-heart" id="heart-icon-${itemId}"></i>
-                    <span class="like-count" id="like-count-${itemId}">0</span>
+                <p>유형: ${plan.category.toUpperCase()}</p>
+                <p>작성자: ${plan.creator}</p>
+                <p>장소: ${plan.place}</p>
+                <p>설명: ${plan.description}</p>
+                <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
+                    <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
+                    <span class="like-count" id="like-count-${plan.id}">0</span>
                 </button>
             </div><hr>
         `;
+        document.getElementById(`${plan.category}Content`).innerHTML += content;
+    }
 
-        // 각 유형에 맞는 콘텐츠 영역에 내용 추가
-        document.getElementById(`${type}Content`).innerHTML += content;
+    // 여행 계획 불러오기
+    function loadPlans(category) {
+        const url = `/group/${groupId}/get_plans/?category=${category}`;
+        console.log('Request URL:', url);
+        fetch(url)
+        .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+        })
+        .then(data => {
+    })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(`계획 불러오기 실패: ${error.message}`);
+        });
+    }
 
-        // 페이지 전환 + 입력 필드 초기화
-        clearForm(type);
-        showPage('viewSchedulePage');
-        showContent(`${type}Content`);
+    // 여행 계획 삭제
+    function deleteTravelPlan() {
+        if (currentItemId !== null) {
+            fetch(`/plans/plan/${currentItemId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const element = document.getElementById(`${currentType}-item-${currentItemId}`);
+                    if (element) {
+                        element.remove();
+                    }
+                    currentItemId = null;
+                    showPage('viewSchedulePage');
+                } else {
+                    alert('계획 삭제 실패: ' + data.message);
+                }
+            });
+        } else {
+            alert('삭제할 여행 계획이 없습니다.');
+        }
     }
 
     // id="viewSchedulePage"에 특정 콘텐츠만 표시하고 다른 영역은 안 보이게
@@ -200,6 +408,8 @@
             content.style.display = 'none';
         });
         document.getElementById(contentId).style.display = 'block';
+        let category = contentId.replace('Content', '');
+        loadPlans(category);
     }
 
     // 여행 세부 정보 보기 함수
@@ -231,17 +441,36 @@
     // 여행 계획 삭제 함수
     function deleteTravelPlan() {
         if (currentItemId !== null) {
-            const element = document.getElementById(`${currentType}-item-${currentItemId}`);
-            if (element) {
-                element.remove();
-            }
-            currentItemId = null;
-            showPage('viewSchedulePage');
+            fetch(`/plans/plan/${currentItemId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const element = document.getElementById(`${currentType}-item-${currentItemId}`);
+                    if (element) {
+                        element.remove();
+                    }
+                    currentItemId = null;
+                    showPage('viewSchedulePage');
+                } else {
+                    alert('계획 삭제 실패: ' + data.message);
+                }
+            });
         } else {
             alert('삭제할 여행 계획이 없습니다.');
         }
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+        loadPlans('play');
+        loadPlans('eat');
+        loadPlans('stay');
+        loadPlans('others');
+    });
     // 입력 필드 초기화 함수
     function clearForm(type) {
         const placeField = document.getElementById(`${type}-place`);
@@ -324,6 +553,20 @@
 
     .play-item, .eat-item, .stay-item, .others-item, .comment-item {
         margin-bottom: 15px;
+    }
+    #searchResults ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+    #searchResults li {
+        cursor: pointer;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    #searchResults li:hover {
+        background-color: #f0f0f0;
     }
 </style>
 
