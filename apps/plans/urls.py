@@ -18,4 +18,6 @@ urlpatterns=[
     path('timetable/', timetable, name='timetable'),
     #초대코드를 입력하는 페이지
     path('join_group_page/', join_group_page, name='join_group_page'),
+    #map view
+    path('map/', map_view, name='map_view'),
 ]

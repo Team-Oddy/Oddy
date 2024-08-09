@@ -263,3 +263,9 @@ def timetable(request):
     return render(request, 'timetable.html')
 
 
+
+#map예제 추가해봤으나 검색은 안되는 중.. 지도는 잘 불러와짐
+from django.shortcuts import render
+
+def map_view(request):
+    return render(request, 'map.html')
