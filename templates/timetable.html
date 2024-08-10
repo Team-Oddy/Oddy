@@ -54,15 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAllPlans();
 });
 
-function addPlanToTimetable(plan) {
-    const cell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${plan.time.split(':')[0]}"]`);
-    if (cell) {
-        const planElement = document.createElement('div');
-        planElement.textContent = `${plan.category}: ${plan.place}`;
-        planElement.className = `plan ${plan.category}`;
-        cell.appendChild(planElement);
-    }
-}
 //시간표에 추가하는 함수임
 function addPlanToTimetable(plan) {
     if (plan.date && plan.plan_start_time && plan.plan_end_time) {

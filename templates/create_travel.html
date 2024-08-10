@@ -7,7 +7,7 @@
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <div class="create_travel-main-header">
-        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day != None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3><hr>
+        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day != None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3>
     </div>
     
     <div class="create_travel-main-members-container">
@@ -19,7 +19,7 @@
     </div><br>
     
     <div class="create_travel-main-addPlans" onclick="showPage('viewSchedulePage')">
-        <p>여행 계획 추가하기</p>
+        <p>여행 계획 확인하기</p>
     </div><br>
     
     <div class="create_travel-main-timetable">
@@ -31,122 +31,143 @@
 
 <!--여행 계획 추가하기->play->추가하기-->
 <div id="playPage" class="create_travel-play-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
     <h3 class="create_travel-play-title">PLAY</h3>
     <div class="create_travel-play-place">
-        <label for="play-place">여행지를 알려주세요!</label><br>
+        <label for="play-place">
+            <span>여행지를 알려주세요!</span></label>
         <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
         <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
-        <button onclick="previousPage='playPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('play-place').value;">검색</button>
+        <button onclick="previousPage='playPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('play-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
     </div>
     <div class="create_travel-play-place-info">
-        <label for="play-description">여행지를 한줄로 소개해주세요!</label><br>
-        <textarea id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></textarea>
+        <label for="play-description">
+            <span>여행지를 한줄로 소개해주세요!</span></label>
+        <input type="text" id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
     </div>
-    <button class="btn-submit" onclick="submitForm('play')">완료</button>
-
+    <button class="btn-submit" onclick="submitForm('play')">
+        <span>완료</span></button>
 </div>
 
 <!--여행 계획 추가하기->eat->추가하기-->
 <div id="eatPage" class="create_travel-eat-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
     <h3 class="create_travel-eat-title">EAT</h3>
     <div class="create_travel-eat-place">
-        <label for="eat-place">여행지를 알려주세요!</label><br>
+        <label for="eat-place">
+        <span>여행지를 알려주세요!</span></label><br>
         <input type="text" id="eat-place" name="place" placeholder="장소 이름을 검색해보세요">
         <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
-        <button onclick="previousPage='eatPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('eat-place').value;">검색</button>
+        <button onclick="previousPage='eatPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('eat-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
     </div>
     <div class="create_travel-eat-place-info">
         <label for="eat-description">여행지를 한줄로 소개해주세요!</label><br>
-        <textarea id="eat-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></textarea>
+        <input id="eat-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
     </div>
-    <button class="btn-submit" onclick="submitForm('eat')">완료</button>
+    <button class="btn-submit" onclick="submitForm('eat')">
+        <span>완료</span></button>
 </div>
 
 <!--여행 계획 추가하기->stay->추가하기-->
 <div id="stayPage" class="create_travel-stay-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
     <h3 class="create_travel-stay-title">STAY</h3>
     <div class="create_travel-stay-place">
-        <label for="stay-place">여행지를 알려주세요!</label><br>
+        <label for="stay-place">
+        <span>여행지를 알려주세요!</span></label><br>
         <input type="text" id="stay-place" name="place" placeholder="장소 이름을 검색해보세요">
         <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
-        <button onclick="previousPage='stayPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('stay-place').value;">검색</button>
+        <button onclick="previousPage='stayPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('stay-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
     </div>
     <div class="create_travel-stay-place-info">
         <label for="stay-description">여행지를 한줄로 소개해주세요!</label><br>
-        <textarea id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></textarea>
+        <input id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
     </div>
-    <button class="btn-submit" onclick="submitForm('stay')">완료</button>
-
+    <button class="btn-submit" onclick="submitForm('stay')">
+        <span>완료</span></button>
 </div>
 
 <!--여행 계획 추가하기->others->추가하기-->
 <div id="othersPage" class="create_travel-others-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
     <h3 class="create_travel-others-title">OTHERS</h3>
     <div class="create_travel-others-place">
-        <label for="others-place">여행지를 알려주세요!</label><br>
+        <label for="others-place">
+        <span>여행지를 알려주세요!</span></label><br>
         <input type="text" id="others-place" name="place" placeholder="장소 이름을 검색해보세요">
         <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
-        <button onclick="previousPage='othersPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('others-place').value;">검색</button>
+        <button onclick="previousPage='othersPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('others-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
     </div>
     <div class="create_travel-others-place-info">
         <label for="others-description">여행지를 한줄로 소개해주세요!</label><br>
-        <textarea id="others-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></textarea>
+        <input id="others-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
     </div>
-    <button class="btn-submit" onclick="submitForm('others')">완료</button>
+    <button class="btn-submit" onclick="submitForm('others')">
+        <span>완료</span></button>
 </div>
 
 <!--장소검색-->
-<!-- <div id="placeSearchPage" class="create_travel-play-place-search create_travel-page">
-    <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
-    <button>검색</button><br>
-    <button class="btn-submit" onclick="showPage('playPage')">완료</button>
-</div> -->
-
 <div id="placeSearchPage" class="create_travel-play-place-search create_travel-page">
     <input type="text" id="search-place" name="place" placeholder="장소 이름을 검색해보세요">
-    <button onclick="searchPlace()">검색</button><br>
+    <button>
+        <img src="{% static 'image/search-pink.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-pink"> 
+    </button><br>
     <div id="searchResults"></div>
-    <button class="btn-submit" onclick="showPage('previousPage')">이전</button>
+    <button class="btn-submit" onclick="showPage(previousPage)">
+        <span>완료</span></button>
 </div>
 
 <!--메인->여행 계획 추가하기-->
 <div id="viewSchedulePage" class="create_travel-all-container create_travel-page">
     <h3 class="create_travel-all-title">여행 계획 확인하기</h3>
-    <button onclick="showPage('travelMain')">메인으로</button>
+    <button onclick="showPage('travelMain')">
+    <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn"> 
+    </button>
     <div class="create_travel-all-menu">
-        <a href="#" onclick="showContent('playContent')" class="create_travel-all-play">PLAY</a>
-        <a href="#" onclick="showContent('eatContent')" class="create_travel-all-eat">EAT</a>
-        <a href="#" onclick="showContent('stayContent')" class="create_travel-all-stay">STAY</a>
-        <a href="#" onclick="showContent('othersContent')" class="create_travel-all-others">OTHERS</a>
-    </div><hr>
+        <a href="#" onclick="selectPlan('play')" class="create_travel-all-play">PLAY</a>
+        <a href="#" onclick="selectPlan('eat')" class="create_travel-all-eat">EAT</a>
+        <a href="#" onclick="selectPlan('stay')" class="create_travel-all-stay">STAY</a>
+        <a href="#" onclick="selectPlan('others')" class="create_travel-all-others">OTHERS</a>
+    </div>
     <div id="playContent" class="create_travel-all-content">
         <div class="content-items"></div>
-        <button class="add-button" onclick="clearForm('play'); showPage('playPage')">추가</button>
-        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
     </div>
     <div id="eatContent" class="create_travel-all-content">
         <div class="content-items"></div>
-        <button class="add-button" onclick="clearForm('eat'); showPage('eatPage')">추가</button>
-        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
     </div>
     <div id="stayContent" class="create_travel-all-content">
         <div class="content-items"></div>
-        <button class="add-button" onclick="clearForm('stay'); showPage('stayPage')">추가</button>
-        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
     </div>
     <div id="othersContent" class="create_travel-all-content">
         <div class="content-items"></div>
-        <button class="add-button" onclick="clearForm('others'); showPage('othersPage')">추가</button>
-        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
+    </div>
+    <!-- 추가 버튼과 달력으로 이동 링크 항상 표시되게-->
+    <div class="create_travel-buttons">
+        <button class="add-button" onclick="addNewPlan()">
+        <img src="{% static 'image/plus-btn.svg' %}" alt="plus-btn" width="53" height="53" class="plus-btn"> 
+        </button>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}" class="create_travel-main-button">
+            <img src="{% static 'image/calender-btn.svg' %}" alt="calender-btn" width="53" height="53" class="calender-btn"> 
+        </a>
     </div>
 </div>
 
 <!-- 여행 계획 디테일(댓글입력) -->
 <div id="travelDetail" class="create_travel-page">
-    <h3>여행 상세 보기</h3>
+    <h3 class="travel-detail-page-top">여행 계획 상세보기</h3>
     <div id="travelDetailContent"></div>
     <button onclick="deleteTravelPlan()">여행 계획 삭제하기</button>
-    <button onclick="showPage('viewSchedulePage')">이전</button><hr>
+    <button onclick="showPage('viewSchedulePage')">
+        <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn"> 
+    </button>
     <div id="travelDetailComments"></div>
 </div>
 
@@ -204,6 +225,21 @@
         return cookieValue;
     }
     const csrftoken = getCookie('csrftoken');
+
+    // 여행 계획 유형 선택 함수
+    function selectPlan(planType) {
+        selectedPlan = planType;
+        showContent(planType + 'Content'); // 선택한 유형의 콘텐츠를 표시
+    }
+
+    // 새로운 여행 계획 추가
+    function addNewPlan() {
+        if (selectedPlan) {
+            showPage(selectedPlan + 'Page');
+        } else {
+            alert('추가할 여행 유형을 선택하세요.');
+        }
+    }
 
     // id="playPage"에서 모든 내용 입력 후 완료하기 누르면 id="viewSchedulePage"에 해당하는 유형 아래 내용 추가
     function submitForm(type) {
@@ -356,7 +392,7 @@ function selectPlace(title, address) {
                     <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
                     <span class="like-count" id="like-count-${plan.id}">0</span>
                 </button>
-            </div><hr>
+            </div>
         `;
         document.getElementById(`${plan.category}Content`).innerHTML += content;
     }
@@ -433,11 +469,13 @@ function selectPlace(title, address) {
         `;
         document.getElementById('travelDetailContent').innerHTML = detailContent;
         document.getElementById('travelDetailComments').innerHTML = `
-            <p>댓글 <span id="comment_count_${itemId}">0</span></p>
+            <p class="comment-count">댓글 <span id="comment_count_${itemId}">0</span></p>
             <div id="comment_list_${itemId}">
             </div>
-            <input type="text" id="comment_${itemId}" name="content" placeholder="댓글 입력">
-            <button onclick="make_comment(${itemId})" type="submit">작성</button>
+            <input type="text" id="comment_${itemId}" name="content" placeholder="이 여행지에 대한 댓글을 작성해보세요">
+            <button onclick="make_comment(${itemId})" type="submit">
+            <img src="{% static 'image/send.svg' %}" alt="back-btn" width="24" height="24" class="send-btn"> 
+            </button>
         `;
         showPage('travelDetail');
         updateCommentCount(itemId);
@@ -514,7 +552,7 @@ function selectPlace(title, address) {
         newComment.classList.add('comment-item');
         newComment.id = commentId;
         newComment.innerHTML = `
-            <p>댓글 작성자: 00</p><p>${content}</p>
+            <p>댓글 작성자: 00</p><p class="comment-content">${content}</p>
             <button onclick="delete_comment('${commentId}')">삭제</button>
         `;
         commentList.appendChild(newComment);
@@ -556,8 +594,20 @@ function selectPlace(title, address) {
         cursor: pointer;
     }
 
-    .play-item, .eat-item, .stay-item, .others-item, .comment-item {
-        margin-bottom: 15px;
+    /*추가, 달력으로 이동 스타일*/
+    .create_travel-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .create_travel-buttons .add-button,
+    .create_travel-buttons .create_travel-main-button {
+        margin-bottom: 10px;
+        display: inline-block;
     }
     #searchResults ul {
     list-style-type: none;

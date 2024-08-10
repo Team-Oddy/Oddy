@@ -25,8 +25,8 @@
 
 <div id="optionsPage" class="create_group-page">
     <p>설레는 여행 계획하기, 오디와 함께해요!</p>
-    <img src="{% static 'image/Group 615.png' %}" alt="white cloud" width="178.37" height="175" class="create_group-white_cloud"> 
-    <img src="{% static 'image/Group 616.png' %}" alt="pink cloud" width="159" height="156" class="create_group-pink_cloud">    
+    <img src="{% static 'image/white-big-cloud.svg' %}" alt="white cloud" width="178.37" height="175" class="create_group-white_cloud"> 
+    <img src="{% static 'image/pink-small-cloud.svg' %}" alt="pink cloud" width="159" height="156" class="create_group-pink_cloud">    
     <button class="create-travelgroup" onclick="showPage('travelNamePage')">
         <span>여행 모임 만들기</span></button>
     <button class="enter-invitedgroup" onclick="joinGroup()">
@@ -82,10 +82,10 @@
 </div>
 
 <div id="completePage" class="create_group-page">
-    <img src="{% static 'image/Group 8.png' %}" alt="check icon" width="57" height="57" class="complete_page-check_icon"> 
+    <img src="{% static 'image/check-btn.svg' %}" alt="check icon" width="57" height="57" class="complete_page-check_icon"> 
     <p class="complete_create_group">여행 모임 생성 완료</p>
     <p class="together_trip">설레는 여행을 함께 준비해봐요!</p>
-    <img src="{% static 'image/Group 618.png' %}" alt="pink cloud" width="224" height="219.77" class="complete_page-pink_cloud"> 
+    <img src="{% static 'image/pink-big-cloud.svg' %}" alt="pink cloud" width="224" height="219.77" class="complete_page-pink_cloud"> 
     <button class="share-link">
     <span>초대 링크 공유하기</span></button>
     <b class="enter-group">
@@ -94,7 +94,7 @@
 </div>
 
 <div id="entryPage" class="create_group-page">
-    <img src="{% static 'image/Group 687.png' %}" alt="cloud icon" width="192.46" height="112.36"> 
+    <img src="{% static 'image/two-character.svg' %}" alt="cloud icon" width="192.46" height="112.36"> 
     <p class="question">당신의 여행 유형이 궁금하지 않으신가요?</p>
     <p class="findyourstyle">5개의 질문으로<br>나만의 여행 스타일을 발견해보세요!</p>
     <a href="javascript:void(0)" onclick="showPage('optionsPage')" class="skip-test">

@@ -5,18 +5,17 @@
 {% block title %}Oddy-my_page{% endblock %}
 
 {% block content %}
-<a href="#" class="main-kakao">카카오 로그인</a><br>
-<a href="{% url 'plans:create_group' %}">여행 모임 생성</a>
-<a href="{% url 'plans:my_page' %}" class="main-mypage">
-    <img src="{% static 'image/person.png' %}" alt="person Icon" width="20" height="20">
-</a>
 {% if user.is_authenticated %}
-    <p>환영합니다, {{ user.username }}님!</p>
-    <a href="{% url 'plans:kakao_logout' %}">로그아웃</a>
-    <a href="{% url 'plans:create_group' %}">여행 모임 생성</a>
+    <a href="{% url 'plans:my_page' %}" class="main-mypage">
+    <img src="{% static 'image/person.svg' %}" alt="Person Icon" width="20" height="20">
+    </a>
+    <a href="{% url 'plans:create_group' %}" class="enter-oddy">
+        <span>오디 시작하기</span>
+    </a>
 {% else %}
     <a href="{% provider_login_url 'kakao' %}" class="main-kakao">
-    <img src="{% static 'image/kakao_talk.png' %}" alt="kakao Icon" width="20" height="18.57">
-    <span>카카오 로그인</span></a>
+        <img src="{% static 'image/kakao_talk.svg' %}" alt="kakao Icon" width="20" height="18.57">
+        <span>카카오 로그인</span>
+    </a>
 {% endif %}
 {% endblock %}

@@ -13,9 +13,10 @@
 .next-link.active, .complete-btn.active {
     background: var(--pink02);
 }
-.test-selected  {
-    background-color: var(--white) !important;
-    border: 1px solid var(--pink02) !important;
+.test-selected  { 
+    background-color: transparent !important;
+    border: 1.5px solid var(--pink02) !important;
+    color: var(--black) !important;
 }
 </style>
 
@@ -191,7 +192,7 @@ function completeTest() {
             let travelTypes = {
                 '완벽주의 플래너형': {
                     className: 'perfect-planner',
-                    svg: `<img src="{% static 'image/Group 686 (1).png' %}" alt="pink cloud" width="136.67" height="121.31" class="create_group-pink_cloud-a">`,
+                    svg: `<img src="{% static 'image/character1.svg' %}" alt="pink cloud" width="136.67" height="121.31" class="create_group-pink_cloud-a">`,
                     name: '완벽주의 플래너형',
                     keyword1: '#효율적',
                     keyword2: '#체계적',
@@ -201,7 +202,7 @@ function completeTest() {
                 },
                 '자유로운 모험가형': {
                     className: 'free-planner',
-                    svg: `<img src="{% static 'image/Group 686 (2).png' %}" alt="pink cloud" width="135.02" height="151.29" class="create_group-pink_cloud-b">`,
+                    svg: `<img src="{% static 'image/character2.svg' %}" alt="pink cloud" width="135.02" height="151.29" class="create_group-pink_cloud-b">`,
                     name: '자유로운 모험가형',
                     keyword1: '#즉흥적',
                     keyword2: '#문화체험',
@@ -211,7 +212,7 @@ function completeTest() {
                 },
                 '휴식 추구형': {
                     className: 'rest',
-                    svg: `<img src="{% static 'image/Group 686.png' %}" alt="pink cloud" width="134.83" height="122.54" class="create_group-pink_cloud-c">`,
+                    svg: `<img src="{% static 'image/character3.svg' %}" alt="pink cloud" width="134.83" height="122.54" class="create_group-pink_cloud-c">`,
                     name: '휴식 추구형',
                     keyword1: '#힐링',
                     keyword2: '#여유',
@@ -221,7 +222,7 @@ function completeTest() {
                 },
                 '미식 탐험가형': {
                     className: 'eat',
-                    svg: `<img src="{% static 'image/Group 686 (3).png' %}" alt="pink cloud" width="156.4" height="150.85" class="create_group-pink_cloud-d">`,
+                    svg: `<img src="{% static 'image/character4.svg' %}" alt="pink cloud" width="156.4" height="150.85" class="create_group-pink_cloud-d">`,
                     name: '미식 탐험가형',
                     keyword1: '#맛집투어',
                     keyword2: '#현지음식',
@@ -231,7 +232,7 @@ function completeTest() {
                 },
                 '균형 잡힌 탐험가형': {
                     className: 'explorer',
-                    svg: `<img src="{% static 'image/Group 686 (4).png' %}" alt="pink cloud" width="127.2" height="132.88" class="create_group-pink_cloud-e">`,
+                    svg: `<img src="{% static 'image/character5.svg' %}" alt="pink cloud" width="127.2" height="132.88" class="create_group-pink_cloud-e">`,
                     name: '균형잡힌 탐험가형',
                     keyword1: '#다재다능',
                     keyword2: '#융통성',
@@ -275,7 +276,7 @@ function completeTest() {
                         </ul>
                     </div>
                     <a class="testResult-restart" href="javascript:void(0)" onclick="restartTest()">다시 할래요</a>
-                    <button class="testResult-button"  onclick="startOddy()">오디 시작하기</button>
+                    <button class="testResult-button"  onclick="startOddy()">오디 입장하기</button>
                 </div>
             `;
             document.getElementById('test-page-container').innerHTML = '';
