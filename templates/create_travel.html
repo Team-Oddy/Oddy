@@ -23,7 +23,7 @@
     </div><br>
     
     <div class="create_travel-main-timetable">
-        <a href="{% url 'plans:timetable' %}" class="create_travel-main-button">여행 시간표 보기</a>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a>
     </div><br>
     
     <a href="{% url 'plans:travel_map' %}" class="create_travel-main-button">여행 지도 보기</a>
@@ -122,22 +122,22 @@
     <div id="playContent" class="create_travel-all-content">
         <div class="content-items"></div>
         <button class="add-button" onclick="clearForm('play'); showPage('playPage')">추가</button>
-        <a href="{% url 'plans:timetable' %}" class="create_travel-main-button">달력으로 이동</a><hr>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
     </div>
     <div id="eatContent" class="create_travel-all-content">
         <div class="content-items"></div>
         <button class="add-button" onclick="clearForm('eat'); showPage('eatPage')">추가</button>
-        <a href="{% url 'plans:timetable' %}" class="create_travel-main-button">달력으로 이동</a><hr>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
     </div>
     <div id="stayContent" class="create_travel-all-content">
         <div class="content-items"></div>
         <button class="add-button" onclick="clearForm('stay'); showPage('stayPage')">추가</button>
-        <a href="{% url 'plans:timetable' %}" class="create_travel-main-button">달력으로 이동</a><hr>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
     </div>
     <div id="othersContent" class="create_travel-all-content">
         <div class="content-items"></div>
         <button class="add-button" onclick="clearForm('others'); showPage('othersPage')">추가</button>
-        <a href="{% url 'plans:timetable' %}" class="create_travel-main-button">달력으로 이동</a><hr>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
     </div>
 </div>
 
@@ -440,7 +440,7 @@ function selectPlace(title, address) {
             <button onclick="make_comment(${itemId})" type="submit">작성</button>
         `;
         showPage('travelDetail');
-        updateCommentCount(itemId); // 페이지를 열 때 댓글 수 업데이트
+        updateCommentCount(itemId);
     }
 
     // 여행 계획 삭제 함수

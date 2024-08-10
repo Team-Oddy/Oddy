@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from . import views
 
 app_name='plans'
 
@@ -15,7 +16,10 @@ urlpatterns=[
     path('save_test_result/', save_test_result, name='save_test_result'),
     path('create_travel/', create_travel, name='create_travel'),
     path('travel_map/', travel_map, name='travel_map'),
-    path('timetable/', timetable, name='timetable'),
+    path('timetable/<int:travel_group_id>/', views.timetable_view, name='timetable'),
+    path('add_timetable_plan/<int:travel_group_id>/', views.add_timetable_plan, name='add_timetable_plan'),
+    path('get_all_plans/<int:travel_group_id>/', views.get_all_plans, name='get_all_plans'),
+    path('get_plans/<int:travel_group_id>/', views.get_plans, name='get_plans'),
     #초대코드를 입력하는 페이지
     path('join_group_page/', join_group_page, name='join_group_page'),
     #map view
@@ -26,4 +30,7 @@ urlpatterns=[
     path('plan/<int:plan_id>/delete/', delete_travel_plan, name='delete_travel_plan'),
     path('plan/<int:plan_id>/detail/', travel_plan_detail, name='travel_plan_detail'),
     path('search/', search_view, name='search'),
+    path('timetable/<int:travel_group_id>/', views.timetable_view, name='timetable'),
+    path('add_timetable_plan/<int:travel_group_id>/', views.add_timetable_plan, name='add_timetable_plan'),
+    path('update_plan_datetime/', views.update_plan_datetime, name='update_plan_datetime'),
 ]

@@ -259,9 +259,6 @@ function submitNickname() {
 }
 
 function submitTravelInfo() {
-    const startDate = new Date(formData.travelStartDate);
-    const endDate = new Date(formData.travelEndDate);
-
     fetch('/travel_name_page/', {
         method: 'POST',
         headers: {
@@ -270,8 +267,8 @@ function submitTravelInfo() {
         },
         body: JSON.stringify({
             travelName: formData.travelName,
-            travelStartDate: startDate.toISOString().split('T')[0],
-            travelEndDate: endDate.toISOString().split('T')[0]
+            travelStartDate: formData.travelStartDate,
+            travelEndDate: formData.travelEndDate
         })
     })
     .then(response => response.json())
@@ -283,5 +280,31 @@ function submitTravelInfo() {
         }
     });
 }
+
+// function submitTravelInfo() {
+//     const startDate = new Date(formData.travelStartDate);
+//     const endDate = new Date(formData.travelEndDate);
+
+//     fetch('/travel_name_page/', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': getCookie('csrftoken')
+//         },
+//         body: JSON.stringify({
+//             travelName: formData.travelName,
+//             travelStartDate: startDate.toISOString().split('T')[0],
+//             travelEndDate: endDate.toISOString().split('T')[0]
+//         })
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.success) {
+//             showPage('completePage');
+//         } else {
+//             alert(data.error);
+//         }
+//     });
+// }
 </script>
 {% endblock %}
