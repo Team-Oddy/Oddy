@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import UserProfile, TravelGroup
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import requests
 from django.conf import settings
@@ -13,6 +13,11 @@ from django.views.decorators.http import require_http_methods
 import random
 import string
 import re
+from .forms import TravelGroupForm
+from .models import TravelGroup, TravelPlan
+from datetime import datetime, timedelta
+from django.views.decorators.http import require_POST
+
 
 #선아 작성 부분
 def main(request):
@@ -239,32 +244,43 @@ def join_group_page(request):
     return render(request, 'join_group.html', {'form': form})
 
 
-#여행 계획
-def create_travel(request):
-    #여행 모임 이름 가져오기
-    travel_group = TravelGroup.objects.order_by('-id').first()
-    travel_name = travel_group.travel_name if travel_group else '여행 이름 없음'
-    group_id = travel_group.id if travel_group else None
 
-    #종료일-시작일 구해서 D-?로 표시
-    if travel_group:
-        start_date = travel_group.start_date
-        end_date = travel_group.end_date
+
+@login_required
+def create_travel(request):
+    if request.method == 'POST':
+        form = TravelGroupForm(request.POST)
+        if form.is_valid():
+            travel_group = form.save(commit=False)
+            travel_group.creator = request.user.userprofile
+            travel_group.save()
+            travel_group.members.add(request.user.userprofile)
+            return redirect('plans:timetable', travel_group_id=travel_group.id)
+    else:
+        form = TravelGroupForm()
+
+    latest_travel_group = TravelGroup.objects.order_by('-id').first()
+    
+    if latest_travel_group:
+        travel_name = latest_travel_group.travel_name
+        start_date = latest_travel_group.start_date
+        end_date = latest_travel_group.end_date
         d_day = (end_date - start_date).days
     else:
+        travel_name = '여행 이름 없음'
         d_day = None
 
-    return render(request, 'create_travel.html', {
-        'travel_name': travel_name, 
+    context = {
+        'form': form,
+        'travel_name': travel_name,
         'd_day': d_day,
-        'travel_group': travel_group
-    })
+        'travel_group': latest_travel_group
+    }
+
+    return render(request, 'create_travel.html', context)
 
 def travel_map(request):
     return render(request, 'travel_map.html')
-
-def timetable(request):
-    return render(request, 'timetable.html')
 
 
 
@@ -402,3 +418,97 @@ def search_view(request):
             'ncp_client_id': settings.NAVER_CLIENT_ID
         }
         return JsonResponse({'results': results, 'query': query})
+    
+
+
+
+def timetable_view(request, travel_group_id):
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
+    travel_plans = TravelPlan.objects.filter(travel_group=travel_group)
+
+    # 날짜 범위 생성
+    date_range = [travel_group.start_date + timedelta(days=x) for x in range((travel_group.end_date - travel_group.start_date).days + 1)]
+
+    context = {
+        'travel_group': travel_group,
+        'travel_plans': travel_plans,
+        'date_range': date_range,
+        'hours': range(24),
+    }
+    return render(request, 'timetable.html', context)
+
+@require_POST
+def add_timetable_plan(request, travel_group_id):
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
+    data = json.loads(request.body)
+
+    date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+    time = datetime.strptime(data['time'], '%H:%M').time()
+
+    new_plan = TravelPlan.objects.create(
+        travel_group=travel_group,
+        creator=request.user.userprofile,
+        category=data['category'],
+        place=data['place'],
+        description=data['description'],
+        date=date,
+        time=time
+    )
+
+    return JsonResponse({
+        'status': 'success', 
+        'plan_id': new_plan.id,
+        'category': new_plan.category,
+        'place': new_plan.place,
+        'date': new_plan.date.strftime('%Y-%m-%d'),
+        'time': new_plan.time.strftime('%H:%M')
+    })
+
+def get_all_plans(request, travel_group_id):
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
+    plans = TravelPlan.objects.filter(travel_group=travel_group)
+    plans_data = [{
+        'id': plan.id,
+        'category': plan.category,
+        'place': plan.place,
+        'description': plan.description,
+        'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
+        'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
+        'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
+    } for plan in plans]
+    return JsonResponse(plans_data, safe=False)
+
+def get_plans(request, travel_group_id):
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
+    category = request.GET.get('category')
+    if category:
+        plans = TravelPlan.objects.filter(travel_group=travel_group, category=category)
+    else:
+        plans = TravelPlan.objects.filter(travel_group=travel_group)
+    
+    plans_data = [{
+        'id': plan.id,
+        'category': plan.category,
+        'place': plan.place,
+        'description': plan.description,
+        'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
+        'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
+        'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
+    } for plan in plans]
+    return JsonResponse(plans_data, safe=False)
+
+@require_POST
+def update_plan_datetime(request):
+    data = json.loads(request.body)
+    plan_id = data.get('plan_id')
+    date = data.get('date')
+    plan_start_time = data.get('plan_start_time')
+    plan_end_time = data.get('plan_end_time')
+    
+    plan = get_object_or_404(TravelPlan, id=plan_id)
+    plan.date = date
+    plan.plan_start_time = plan_start_time
+    plan.plan_end_time = plan_end_time
+    plan.save()
+    
+    return JsonResponse({'status': 'success', 'category': plan.category})

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 import random
 import string
 
@@ -35,6 +36,9 @@ class TravelGroup(models.Model):
             if not TravelGroup.objects.filter(invite_code=code).exists():
                 return code
 
+from django.db import models
+from django.utils import timezone
+
 class TravelPlan(models.Model):
     CATEGORY_CHOICES = [
         ('play', 'PLAY'),
@@ -48,12 +52,14 @@ class TravelPlan(models.Model):
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
     place = models.CharField(max_length=200)
     description = models.TextField()
+    date = models.DateField(null=True, blank=True)
+    plan_start_time = models.TimeField(null=True, blank=True)
+    plan_end_time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.travel_group.travel_name} - {self.category}: {self.place}"
-
+        return f"{self.travel_group.travel_name} - {self.category}: {self.place} on {self.date} from {self.plan_start_time} to {self.plan_end_time}"
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

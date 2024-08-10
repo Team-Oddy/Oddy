@@ -1,10 +1,223 @@
 {% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Oddy-timetable{% endblock %}
-
 {% block content %}
+<h1>{{ travel_group.travel_name }} 시간표</h1>
 
-시간표
+<div class="timetable-container">
+    <table class="timetable">
+        <thead>
+            <tr>
+                <th>시간</th>
+                {% for date in date_range %}
+                    <th>{{ date|date:"m/d (D)" }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for hour in hours %}
+                <tr>
+                    <th>{{ hour }}:00</th>
+                    {% for date in date_range %}
+                        <td data-date="{{ date|date:'Y-m-d' }}" data-hour="{{ hour }}"></td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
+<div class="plan-management">
+    <h2>여행 계획 관리</h2>
+    <div class="category-buttons">
+        <button onclick="showPlans('play')">PLAY</button>
+        <button onclick="showPlans('eat')">EAT</button>
+        <button onclick="showPlans('stay')">STAY</button>
+        <button onclick="showPlans('others')">OTHERS</button>
+    </div>
+    <div id="plan-list"></div>
+</div>
+
+<div id="date-time-modal" class="modal">
+    <div class="modal-content">
+        <h3>날짜와 시간 입력</h3>
+        <input type="date" id="modal-date">
+        <input type="time" id="modal-start-time">
+        <input type="time" id="modal-end-time">
+        <button onclick="saveDateTimeAndClose()">저장</button>
+        <button onclick="closeModal()">취소</button>
+    </div>
+</div>
+
+<script>
+let currentPlanId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadAllPlans();
+});
+
+function addPlanToTimetable(plan) {
+    const cell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${plan.time.split(':')[0]}"]`);
+    if (cell) {
+        const planElement = document.createElement('div');
+        planElement.textContent = `${plan.category}: ${plan.place}`;
+        planElement.className = `plan ${plan.category}`;
+        cell.appendChild(planElement);
+    }
+}
+//시간표에 추가하는 함수임
+function addPlanToTimetable(plan) {
+    if (plan.date && plan.plan_start_time && plan.plan_end_time) {
+        const startHour = parseInt(plan.plan_start_time.split(':')[0]);
+        const endHour = parseInt(plan.plan_end_time.split(':')[0]);
+        
+        for (let hour = startHour; hour <= endHour; hour++) {
+            const cell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${hour}"]`);
+            if (cell) {
+                const planElement = document.createElement('div');
+                planElement.textContent = `${plan.category}: ${plan.place}`;
+                planElement.className = `plan ${plan.category}`;
+                if (hour === startHour) {
+                    planElement.textContent += ` (${plan.plan_start_time})`;
+                } else if (hour === endHour) {
+                    planElement.textContent += ` (${plan.plan_end_time})`;
+                }
+                
+                cell.appendChild(planElement);
+            }
+        }
+    }
+}
+
+function loadAllPlans() {
+    fetch(`{% url "plans:get_all_plans" travel_group.id %}`)
+    .then(response => response.json())
+    .then(plans => {
+        plans.forEach(addPlanToTimetable);
+    });
+}
+
+function showPlans(category) {
+    fetch(`{% url "plans:get_plans" travel_group.id %}?category=${category}`)
+    .then(response => response.json())
+    .then(plans => {
+        const planList = document.getElementById('plan-list');
+        planList.innerHTML = '';
+        plans.forEach(plan => {
+            const planElement = document.createElement('div');
+            planElement.className = 'plan-item';
+            planElement.innerHTML = `
+                <h3>${plan.place}</h3>
+                <p>${plan.description}</p>
+                <p class="date-time-info" style="display: ${plan.date && plan.plan_start_time && plan.plan_end_time ? 'block' : 'none'}">
+                    Date: ${plan.date || ''}, 
+                    Start Time: ${plan.plan_start_time || ''}, 
+                    End Time: ${plan.plan_end_time || ''}
+                </p>
+                <button onclick="openDateTimeModal(${plan.id})">
+                    ${plan.date && plan.plan_start_time && plan.plan_end_time ? '날짜/시간 수정' : '날짜/시간 입력'}
+                </button>
+            `;
+            planList.appendChild(planElement);
+        });
+    });
+}
+function openDateTimeModal(planId) {
+    currentPlanId = planId;
+    document.getElementById('date-time-modal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('date-time-modal').style.display = 'none';
+}
+
+function saveDateTimeAndClose() {
+    const date = document.getElementById('modal-date').value;
+    const startTime = document.getElementById('modal-start-time').value;
+    const endTime = document.getElementById('modal-end-time').value;
+    
+    fetch(`{% url "plans:update_plan_datetime" %}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            plan_id: currentPlanId,
+            date: date,
+            plan_start_time: startTime,
+            plan_end_time: endTime
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            closeModal();
+            showPlans(data.category);
+            loadAllPlans();
+        }
+    });
+}
+</script>
+
+<style>
+.timetable-container {
+    overflow-x: auto;
+}
+.timetable {
+    width: 100%;
+    border-collapse: collapse;
+}
+.timetable th, .timetable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.plan {
+    margin: 2px;
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 0.8em;
+}
+.play { background-color: #ffd700; }
+.eat { background-color: #90ee90; }
+.stay { background-color: #add8e6; }
+.others { background-color: #d3d3d3; }
+.plan-management {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+.category-buttons {
+    margin-bottom: 10px;
+}
+.category-buttons button {
+    margin-right: 10px;
+}
+.plan-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+</style>
 {% endblock %}
