@@ -18,3 +18,8 @@ class InviteCodeForm(forms.Form):
             'placeholder': '초대 코드 6자리를 입력해주세요'
         })
     )
+
+class TravelGroupForm(forms.ModelForm):
+    class Meta:
+        model = TravelGroup
+        fields = ['travel_name', 'start_date', 'end_date']
