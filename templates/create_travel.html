@@ -236,33 +236,34 @@
 
     // id="playPage"에서 모든 내용 입력 후 완료하기 누르면 id="viewSchedulePage"에 해당하는 유형 아래 내용 추가
     function submitForm(type) {
-        let place = document.getElementById(`${type}-place`).value;
-        let description = document.getElementById(`${type}-description`).value;
-        if (!place || !description) {
-            alert('모든 내용을 채워주세요.');
-            return;
-        }
-
-        fetch(`/group/${groupId}/add_plan/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({category: type, place, description})
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                addPlanToUI(data);
-                clearForm(type);
-                showPage('viewSchedulePage');
-                showContent(`${type}Content`);
-            } else {
-                alert('계획 추가 실패: ' + data.message);
-            }
-        });
+    let place = document.getElementById(`${type}-place`).value;
+    let description = document.getElementById(`${type}-description`).value;
+    if (!place || !description) {
+        alert('모든 내용을 채워주세요.');
+        return;
     }
+
+    fetch(`/group/${groupId}/add_plan/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({category: type, place, description})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            clearForm(type);
+            showPage('viewSchedulePage');
+            showContent(`${type}Content`);
+            loadPlans(type);  // 해당 카테고리의 계획들을 다시 로드
+        } else {
+            alert('계획 추가 실패: ' + data.message);
+        }
+    });
+}
+
 
 //     function searchPlace() {
 //     let query = document.getElementById('search-place').value;
@@ -373,41 +374,49 @@ function selectPlace(title, address) {
     showPage(previousPage);
 }
 
-    function addPlanToUI(plan) {
-        let content = `
-            <div class="${plan.category}-item" id="${plan.category}-item-${plan.id}" onclick="viewDetail('${plan.category}', '${plan.place}', '${plan.description}', '${plan.creator}', ${plan.id})">
+
+    // 여행 계획 불러오기
+    function loadPlans(category) {
+    const url = `/group/${groupId}/get_plans/?category=${category}`;
+    console.log('Request URL:', url);
+    fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Received data:', data);
+        const contentContainer = document.querySelector(`#${category}Content .content-items`);
+        contentContainer.innerHTML = ''; // 기존 내용을 비웁니다.
+        
+        data.plans.forEach(plan => {
+            const planElement = document.createElement('div');
+            planElement.className = `${category}-item`;
+            planElement.id = `${category}-item-${plan.id}`;
+            planElement.onclick = () => viewDetail(category, plan.place, plan.description, plan.creator, plan.id);
+            
+            planElement.innerHTML = `
                 <p>시간표에 추가 여부 o/x</p>
-                <p>유형: ${plan.category.toUpperCase()}</p>
+                <p>유형: ${category.toUpperCase()}</p>
                 <p>작성자: ${plan.creator}</p>
                 <p>장소: ${plan.place}</p>
                 <p>설명: ${plan.description}</p>
                 <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
                     <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
-                    <span class="like-count" id="like-count-${plan.id}">0</span>
+                    <span class="like-count" id="like-count-${plan.id}">${plan.likes || 0}</span>
                 </button>
-            </div>
-        `;
-        document.getElementById(`${plan.category}Content`).innerHTML += content;
-    }
-
-    // 여행 계획 불러오기
-    function loadPlans(category) {
-        const url = `/group/${groupId}/get_plans/?category=${category}`;
-        console.log('Request URL:', url);
-        fetch(url)
-        .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-        })
-        .then(data => {
-    })
-        .catch(error => {
-            console.error('Error:', error);
-            alert(`계획 불러오기 실패: ${error.message}`);
+            `;
+            
+            contentContainer.appendChild(planElement);
         });
-    }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert(`계획 불러오기 실패: ${error.message}`);
+    });
+}
 
     // 여행 계획 삭제
     function deleteTravelPlan() {
