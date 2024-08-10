@@ -7,7 +7,7 @@
 <div id="joinGroupPage" class="join_group-page">
     <div class="join_group-joinCode">
         <div class="join_group-joinCode-container">
-            <img src="{% static 'image/Group 622.png' %}" alt="white cloud" width="46.83" height="45.94" class="join_group-white_cloud"> 
+            <img src="{% static 'image/white-small-cloud.svg' %}" alt="white cloud" width="46.83" height="45.94" class="join_group-white_cloud"> 
             <h2 class="join_group-joinCode-h2">초대 코드 입력하기</h2>
             <form method="post" action="{% url 'plans:join_group_page' %}">
                 {% csrf_token %}

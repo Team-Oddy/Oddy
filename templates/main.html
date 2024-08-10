@@ -7,14 +7,14 @@
 {% block content %}
 {% if user.is_authenticated %}
     <a href="{% url 'plans:my_page' %}" class="main-mypage">
-    <img src="{% static 'image/person.png' %}" alt="Person Icon" width="20" height="20">
+    <img src="{% static 'image/person.svg' %}" alt="Person Icon" width="20" height="20">
     </a>
     <a href="{% url 'plans:create_group' %}" class="enter-oddy">
-        <span>오디 입장하기</span>
+        <span>오디 시작하기</span>
     </a>
 {% else %}
     <a href="{% provider_login_url 'kakao' %}" class="main-kakao">
-        <img src="{% static 'image/kakao_talk.png' %}" alt="kakao Icon" width="20" height="18.57">
+        <img src="{% static 'image/kakao_talk.svg' %}" alt="kakao Icon" width="20" height="18.57">
         <span>카카오 로그인</span>
     </a>
 {% endif %}
