@@ -128,13 +128,15 @@
 <!--메인->여행 계획 추가하기-->
 <div id="viewSchedulePage" class="create_travel-all-container create_travel-page">
     <h3 class="create_travel-all-title">여행 계획 확인하기</h3>
-    <button onclick="showPage('travelMain')">메인으로</button>
+    <button onclick="showPage('travelMain')">
+    <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn">
+    </button>
     <div class="create_travel-all-menu">
         <a href="#" onclick="showContent('playContent'); selectPlan('play')" class="create_travel-all-play">PLAY</a>
         <a href="#" onclick="showContent('eatContent'); selectPlan('eat')" class="create_travel-all-eat">EAT</a>
         <a href="#" onclick="showContent('stayContent'); selectPlan('stay')" class="create_travel-all-stay">STAY</a>
         <a href="#" onclick="showContent('othersContent'); selectPlan('others')" class="create_travel-all-others">OTHERS</a>
-    </div><hr>
+    </div>
     <div id="playContent" class="create_travel-all-content">
         <div class="content-items"></div>
     </div>
@@ -148,8 +150,12 @@
         <div class="content-items"></div>
     </div>
     <div class="create_travel-buttons">
-        <button class="add-button" onclick="addNewPlan()">추가</button>
-        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a><hr>
+        <button class="add-button" onclick="addNewPlan()">
+            <img src="{% static 'image/plus-btn.svg' %}" alt="back-btn" width="53" height="53" class="plus-btn"> 
+        </button>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
+            <img src="{% static 'image/calender-btn.svg' %}" alt="back-btn" width="53" height="53" class="calender-btn"> 
+        </a>
     </div>
 </div>
 
@@ -234,11 +240,12 @@
         }
     }
 
-    // id="playPage"에서 모든 내용 입력 후 완료하기 누르면 id="viewSchedulePage"에 해당하는 유형 아래 내용 추가
     function submitForm(type) {
-    let place = document.getElementById(`${type}-place`).value;
+    let placeInput = document.getElementById(`${type}-place`);
+    let place = placeInput.value;
+    let address = placeInput.dataset.address;
     let description = document.getElementById(`${type}-description`).value;
-    if (!place || !description) {
+    if (!place || !description || !address) {
         alert('모든 내용을 채워주세요.');
         return;
     }
@@ -249,7 +256,7 @@
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
         },
-        body: JSON.stringify({category: type, place, description})
+        body: JSON.stringify({category: type, place, address, description})
     })
     .then(response => response.json())
     .then(data => {
@@ -257,13 +264,12 @@
             clearForm(type);
             showPage('viewSchedulePage');
             showContent(`${type}Content`);
-            loadPlans(type);  // 해당 카테고리의 계획들을 다시 로드
+            loadPlans(type);
         } else {
             alert('계획 추가 실패: ' + data.message);
         }
     });
 }
-
 
 //     function searchPlace() {
 //     let query = document.getElementById('search-place').value;

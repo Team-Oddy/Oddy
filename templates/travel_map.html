@@ -1,8 +1,165 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Oddy-travel_map{% endblock %}
+{% block title %}여행 지도{% endblock %}
 
 {% block content %}
-지도
+<div id="map-container">
+    <div id="map"></div>
+    <h2 class="map-travel_group_name">{{ travel_group.travel_name }}</h2>
+    <button id="returnToMyLocation">
+        <img src="{% static 'image/now-position-btn.svg' %}" alt="position-btn" width="53" height="53" class="now-position-btn">
+    </button>
+</div>
+
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=asqg2o00lg&submodules=geocoder"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var staticUrl = "{% static '' %}";
+    var map;
+    var currentLocation = { lat: 0, lng: 0 };
+    var marker;
+    var markers = [];
+
+    function initMap(lat, lng) {
+        currentLocation = { lat, lng };
+        map = new naver.maps.Map("map", {
+            center: new naver.maps.LatLng(lat, lng),
+            zoom: 15,
+            zoomControl: false,
+            mapTypeControl: false,
+            scaleControl: false,
+            mapDataControl: false,
+        });
+        
+        marker = new naver.maps.Marker({
+            position: new naver.maps.LatLng(lat, lng),
+            map: map
+        });
+
+        // 여행 계획 마커 추가
+        addTravelPlanMarkers();
+    }
+
+    function getMarkerIcon(category) {
+    const iconPaths = {
+        'play': staticUrl + 'image/play-marker.svg',
+        'eat': staticUrl + 'image/eat-marker.svg',
+        'stay': staticUrl + 'image/stay-marker.svg',
+        'others': staticUrl + 'image/others-marker.svg'
+    };
+
+    if (category in iconPaths) {
+        return {
+            content: `<img src="${iconPaths[category]}" alt="${category} marker" style="width: 35px; height: 35px;">`,
+            size: new naver.maps.Size(35, 35),
+            anchor: new naver.maps.Point(17.5, 35)
+        };
+    }
+
+    // 기본 아이콘 반환
+    return {
+        content: `<img src="${staticUrl}image/default-marker.svg" alt="default marker" style="width: 35px; height: 35px;">`,
+        size: new naver.maps.Size(35, 35),
+        anchor: new naver.maps.Point(17.5, 35)
+    };
+    
+    }
+
+
+    function addTravelPlanMarkers() {
+        {% for plan in travel_plans %}
+            {% if plan.address %}
+                naver.maps.Service.geocode({
+                    query: '{{ plan.address }}'
+                }, function(status, response) {
+                    if (status === naver.maps.Service.Status.OK) {
+                        var result = response.v2.addresses[0];
+                        var lat = result.y;
+                        var lng = result.x;
+                        var markerOptions = {
+                            position: new naver.maps.LatLng(lat, lng),
+                            map: map,
+                            title: '{{ plan.place }}',
+                            icon: getMarkerIcon('{{ plan.category }}')
+                        };
+                        var marker = new naver.maps.Marker(markerOptions);
+                        markers.push(marker);
+
+                        // 정보 창 추가
+                        var infoWindow = new naver.maps.InfoWindow({
+                            content: '<div style="padding:10px;"><strong>{{ plan.place }}</strong><br>{{ plan.description }}<br>{{ plan.category }}</div>'
+                        });
+
+                        naver.maps.Event.addListener(marker, "click", function(e) {
+                            if (infoWindow.getMap()) {
+                                infoWindow.close();
+                            } else {
+                                infoWindow.open(map, marker);
+                            }
+                        });
+                    }
+                });
+            {% endif %}
+        {% endfor %}
+    }
+
+    function setCurrentLocation(callback) {
+        function success(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            currentLocation = { lat, lng };
+            if (callback) {
+                callback(lat, lng);
+            } else {
+                initMap(lat, lng);
+            }
+            
+            if (marker) {
+                marker.setPosition(new naver.maps.LatLng(lat, lng));
+            }
+        }
+
+        function error() {
+            const lat = 37.5666103;
+            const lng = 126.9783882;
+            currentLocation = { lat, lng };
+            if (callback) {
+                callback(lat, lng);
+            } else {
+                initMap(lat, lng);
+            }
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error);
+        } else {
+            error();
+        }
+    }
+
+    window.onload = function() {
+        setCurrentLocation();
+
+        document.getElementById('returnToMyLocation').addEventListener('click', function() {
+            if (currentLocation.lat !== 0 && currentLocation.lng !== 0) {
+                map.setCenter(new naver.maps.LatLng(currentLocation.lat, currentLocation.lng));
+                if (marker) {
+                    marker.setPosition(new naver.maps.LatLng(currentLocation.lat, currentLocation.lng));
+                }
+            } else {
+                setCurrentLocation(function(lat, lng) {
+                    map.setCenter(new naver.maps.LatLng(lat, lng));
+                    if (marker) {
+                        marker.setPosition(new naver.maps.LatLng(lat, lng));
+                    }
+                });
+            }
+        });
+    };
+
+    window.addEventListener('resize', function() {
+        map.setSize(new naver.maps.Size(window.innerWidth, window.innerHeight));
+    });
+</script>
 {% endblock %}

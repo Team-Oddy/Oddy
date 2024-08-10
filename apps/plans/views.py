@@ -17,6 +17,8 @@ from .forms import TravelGroupForm
 from .models import TravelGroup, TravelPlan
 from datetime import datetime, timedelta
 from django.views.decorators.http import require_POST
+from django.shortcuts import render, get_object_or_404
+from .models import TravelGroup, TravelPlan
 
 
 #선아 작성 부분
@@ -308,9 +310,10 @@ def add_travel_plan(request, group_id):
     data = json.loads(request.body)
     category = data.get('category')
     place = data.get('place')
+    address = data.get('address')
     description = data.get('description')
     
-    if not all([category, place, description]):
+    if not all([category, place,address, description]):
         return JsonResponse({'status': 'error', 'message': 'Missing required fields'})
     
     plan = TravelPlan.objects.create(
@@ -318,6 +321,7 @@ def add_travel_plan(request, group_id):
         creator=request.user.userprofile,
         category=category,
         place=place,
+        address=address,
         description=description
     )
     
@@ -326,6 +330,7 @@ def add_travel_plan(request, group_id):
         'id': plan.id,
         'category': plan.category,
         'place': plan.place,
+        'address': plan.address,
         'description': plan.description,
         'creator': plan.creator.nickname or plan.creator.user.username
     })
@@ -512,3 +517,13 @@ def update_plan_datetime(request):
     plan.save()
     
     return JsonResponse({'status': 'success', 'category': plan.category})
+
+def travel_map(request, travel_group_id):
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
+    travel_plans = TravelPlan.objects.filter(travel_group=travel_group)
+    
+    context = {
+        'travel_group': travel_group,
+        'travel_plans': travel_plans,
+    }
+    return render(request, 'travel_map.html', context)

@@ -51,6 +51,7 @@ class TravelPlan(models.Model):
     creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='created_plans')
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
     place = models.CharField(max_length=200)
+    address = models.CharField(max_length=500, null=True, blank=True)
     description = models.TextField()
     date = models.DateField(null=True, blank=True)
     plan_start_time = models.TimeField(null=True, blank=True)

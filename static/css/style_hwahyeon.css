@@ -1,3 +1,6 @@
+body {
+    overflow-y: auto;
+}
 /*create_group.html nickname*/
 .create_group-nickname-top, .create_group-travelName-top, .create_group-travelDate-top {
     display: flex;

@@ -23,7 +23,9 @@ urlpatterns=[
     #초대코드를 입력하는 페이지
     path('join_group_page/', join_group_page, name='join_group_page'),
     #map view
-    path('map/', map_view, name='map_view'),
+    path('travel_map/<int:travel_group_id>/', views.travel_map, name='travel_map'),
+    path('travel_map/', views.travel_map, name='travel_map'),
+    path('travel_map/<int:travel_group_id>/', views.travel_map, name='travel_map_with_id'),
     #travel plans
     path('group/<int:group_id>/add_plan/', add_travel_plan, name='add_travel_plan'),
     path('group/<int:group_id>/get_plans/', get_travel_plans, name='get_travel_plans'),
