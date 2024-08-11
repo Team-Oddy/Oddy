@@ -518,6 +518,7 @@ def update_plan_datetime(request):
     
     return JsonResponse({'status': 'success', 'category': plan.category})
 
+#지도 마커 구현 코드
 def travel_map(request, travel_group_id):
     travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
     travel_plans = TravelPlan.objects.filter(travel_group=travel_group)

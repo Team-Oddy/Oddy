@@ -129,7 +129,7 @@ body {
 {
     position: static;  
     font: var(--text-style-pretendard-semibold-16);
-    color: var(--black);
+    color: var(--gray03);
 }
 
 .create_group-nickname-button.active, .create_group-travelName-button.active, .create_group-travelDate-button.active {
@@ -137,6 +137,16 @@ body {
     cursor: pointer;
     border-color: var(--pink02);
 }
+
+.create_group-nickname-button.active span,
+.create_group-travelName-button.active span,
+.create_group-travelDate-button.active span,
+#submitButton.active span,
+#travelNameButton.active span,
+#travelDateButton.active span {
+    color: var(--black);
+}
+
 .create_group-travelName-top-circle1, .create_group-travelDate-top-circle1 {
     width: 6px;
     height: 6px;

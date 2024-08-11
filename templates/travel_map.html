@@ -18,7 +18,7 @@
     var staticUrl = "{% static '' %}";
     var map;
     var currentLocation = { lat: 0, lng: 0 };
-    var marker;
+    var currentLocationMarker;
     var markers = [];
 
     function initMap(lat, lng) {
@@ -31,10 +31,17 @@
             scaleControl: false,
             mapDataControl: false,
         });
-        
-        marker = new naver.maps.Marker({
+
+        var currentLocationIcon = {
+            content: '<img src="' + staticUrl + 'image/now-marker.svg" alt="Current Location" style="width: 14px; height: 14px;">',
+            size: new naver.maps.Size(14, 14),
+            anchor: new naver.maps.Point(7, 7)
+        };
+
+        currentLocationMarker = new naver.maps.Marker({
             position: new naver.maps.LatLng(lat, lng),
-            map: map
+            map: map,
+            icon: currentLocationIcon
         });
 
         // 여행 계획 마커 추가
@@ -42,30 +49,28 @@
     }
 
     function getMarkerIcon(category) {
-    const iconPaths = {
-        'play': staticUrl + 'image/play-marker.svg',
-        'eat': staticUrl + 'image/eat-marker.svg',
-        'stay': staticUrl + 'image/stay-marker.svg',
-        'others': staticUrl + 'image/others-marker.svg'
-    };
+        const iconPaths = {
+            'play': staticUrl + 'image/play-marker.svg',
+            'eat': staticUrl + 'image/eat-marker.svg',
+            'stay': staticUrl + 'image/stay-marker.svg',
+            'others': staticUrl + 'image/others-marker.svg'
+        };
 
-    if (category in iconPaths) {
+        if (category in iconPaths) {
+            return {
+                content: `<img src="${iconPaths[category]}" alt="${category} marker" style="width: 35px; height: 35px;">`,
+                size: new naver.maps.Size(35, 35),
+                anchor: new naver.maps.Point(17.5, 35)
+            };
+        }
+
+        // 기본 아이콘 반환
         return {
-            content: `<img src="${iconPaths[category]}" alt="${category} marker" style="width: 35px; height: 35px;">`,
+            content: `<img src="${staticUrl}image/default-marker.svg" alt="default marker" style="width: 35px; height: 35px;">`,
             size: new naver.maps.Size(35, 35),
             anchor: new naver.maps.Point(17.5, 35)
         };
     }
-
-    // 기본 아이콘 반환
-    return {
-        content: `<img src="${staticUrl}image/default-marker.svg" alt="default marker" style="width: 35px; height: 35px;">`,
-        size: new naver.maps.Size(35, 35),
-        anchor: new naver.maps.Point(17.5, 35)
-    };
-    
-    }
-
 
     function addTravelPlanMarkers() {
         {% for plan in travel_plans %}
@@ -115,8 +120,8 @@
                 initMap(lat, lng);
             }
             
-            if (marker) {
-                marker.setPosition(new naver.maps.LatLng(lat, lng));
+            if (currentLocationMarker) {
+                currentLocationMarker.setPosition(new naver.maps.LatLng(lat, lng));
             }
         }
 
@@ -144,14 +149,14 @@
         document.getElementById('returnToMyLocation').addEventListener('click', function() {
             if (currentLocation.lat !== 0 && currentLocation.lng !== 0) {
                 map.setCenter(new naver.maps.LatLng(currentLocation.lat, currentLocation.lng));
-                if (marker) {
-                    marker.setPosition(new naver.maps.LatLng(currentLocation.lat, currentLocation.lng));
+                if (currentLocationMarker) {
+                    currentLocationMarker.setPosition(new naver.maps.LatLng(currentLocation.lat, currentLocation.lng));
                 }
             } else {
                 setCurrentLocation(function(lat, lng) {
                     map.setCenter(new naver.maps.LatLng(lat, lng));
-                    if (marker) {
-                        marker.setPosition(new naver.maps.LatLng(lat, lng));
+                    if (currentLocationMarker) {
+                        currentLocationMarker.setPosition(new naver.maps.LatLng(lat, lng));
                     }
                 });
             }
