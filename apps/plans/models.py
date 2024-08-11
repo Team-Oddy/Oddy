@@ -1,8 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.utils import timezone
 import random
 import string
 
@@ -15,7 +14,7 @@ class UserProfile(models.Model):
         return self.nickname if self.nickname else self.user.username
 
 class TravelGroup(models.Model):
-    creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='created_travel_groups', null =True)
+    creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='created_travel_groups', null=True)
     members = models.ManyToManyField(UserProfile, related_name='joined_travel_groups')
     travel_name = models.CharField(max_length=15)
     start_date = models.DateField()
@@ -36,9 +35,6 @@ class TravelGroup(models.Model):
             if not TravelGroup.objects.filter(invite_code=code).exists():
                 return code
 
-from django.db import models
-from django.utils import timezone
-
 class TravelPlan(models.Model):
     CATEGORY_CHOICES = [
         ('play', 'PLAY'),
@@ -51,20 +47,15 @@ class TravelPlan(models.Model):
     creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='created_plans')
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
     place = models.CharField(max_length=200)
+    address = models.CharField(max_length=500, null=True, blank=True)
     description = models.TextField()
     date = models.DateField(null=True, blank=True)
     plan_start_time = models.TimeField(null=True, blank=True)
     plan_end_time = models.TimeField(null=True, blank=True)
+    like_count = models.PositiveIntegerField(default=0)
+    comment_count = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.travel_group.travel_name} - {self.category}: {self.place} on {self.date} from {self.plan_start_time} to {self.plan_end_time}"
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.save()

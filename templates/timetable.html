@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{{ travel_group.travel_name }} 시간표</h1>
+<h2>{{ travel_group.travel_name }} 시간표</h2>
 
 <div class="timetable-container">
     <table class="timetable">
@@ -25,8 +25,16 @@
     </table>
 </div>
 
+<div class="pagination">
+    {% if has_previous %}
+        <button onclick="changePage('{{ previous_page_url }}')">이전</button>
+    {% endif %}
+    {% if has_next %}
+        <button onclick="changePage('{{ next_page_url }}')">다음</button>
+    {% endif %}
+</div>
+
 <div class="plan-management">
-    <h2>여행 계획 관리</h2>
     <div class="category-buttons">
         <button onclick="showPlans('play')">PLAY</button>
         <button onclick="showPlans('eat')">EAT</button>
@@ -36,25 +44,115 @@
     <div id="plan-list"></div>
 </div>
 
-<div id="date-time-modal" class="modal">
+<div id="date-modal" class="modal">
     <div class="modal-content">
-        <h3>날짜와 시간 입력</h3>
-        <input type="date" id="modal-date">
+        <h3>방문 날짜 선택</h3>
+        <select id="modal-date">
+            {% for date in available_dates %}
+                <option value="{{ date }}">{{ date|date:"Y-m-d" }}</option>
+            {% endfor %}
+        </select>
+        <button onclick="openTimeModal()">다음</button>
+        <button onclick="closeDateModal()">취소</button>
+    </div>
+</div>
+
+<div id="time-modal" class="modal">
+    <div class="modal-content">
+        <h3>방문 시간 입력</h3>
         <input type="time" id="modal-start-time">
         <input type="time" id="modal-end-time">
         <button onclick="saveDateTimeAndClose()">저장</button>
-        <button onclick="closeModal()">취소</button>
+        <button onclick="closeTimeModal()">취소</button>
     </div>
 </div>
 
 <script>
 let currentPlanId = null;
+let selectedDate = null;
 
 document.addEventListener('DOMContentLoaded', function() {
     loadAllPlans();
 });
 
-//시간표에 추가하는 함수임
+function openDateTimeModal(planId) {
+    currentPlanId = planId;
+    document.getElementById('date-modal').style.display = 'block';
+}
+
+function closeDateModal() {
+    document.getElementById('date-modal').style.display = 'none';
+}
+
+function openTimeModal() {
+    const dateElement = document.getElementById('modal-date');
+    const selectedDateValue = dateElement.value;
+
+    if (!selectedDateValue) {
+        alert('날짜를 선택해주세요.');
+        return;
+    }
+
+    const selectedDate = new Date(selectedDateValue);
+
+    if (isNaN(selectedDate)) {
+        alert('유효한 날짜를 선택해주세요.');
+        return;
+    }
+
+    const formattedDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+    dateElement.value = formattedDate;
+    
+    document.getElementById('date-modal').style.display = 'none';
+    document.getElementById('time-modal').style.display = 'block';
+}
+
+
+
+function closeTimeModal() {
+    document.getElementById('time-modal').style.display = 'none';
+}
+
+function saveDateTimeAndClose() {
+    const startTime = document.getElementById('modal-start-time').value;
+    const endTime = document.getElementById('modal-end-time').value;
+    
+    if (!startTime || !endTime) {
+        alert('시간을 입력해주세요.');
+        return;
+    }
+
+    fetch(`{% url "plans:update_plan_datetime" %}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            plan_id: currentPlanId,
+            date: selectedDate,
+            plan_start_time: startTime,
+            plan_end_time: endTime
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            closeTimeModal();
+            showPlans(data.category);
+            loadAllPlans();
+        }
+    });
+}
+
+function loadAllPlans() {
+    fetch(`{% url "plans:get_all_plans" travel_group.id %}`)
+    .then(response => response.json())
+    .then(plans => {
+        plans.forEach(addPlanToTimetable);
+    });
+}
+
 function addPlanToTimetable(plan) {
     if (plan.date && plan.plan_start_time && plan.plan_end_time) {
         const startHour = parseInt(plan.plan_start_time.split(':')[0]);
@@ -78,14 +176,6 @@ function addPlanToTimetable(plan) {
     }
 }
 
-function loadAllPlans() {
-    fetch(`{% url "plans:get_all_plans" travel_group.id %}`)
-    .then(response => response.json())
-    .then(plans => {
-        plans.forEach(addPlanToTimetable);
-    });
-}
-
 function showPlans(category) {
     fetch(`{% url "plans:get_plans" travel_group.id %}?category=${category}`)
     .then(response => response.json())
@@ -96,8 +186,10 @@ function showPlans(category) {
             const planElement = document.createElement('div');
             planElement.className = 'plan-item';
             planElement.innerHTML = `
-                <h3>${plan.place}</h3>
-                <p>${plan.description}</p>
+                <p>유형: ${category.toUpperCase()}</p>
+                <p>작성자: ${plan.creator}</p>
+                <p>장소: ${plan.place}</p>
+                <p>설명: ${plan.description}</p>
                 <p class="date-time-info" style="display: ${plan.date && plan.plan_start_time && plan.plan_end_time ? 'block' : 'none'}">
                     Date: ${plan.date || ''}, 
                     Start Time: ${plan.plan_start_time || ''}, 
@@ -111,41 +203,9 @@ function showPlans(category) {
         });
     });
 }
-function openDateTimeModal(planId) {
-    currentPlanId = planId;
-    document.getElementById('date-time-modal').style.display = 'block';
-}
 
-function closeModal() {
-    document.getElementById('date-time-modal').style.display = 'none';
-}
-
-function saveDateTimeAndClose() {
-    const date = document.getElementById('modal-date').value;
-    const startTime = document.getElementById('modal-start-time').value;
-    const endTime = document.getElementById('modal-end-time').value;
-    
-    fetch(`{% url "plans:update_plan_datetime" %}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({
-            plan_id: currentPlanId,
-            date: date,
-            plan_start_time: startTime,
-            plan_end_time: endTime
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            closeModal();
-            showPlans(data.category);
-            loadAllPlans();
-        }
-    });
+function changePage(url) {
+    window.location.href = url;
 }
 </script>
 
@@ -209,6 +269,20 @@ function saveDateTimeAndClose() {
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
+}
+.pagination {
+    text-align: center;
+}
+.pagination button {
+    cursor: pointer;
+}
+.pagination span {
+    font-size: 1.2em;
+    margin: 0 15px;
+    vertical-align: middle;
+}
+.pagination button:hover {
+    color: #007bff;
 }
 </style>
 {% endblock %}

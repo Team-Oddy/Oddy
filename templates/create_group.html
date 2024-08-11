@@ -75,7 +75,7 @@
     <div class="create_group-travelDate-bottom">
         <p class="create_group-travelDate-comment">여행 일정을 알려주세요!</p><br>
         <input type="text" id="travelStartDate" placeholder="  시작일" class="create_group-travelDate-input-start"><p class="create_group-travelDate-input-center"></p><input type="text" id="travelEndDate" placeholder="  종료일" class="create_group-travelDate-input-end"><br>
-        <p id="travelDateError" class="create_group-error">여행 이름은 15글자 이내로 작성해주세요.</p><br>
+        <p id="travelDateError" class="create_group-error">여행 날짜를 올바르게 입력해주세요.</p><br>
         <button onclick="nextStepDates('travelStartDate', 'travelEndDate')" class="create_group-travelDate-button" id="travelDateButton">
         <span>완료</span></button>
     </div>
@@ -155,14 +155,72 @@ document.getElementById('travelName').addEventListener('input', function() {
     }
 });
 
+// 수정된 부분: 날짜 입력 시 포맷팅과 검증을 처리
 document.getElementById('travelStartDate').addEventListener('input', function() {
+    formatInputDate(this);
+    validateDateInput();  // 시작일이 현재 날짜보다 이전인지 확인
+});
+
+document.getElementById('travelEndDate').addEventListener('input', function() {
+    formatInputDate(this);
+    validateDateInput();  // 종료일이 시작일보다 빠른지 확인
+});
+
+// 날짜 입력 시 '-' 문자를 자동으로 삽입하는 함수
+function formatInputDate(input) {
+    let value = input.value.replace(/[^0-9]/g, '');
+    if (value.length >= 4) value = value.slice(0, 4) + '-' + value.slice(4);
+    if (value.length >= 7) value = value.slice(0, 7) + '-' + value.slice(7);
+    input.value = value;
+}
+
+// 입력된 날짜를 검증하는 함수
+function validateDateInput() {
+    let startDateInput = document.getElementById('travelStartDate');
+    let endDateInput = document.getElementById('travelEndDate');
+    let startDate = new Date(startDateInput.value);
+    let endDate = new Date(endDateInput.value);
+    let today = new Date();
+    
+    // 시작일이 오늘 날짜보다 이전인지 확인
+    if (startDateInput.value && startDate < today.setHours(0, 0, 0, 0)) {
+        alert("시작일은 오늘 이후로 설정해야 합니다."); // alert로 변경
+        return false;
+    }
+
+    // 종료일이 시작일보다 빠른지 확인
+    if (endDateInput.value && startDateInput.value && endDate < startDate) {
+        alert("종료일은 시작일 이후로 설정해야 합니다."); // alert로 변경
+        return false;
+    }
+
+    // 유효한 날짜 입력 시 버튼 활성화
     let button = document.getElementById('travelDateButton');
-    if (this.value.trim() !== "") {
+    if (startDateInput.value.trim() !== "" && endDateInput.value.trim() !== "") {
         button.classList.add('active');
     } else {
         button.classList.remove('active');
     }
-});
+    return true;
+}
+
+// 수정된 부분: 날짜 검증을 통과했는지 확인
+function nextStepDates(startInputId, endInputId) {
+    let startValue = document.getElementById(startInputId).value;
+    let endValue = document.getElementById(endInputId).value;
+    
+    if (!validateDateInput()) {
+        return;  
+    }
+    
+    formData[startInputId] = startValue;
+    formData[endInputId] = endValue;
+
+    showPage('completePage');
+
+    // 여행 정보 저장
+    submitTravelInfo();
+}
 
 function joinGroup() {
     window.location.href = "{% url 'plans:join_group_page' %}";
@@ -199,28 +257,6 @@ function nextStep(inputId, nextPageId) {
         showPage(nextPageId);
     }
 }
-
-function nextStepDates(startInputId, endInputId) {
-    let startValue = document.getElementById(startInputId).value;
-    let endValue = document.getElementById(endInputId).value;
-    if (startValue.trim() === "" || endValue.trim() === "") {
-        document.getElementById('travelDateError').style.display = 'block'; 
-        return;  
-    }
-    formData[startInputId] = startValue;
-    formData[endInputId] = endValue;
-
-    showPage('completePage');
-
-    // 여행 정보 저장
-    submitTravelInfo();
-}
-
-window.addEventListener('load', function() {
-    if (window.location.hash) {
-        showPage(window.location.hash.substring(1));
-    }
-});
 
 // CSRF 토큰을 가져오는 함수
 function getCookie(name) {
@@ -280,31 +316,5 @@ function submitTravelInfo() {
         }
     });
 }
-
-// function submitTravelInfo() {
-//     const startDate = new Date(formData.travelStartDate);
-//     const endDate = new Date(formData.travelEndDate);
-
-//     fetch('/travel_name_page/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': getCookie('csrftoken')
-//         },
-//         body: JSON.stringify({
-//             travelName: formData.travelName,
-//             travelStartDate: startDate.toISOString().split('T')[0],
-//             travelEndDate: endDate.toISOString().split('T')[0]
-//         })
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.success) {
-//             showPage('completePage');
-//         } else {
-//             alert(data.error);
-//         }
-//     });
-// }
 </script>
 {% endblock %}

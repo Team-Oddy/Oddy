@@ -342,13 +342,14 @@ def get_travel_plans(request, group_id):
     else:
         plans = TravelPlan.objects.filter(travel_group=travel_group).order_by('category', '-created_at')
     
+
     plans_data = [{
         'id': plan.id,
         'category': plan.category,
         'place': plan.place,
         'description': plan.description,
         'creator': plan.creator.nickname or plan.creator.user.username,
-        'created_at': plan.created_at.isoformat()
+        'created_at': plan.created_at.isoformat(),
     } for plan in plans]
     
     return JsonResponse({'status': 'success', 'plans': plans_data})
@@ -421,6 +422,7 @@ def search_view(request):
     
 
 
+from django.core.paginator import Paginator
 
 def timetable_view(request, travel_group_id):
     travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
@@ -429,11 +431,21 @@ def timetable_view(request, travel_group_id):
     # 날짜 범위 생성
     date_range = [travel_group.start_date + timedelta(days=x) for x in range((travel_group.end_date - travel_group.start_date).days + 1)]
 
+    # 페이지네이터를 사용하여 날짜를 4일씩 페이지네이션
+    paginator = Paginator(date_range, 4)  # 4일씩 페이지네이션
+    page_number = request.GET.get('page')  # URL에서 페이지 번호를 가져옴
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'travel_group': travel_group,
         'travel_plans': travel_plans,
-        'date_range': date_range,
-        'hours': range(24),
+        'date_range': page_obj.object_list,
+        'hours': range(9,22),
+        'has_previous': page_obj.has_previous(),
+        'has_next': page_obj.has_next(),
+        'previous_page_url': f"?page={page_obj.previous_page_number()}" if page_obj.has_previous() else None,
+        'next_page_url': f"?page={page_obj.next_page_number()}" if page_obj.has_next() else None,
+        'available_dates': date_range,
     }
     return render(request, 'timetable.html', context)
 
@@ -501,10 +513,14 @@ def get_plans(request, travel_group_id):
 def update_plan_datetime(request):
     data = json.loads(request.body)
     plan_id = data.get('plan_id')
-    date = data.get('date')
+    date_str = data.get('date')
     plan_start_time = data.get('plan_start_time')
     plan_end_time = data.get('plan_end_time')
     
+
+    date_str = re.sub(r'(\d{4})년\s(\d{1,2})월\s(\d{1,2})일', r'\1-\2-\3', date_str)
+    date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
     plan = get_object_or_404(TravelPlan, id=plan_id)
     plan.date = date
     plan.plan_start_time = plan_start_time
@@ -512,3 +528,4 @@ def update_plan_datetime(request):
     plan.save()
     
     return JsonResponse({'status': 'success', 'category': plan.category})
+
