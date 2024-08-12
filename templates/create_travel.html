@@ -129,7 +129,7 @@
 <div id="viewSchedulePage" class="create_travel-all-container create_travel-page">
     <h3 class="create_travel-all-title">여행 계획 확인하기</h3>
     <button onclick="showPage('travelMain')">
-    <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn">
+    <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn" onclick="showPage('travelMain')">
     </button>
     <div class="create_travel-all-menu">
         <a href="#" onclick="showContent('playContent'); selectPlan('play')" class="create_travel-all-play">PLAY</a>
@@ -334,32 +334,32 @@ function loadPlans(category) {
             const planElement = document.createElement('div');
             planElement.className = `${category}-item`;
             planElement.id = `${category}-item-${plan.id}`;
-            planElement.onclick = () => viewDetail(category, plan.place, plan.description, plan.creator, plan.id);
 
             let iconTopOffset = 177;
 
-                // SVG 이미지 경로 설정
-                const svgPath = `/static/image/${category.toLowerCase()}.svg`;
+            // SVG 이미지 경로 설정
+            const svgPath = `/static/image/${category.toLowerCase()}.svg`;
 
-                planElement.innerHTML = `
-                    <div class="plan-item-content">
-                        <img src="${svgPath}" alt="${category} icon" class="category-icon">
-                        <div class="plan-details">
-                            <p class="timetable-add">시간표에 추가 여부 o/x</p>
-                            <p class="plan-category">${category.toUpperCase()}</p>
-                            <p class="plan-creator">${plan.creator}</p>
-                            <p class="plan-place">${plan.place}</p>
-                            <p class="plan-description">${plan.description}</p>
-                            <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
-                                <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
-                                <span class="like-count" id="like-count-${plan.id}">${plan.likes || 0}명</span>
-                            </button>
-                        </div>
+            planElement.innerHTML = `
+                <div class="plan-item-content">
+                    <img src="${svgPath}" alt="${category} icon" class="category-icon" 
+                    onclick="viewDetail('${category}', '${plan.place.replace(/'/g, "\\'")}', 
+                    '${plan.description.replace(/'/g, "\\'")}', 
+                    '${plan.creator.replace(/'/g, "\\'")}', ${plan.id}); event.stopPropagation();">
+                    <div class="plan-details">
+                        <p class="timetable-add">시간표에 추가 여부 o/x</p>
+                        <p class="plan-category">${category.toUpperCase()}</p>
+                        <p class="plan-creator">${plan.creator}</p>
+                        <p class="plan-place">${plan.place}</p>
+                        <p class="plan-description">${plan.description}</p>
+                        <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
+                            <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
+                            <span class="like-count" id="like-count-${plan.id}">${plan.likes || 0}명</span>
+                        </button>
                     </div>
-                `;
+                </div>
+            `;
 
-                iconTopOffset += 21;
-            
             contentContainer.appendChild(planElement);
         });
     })
