@@ -267,7 +267,10 @@ def create_travel(request):
         travel_name = latest_travel_group.travel_name
         start_date = latest_travel_group.start_date
         end_date = latest_travel_group.end_date
-        d_day = (end_date - start_date).days
+
+        # 현재 날짜를 기준으로 D-Day 계산
+        today = datetime.today().date()
+        d_day = (start_date - today).days
     else:
         travel_name = '여행 이름 없음'
         d_day = None
@@ -347,13 +350,14 @@ def get_travel_plans(request, group_id):
     else:
         plans = TravelPlan.objects.filter(travel_group=travel_group).order_by('category', '-created_at')
     
+
     plans_data = [{
         'id': plan.id,
         'category': plan.category,
         'place': plan.place,
         'description': plan.description,
         'creator': plan.creator.nickname or plan.creator.user.username,
-        'created_at': plan.created_at.isoformat()
+        'created_at': plan.created_at.isoformat(),
     } for plan in plans]
     
     return JsonResponse({'status': 'success', 'plans': plans_data})
@@ -425,7 +429,8 @@ def search_view(request):
         return JsonResponse({'results': results, 'query': query})
     
 
-
+#시간표 부분
+from django.core.paginator import Paginator
 
 def timetable_view(request, travel_group_id):
     travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
@@ -434,11 +439,22 @@ def timetable_view(request, travel_group_id):
     # 날짜 범위 생성
     date_range = [travel_group.start_date + timedelta(days=x) for x in range((travel_group.end_date - travel_group.start_date).days + 1)]
 
+    # 페이지네이터를 사용하여 날짜를 4일씩 페이지네이션
+    paginator = Paginator(date_range, 4)  # 4일씩 페이지네이션
+    page_number = request.GET.get('page')  # URL에서 페이지 번호를 가져옴
+    page_obj = paginator.get_page(page_number)
+
+    hours = range(9, 22)
     context = {
         'travel_group': travel_group,
         'travel_plans': travel_plans,
-        'date_range': date_range,
-        'hours': range(24),
+        'date_range': page_obj.object_list,
+        'hours': hours,
+        'has_previous': page_obj.has_previous(),
+        'has_next': page_obj.has_next(),
+        'previous_page_url': f"?page={page_obj.previous_page_number()}" if page_obj.has_previous() else None,
+        'next_page_url': f"?page={page_obj.next_page_number()}" if page_obj.has_next() else None,
+        'available_dates': date_range,
     }
     return render(request, 'timetable.html', context)
 
@@ -502,20 +518,45 @@ def get_plans(request, travel_group_id):
     } for plan in plans]
     return JsonResponse(plans_data, safe=False)
 
+import json
+import re
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from datetime import datetime
+from .models import TravelPlan
 @require_POST
 def update_plan_datetime(request):
-    data = json.loads(request.body)
-    plan_id = data.get('plan_id')
-    date = data.get('date')
-    plan_start_time = data.get('plan_start_time')
-    plan_end_time = data.get('plan_end_time')
+    try:
+        data = json.loads(request.body)
+        plan_id = data.get('plan_id')
+        date_str = data.get('date')
+        plan_start_time = data.get('plan_start_time')
+        plan_end_time = data.get('plan_end_time')
+
+        plan = get_object_or_404(TravelPlan, id=plan_id)
+
+        # 날짜가 None이 아닌 경우에만 변환 작업 수행
+        if date_str:
+            date_str = re.sub(r'(\d{4})년\s(\d{1,2})월\s(\d{1,2})일', r'\1-\2-\3', date_str)
+            date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            plan.date = date
+        else:
+            # 날짜가 null일 경우, None으로 설정
+            plan.date = None
+
+        # 시작 및 종료 시간이 제공되었는지 확인
+        plan.plan_start_time = plan_start_time if plan_start_time else None
+        plan.plan_end_time = plan_end_time if plan_end_time else None
+
+        plan.save()
+        
+        return JsonResponse({'status': 'success', 'category': plan.category})
     
-    plan = get_object_or_404(TravelPlan, id=plan_id)
-    plan.date = date
-    plan.plan_start_time = plan_start_time
-    plan.plan_end_time = plan_end_time
-    plan.save()
+    except TravelPlan.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Plan not found'}, status=404)
     
+<<<<<<< HEAD
     return JsonResponse({'status': 'success', 'category': plan.category})
 
 #지도 마커 구현 코드
@@ -528,3 +569,96 @@ def travel_map(request, travel_group_id):
         'travel_plans': travel_plans,
     }
     return render(request, 'travel_map.html', context)
+=======
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+
+#좋아요
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from .models import TravelPlan, Like, Comment
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def toggle_like(request, id):
+    user = request.user.userprofile
+    travel_plan = get_object_or_404(TravelPlan, id=id)
+
+    # 좋아요가 이미 있는지 확인
+    existing_like = Like.objects.filter(travel_plan=travel_plan, user=user).first()
+
+    if existing_like:
+        # 이미 좋아요가 있는 경우 삭제
+        existing_like.delete()
+        liked = False
+    else:
+        # 좋아요가 없는 경우 추가
+        Like.objects.create(travel_plan=travel_plan, user=user)
+        liked = True
+
+    # 좋아요 수 업데이트
+    travel_plan.like_count = travel_plan.likes.count()
+    travel_plan.save()
+
+    return JsonResponse({
+        'liked': liked,
+        'like_count': travel_plan.like_count
+    })
+
+
+    
+@login_required
+@require_POST
+def add_comment(request, plan_id):
+    user_profile = request.user.userprofile
+    travel_plan = TravelPlan.objects.get(id=plan_id)
+    content = request.POST.get('content')
+
+    if content:
+        # 댓글 생성
+        comment = Comment.objects.create(user=user_profile, travel_plan=travel_plan, content=content)
+        comment_count = travel_plan.comments.count()
+
+        # 새로 생성된 댓글 데이터를 반환
+        comment_data = {
+            'id': comment.id,
+            'user': comment.user.nickname,  # 댓글 작성자의 닉네임
+            'content': comment.content,
+            'created_at': comment.created_at.isoformat()
+        }
+
+        return JsonResponse({'success': True, 'comment_count': comment_count, 'comment': comment_data})
+    else:
+        return JsonResponse({'success': False, 'error': '댓글 내용을 입력해주세요.'})
+
+@login_required
+@require_POST
+def delete_comment(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+
+    if request.user.userprofile == comment.user:
+        comment.delete()
+        comment_count = comment.travel_plan.comments.count()
+        return JsonResponse({'success': True, 'comment_count': comment_count, 'comment_id': comment_id})
+    else:
+        return JsonResponse({'success': False, 'error': '삭제할 권한이 없습니다.'})
+
+def get_comments(request, plan_id):
+    travel_plan = get_object_or_404(TravelPlan, id=plan_id)
+    comments = Comment.objects.filter(travel_plan=travel_plan).order_by('created_at')
+
+    comments_data = [{
+        'id': comment.id,
+        'user': comment.user.nickname,
+        'content': comment.content,
+        'created_at': comment.created_at.isoformat()
+    } for comment in comments]
+
+    return JsonResponse({'success': True, 'comments': comments_data})
+
+
+
+
+>>>>>>> 9d7a9e450a42c5007bc6f223630e65e98889fe64
