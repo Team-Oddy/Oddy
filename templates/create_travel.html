@@ -129,7 +129,7 @@
 <div id="viewSchedulePage" class="create_travel-all-container create_travel-page">
     <h3 class="create_travel-all-title">여행 계획 확인하기</h3>
     <button onclick="showPage('travelMain')">
-    <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn" onclick="showPage('travelMain')">
+        <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn" onclick="showPage('travelMain')">
     </button>
     <div class="create_travel-all-menu">
         <a href="#" onclick="showContent('playContent'); selectPlan('play')" class="create_travel-all-play">PLAY</a>
@@ -151,13 +151,14 @@
     </div>
     <div class="create_travel-buttons">
         <button class="add-button" onclick="addNewPlan()">
-            <img src="{% static 'image/plus-btn.svg' %}" alt="back-btn" width="53" height="53" class="plus-btn"> 
+            <img src="{% static 'image/plus-btn.svg' %}" alt="back-btn" width="53" height="53" class="plus-btn">
         </button>
         <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
-            <img src="{% static 'image/calender-btn.svg' %}" alt="back-btn" width="53" height="53" class="calender-btn"> 
+            <img src="{% static 'image/calender-btn.svg' %}" alt="back-btn" width="53" height="53" class="calender-btn">
         </a>
     </div>
 </div>
+>
 
 <!-- 여행 계획 디테일(댓글입력) -->
 <div id="travelDetail" class="create_travel-page">
@@ -210,9 +211,25 @@
 
     // 여행 계획 유형 선택 함수
     function selectPlan(planType) {
-        selectedPlan = planType;
-        showContent(planType + 'Content'); // 선택한 유형의 콘텐츠를 표시
+    // 선택된 플랜 유형을 설정
+    selectedPlan = planType;
+    
+    // 모든 메뉴 항목에서 active 클래스를 제거
+    const menuItems = document.querySelectorAll('.create_travel-all-menu a');
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // 선택한 메뉴 항목에 active 클래스를 추가
+    const selectedItem = document.querySelector(`.create_travel-all-${planType}`);
+    if (selectedItem) {
+        selectedItem.classList.add('active');
     }
+    
+    // 선택한 유형의 콘텐츠를 표시
+    showContent(planType + 'Content');
+}
+
 
     // 새로운 여행 계획 추가
     function addNewPlan() {
