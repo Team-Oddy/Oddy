@@ -536,6 +536,16 @@ def update_plan_datetime(request):
 
         plan = get_object_or_404(TravelPlan, id=plan_id)
 
+        # 이전 계획 정보 저장
+        old_plan = {
+            'id': plan.id,
+            'date': plan.date,
+            'plan_start_time': plan.plan_start_time,
+            'plan_end_time': plan.plan_end_time,
+            'category': plan.category,
+            'place': plan.place
+        }
+
         # 날짜가 None이 아닌 경우에만 변환 작업 수행
         if date_str:
             date_str = re.sub(r'(\d{4})년\s(\d{1,2})월\s(\d{1,2})일', r'\1-\2-\3', date_str)
@@ -550,15 +560,29 @@ def update_plan_datetime(request):
         plan.plan_end_time = plan_end_time if plan_end_time else None
 
         plan.save()
-        
-        return JsonResponse({'status': 'success', 'category': plan.category})
-    
+
+        # 새로운 계획 정보
+        new_plan = {
+            'id': plan.id,
+            'date': plan.date,
+            'plan_start_time': plan.plan_start_time,
+            'plan_end_time': plan.plan_end_time,
+            'category': plan.category,
+            'place': plan.place
+        }
+
+        return JsonResponse({
+            'status': 'success',
+            'category': plan.category,
+            'old_plan': old_plan,
+            'new_plan': new_plan
+        })
+
     except TravelPlan.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Plan not found'}, status=404)
-    
+
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
 
 
 #좋아요
