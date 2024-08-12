@@ -44,6 +44,15 @@
     <div id="plan-list"></div>
 </div>
 
+<div id="modify-or-delete-modal" class="modal">
+    <div class="modal-content">
+        <h3>계획 관리</h3>
+        <button onclick="openDateTimeModal(currentPlanId)">수정</button>
+        <button onclick="confirmDeletePlan(currentPlanId)">삭제</button>
+        <button onclick="closeModifyOrDeleteModal()">취소</button>
+    </div>
+</div>
+
 <div id="date-modal" class="modal">
     <div class="modal-content">
         <h3>방문 날짜 선택</h3>
@@ -60,10 +69,28 @@
 <div id="time-modal" class="modal">
     <div class="modal-content">
         <h3>방문 시간 입력</h3>
-        <input type="time" id="modal-start-time">
-        <input type="time" id="modal-end-time">
+        <label for="modal-start-time">시작 시간:</label>
+        <select id="modal-start-time">
+            {% for hour in hours %}
+                <option value="{{ hour|slice:":02" }}:00">{{ hour }}:00</option>
+            {% endfor %}
+        </select><br>
+        <label for="modal-end-time">종료 시간:</label>
+        <select id="modal-end-time">
+            {% for hour in hours %}
+                <option value="{{ hour|slice:":02" }}:00">{{ hour }}:00</option>
+            {% endfor %}
+        </select>
         <button onclick="saveDateTimeAndClose()">저장</button>
         <button onclick="closeTimeModal()">취소</button>
+    </div>
+</div>
+
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <h3>이 계획을 시간표에서 제거하시겠습니까?</h3>
+        <button onclick="removePlanFromTimetable()">제거</button>
+        <button onclick="closeDeleteModal()">취소</button>
     </div>
 </div>
 
@@ -75,15 +102,30 @@ document.addEventListener('DOMContentLoaded', function() {
     loadAllPlans();
 });
 
+//수정, 삭제 모달창 뜨게
+function openModifyOrDeleteModal(planId) {
+    currentPlanId = planId;
+    document.getElementById('modify-or-delete-modal').style.display = 'block';
+}
+
+//수정, 삭제 모달창 닫게
+function closeModifyOrDeleteModal() {
+    document.getElementById('modify-or-delete-modal').style.display = 'none';
+}
+
+//날짜 선택 모달창 뜨게
 function openDateTimeModal(planId) {
     currentPlanId = planId;
     document.getElementById('date-modal').style.display = 'block';
+    closeModifyOrDeleteModal(); // 수정 모달 닫기
 }
 
+//날짜 선택 모달창 닫게
 function closeDateModal() {
     document.getElementById('date-modal').style.display = 'none';
 }
 
+//시간 선택 모달창 뜨게
 function openTimeModal() {
     const dateElement = document.getElementById('modal-date');
     const selectedDateValue = dateElement.value;
@@ -93,26 +135,28 @@ function openTimeModal() {
         return;
     }
 
-    const selectedDate = new Date(selectedDateValue);
-
-    if (isNaN(selectedDate)) {
-        alert('유효한 날짜를 선택해주세요.');
-        return;
+    const dateRegex = /(\d{4})년\s(\d{1,2})월\s(\d{1,2})일/;
+    const match = selectedDateValue.match(dateRegex);
+    
+    if (match) {
+        const year = match[1];
+        const month = match[2].padStart(2, '0');
+        const day = match[3].padStart(2, '0');
+        selectedDate = `${year}-${month}-${day}`;
+    } else {
+        selectedDate = selectedDateValue; // 기본 값 설정
     }
 
-    const formattedDate = selectedDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
-    dateElement.value = formattedDate;
-    
     document.getElementById('date-modal').style.display = 'none';
     document.getElementById('time-modal').style.display = 'block';
 }
 
-
-
+//시간 선택 모달창 닫게
 function closeTimeModal() {
     document.getElementById('time-modal').style.display = 'none';
 }
 
+//날짜, 시간 저장 후 모달창 닫음
 function saveDateTimeAndClose() {
     const startTime = document.getElementById('modal-start-time').value;
     const endTime = document.getElementById('modal-end-time').value;
@@ -122,7 +166,7 @@ function saveDateTimeAndClose() {
         return;
     }
 
-    fetch(`{% url "plans:update_plan_datetime" %}`, {
+    fetch("{% url 'plans:update_plan_datetime' %}", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -139,45 +183,143 @@ function saveDateTimeAndClose() {
     .then(data => {
         if (data.status === 'success') {
             closeTimeModal();
+            updatePlanInTimetable(currentPlanId, selectedDate, startTime, endTime, data.category); // 시간표 업데이트
+            
             showPlans(data.category);
-            loadAllPlans();
         }
     });
 }
 
+//계획 삭제, 확인 모달 뜨게
+function confirmDeletePlan(planId) {
+    currentPlanId = planId;
+    document.getElementById('delete-modal').style.display = 'block';
+    closeModifyOrDeleteModal(); // 수정/삭제 모달 닫기
+}
+
+//계획 삭제, 확인 모달 닫게
+function closeDeleteModal() {
+    document.getElementById('delete-modal').style.display = 'none';
+}
+
+//시간표에서 계획 제거
+function removePlanFromTimetable() {
+    fetch("{% url 'plans:update_plan_datetime' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            plan_id: currentPlanId,
+            date: null,  // 날짜를 null로 설정하여 시간표에서 제거
+            plan_start_time: null,
+            plan_end_time: null
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            closeDeleteModal();
+            removePlanElementFromTimetable(currentPlanId);  // 시간표에서 계획 제거
+        }
+    });
+}
+
+// 시간표에서 계획을 제거하고 새로운 시간대에 계획을 추가하는 함수
+function updatePlanInTimetable(planId, date, startTime, endTime, category) {
+    // 기존 계획 제거
+    removePlanElementFromTimetable(planId);
+    
+    // 새로운 계획 추가
+    const startHour = parseInt(startTime.split(':')[0]);
+    const endHour = parseInt(endTime.split(':')[0]);
+
+    const cell = document.querySelector(`td[data-date="${date}"][data-hour="${startHour}"]`);
+    if (cell) {
+        const planElement = document.createElement('div');
+        planElement.textContent = `${category}: ${planId}`;  // 실제 장소 정보로 대체해야 합니다.
+        planElement.className = `plan ${category}`;
+        planElement.onclick = function() { openModifyOrDeleteModal(planId); }; // 시간표에서 클릭 시 계획 관리 모달 열기
+
+
+        const duration = endHour - startHour;
+        cell.rowSpan = duration + 1;
+        cell.appendChild(planElement);
+
+        for (let hour = startHour + 1; hour <= endHour; hour++) {
+            const nextCell = document.querySelector(`td[data-date="${date}"][data-hour="${hour}"]`);
+            if (nextCell) {
+                nextCell.style.display = 'none';
+            }
+        }
+    }
+}
+
+// 시간표에서 계획 요소를 제거하는 함수
+function removePlanElementFromTimetable(planId) {
+    // 모든 계획 요소들 찾기
+    const planElements = document.querySelectorAll(`.plan`);
+    planElements.forEach(planElement => {
+        if (planElement.textContent.includes(`${planId}`)) {  // 실제로는 고유 ID로 확인해야 함
+            const cell = planElement.parentElement;
+            cell.removeChild(planElement);
+
+            // 숨겨진 행을 다시 표시하기
+            const rowSpan = cell.rowSpan;
+            cell.rowSpan = 1;
+            const date = cell.getAttribute('data-date');
+            const hour = parseInt(cell.getAttribute('data-hour'));
+
+            for (let i = 1; i < rowSpan; i++) {
+                const nextCell = document.querySelector(`td[data-date="${date}"][data-hour="${hour + i}"]`);
+                if (nextCell) {
+                    nextCell.style.display = '';
+                }
+            }
+        }
+    });
+}
+
+// 모든 계획을 불러와 시간표에 추가하는 함수
 function loadAllPlans() {
-    fetch(`{% url "plans:get_all_plans" travel_group.id %}`)
+    fetch("{% url 'plans:get_all_plans' travel_group.id %}")
     .then(response => response.json())
     .then(plans => {
         plans.forEach(addPlanToTimetable);
     });
 }
 
+// 특정 계획을 시간표에 추가하는 함수
 function addPlanToTimetable(plan) {
     if (plan.date && plan.plan_start_time && plan.plan_end_time) {
         const startHour = parseInt(plan.plan_start_time.split(':')[0]);
         const endHour = parseInt(plan.plan_end_time.split(':')[0]);
-        
-        for (let hour = startHour; hour <= endHour; hour++) {
-            const cell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${hour}"]`);
-            if (cell) {
-                const planElement = document.createElement('div');
-                planElement.textContent = `${plan.category}: ${plan.place}`;
-                planElement.className = `plan ${plan.category}`;
-                if (hour === startHour) {
-                    planElement.textContent += ` (${plan.plan_start_time})`;
-                } else if (hour === endHour) {
-                    planElement.textContent += ` (${plan.plan_end_time})`;
+
+        const cell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${startHour}"]`);
+        if (cell) {
+            const planElement = document.createElement('div');
+            planElement.textContent = `${plan.category}: ${plan.place}`;
+            planElement.className = `plan ${plan.category}`;
+            planElement.onclick = function() { openModifyOrDeleteModal(plan.id); }; // 시간표에서 클릭 시 계획 관리 모달 열기
+
+            const duration = endHour - startHour;
+            cell.rowSpan = duration + 1;
+            cell.appendChild(planElement);
+
+            for (let hour = startHour + 1; hour <= endHour; hour++) {
+                const nextCell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${hour}"]`);
+                if (nextCell) {
+                    nextCell.style.display = 'none';
                 }
-                
-                cell.appendChild(planElement);
             }
         }
     }
 }
 
+// 특정 카테고리의 계획을 불러와 화면에 표시하는 함수
 function showPlans(category) {
-    fetch(`{% url "plans:get_plans" travel_group.id %}?category=${category}`)
+    fetch("{% url 'plans:get_plans' travel_group.id %}?category=" + category)
     .then(response => response.json())
     .then(plans => {
         const planList = document.getElementById('plan-list');
@@ -185,104 +327,122 @@ function showPlans(category) {
         plans.forEach(plan => {
             const planElement = document.createElement('div');
             planElement.className = 'plan-item';
-            planElement.innerHTML = `
-                <p>유형: ${category.toUpperCase()}</p>
-                <p>작성자: ${plan.creator}</p>
-                <p>장소: ${plan.place}</p>
-                <p>설명: ${plan.description}</p>
-                <p class="date-time-info" style="display: ${plan.date && plan.plan_start_time && plan.plan_end_time ? 'block' : 'none'}">
-                    Date: ${plan.date || ''}, 
-                    Start Time: ${plan.plan_start_time || ''}, 
-                    End Time: ${plan.plan_end_time || ''}
-                </p>
-                <button onclick="openDateTimeModal(${plan.id})">
-                    ${plan.date && plan.plan_start_time && plan.plan_end_time ? '날짜/시간 수정' : '날짜/시간 입력'}
-                </button>
-            `;
+
+            if (!plan.date || !plan.plan_start_time || !plan.plan_end_time) {
+                planElement.innerHTML = `
+                    <p>유형: ${category.toUpperCase()}</p>
+                    <p>작성자: ${plan.creator}</p>
+                    <p>장소: ${plan.place}</p>
+                    <p>설명: ${plan.description}</p>
+                    <p>좋아요 개수: ${plan.like_count || 0}</p>
+                    <p class="date-time-info" style="display: none;"></p>
+                `;
+            } else {
+                planElement.innerHTML = `
+                    <p>유형: ${category.toUpperCase()}</p>
+                    <p>작성자: ${plan.creator}</p>
+                    <p>장소: ${plan.place}</p>
+                    <p>설명: ${plan.description}</p>
+                    <p>좋아요 개수: ${plan.like_count || 0}</p>
+                    <p>비행기</p>  <!-- 추가된 부분 -->
+                `;
+            }
+            planElement.onclick = () => openDateTimeModal(plan.id); // 유형 탭 아래에서 클릭 시 바로 날짜/시간 모달 열기
             planList.appendChild(planElement);
         });
     });
 }
 
+// 페이지를 변경하는 함수
 function changePage(url) {
     window.location.href = url;
 }
 </script>
 
 <style>
-.timetable-container {
-    overflow-x: auto;
-}
-.timetable {
-    width: 100%;
-    border-collapse: collapse;
-}
-.timetable th, .timetable td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-}
-.plan {
-    margin: 2px;
-    padding: 2px;
-    border-radius: 3px;
-    font-size: 0.8em;
-}
-.play { background-color: #ffd700; }
-.eat { background-color: #90ee90; }
-.stay { background-color: #add8e6; }
-.others { background-color: #d3d3d3; }
-.plan-management {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #f8f8f8;
-    border-radius: 5px;
-}
-.category-buttons {
-    margin-bottom: 10px;
-}
-.category-buttons button {
-    margin-right: 10px;
-}
-.plan-item {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-}
-.pagination {
-    text-align: center;
-}
-.pagination button {
-    cursor: pointer;
-}
-.pagination span {
-    font-size: 1.2em;
-    margin: 0 15px;
-    vertical-align: middle;
-}
-.pagination button:hover {
-    color: #007bff;
-}
+    .timetable-container {
+        overflow-x: auto;
+    }
+    .timetable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .timetable th, .timetable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        position: relative;
+    }
+    .plan {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 2px;
+        padding: 2px;
+        border-radius: 3px;
+        font-size: 0.8em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .play { background-color: #ffd700; }
+    .eat { background-color: #90ee90; }
+    .stay { background-color: #add8e6; }
+    .others { background-color: #d3d3d3; }
+    .plan-management {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f8f8f8;
+        border-radius: 5px;
+    }
+    .category-buttons {
+        margin-bottom: 10px;
+    }
+    .category-buttons button {
+        margin-right: 10px;
+    }
+    .plan-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000; /* 모달이 다른 요소들 위에 위치하도록 z-index 값 설정 */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+    }
+    .pagination {
+        text-align: center;
+    }
+    .pagination button {
+        cursor: pointer;
+    }
+    .pagination span {
+        font-size: 1.2em;
+        margin: 0 15px;
+        vertical-align: middle;
+    }
+    .pagination button:hover {
+        color: #007bff;
+    }
 </style>
+
 {% endblock %}

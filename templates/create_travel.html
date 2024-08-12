@@ -7,7 +7,7 @@
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <div class="create_travel-main-header">
-        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day != None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3>
+        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day is not None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3>
     </div>
     
     <div class="create_travel-main-members-container">
@@ -174,24 +174,6 @@
     let itemIdCounter = 0;
     let currentItemId = null;
     let currentType = null;
-
-    // 각 페이지에서 pageId에 해당하는 페이지로 넘어가는 함수
-    // function showPage(pageId) {
-    //     document.querySelectorAll('.create_travel-page').forEach(page => {
-    //         page.classList.remove('active');
-    //     });
-    //     document.getElementById(pageId).classList.add('active');
-
-    //     if (pageId === 'placeSearchPage') {
-    //         previousPage = document.querySelector('.create_travel-page.active').id;
-    //     } else if (pageId === 'travelMain') {
-    //         clearForm('play');
-    //         clearForm('eat');
-    //         clearForm('stay');
-    //         clearForm('others');
-    //     }
-    // }
-
     
     function showPage(pageId) {
     document.querySelectorAll('.create_travel-page').forEach(page => {
@@ -265,37 +247,6 @@
 }
 
 
-//     function searchPlace() {
-//     let query = document.getElementById('search-place').value;
-//     if (!query) {
-//         alert('장소를 입력해주세요.');
-//         return;
-//     }
-
-//     naver.maps.Service.geocode({
-//         query: query
-//     }, function(status, response) {
-//         if (status === naver.maps.Service.Status.ERROR) {
-//             alert('검색 결과를 가져오는데 실패했습니다.');
-//             return;
-//         }
-
-//         if (response.v2.meta.totalCount === 0) {
-//             alert('검색 결과가 없습니다.');
-//             return;
-//         }
-
-//         let items = response.v2.addresses;
-//         let resultsHtml = '<ul>';
-//         items.forEach(function(item) {
-//             resultsHtml += `<li onclick="selectPlace('${item.roadAddress}')">${item.roadAddress}</li>`;
-//         });
-//         resultsHtml += '</ul>';
-
-//         document.getElementById('searchResults').innerHTML = resultsHtml;
-//     });
-// }
-
 function searchPlace() {
     let query = document.getElementById('search-place').value;
     if (!query) {
@@ -329,26 +280,7 @@ function searchPlace() {
     });
 }
 
-// function selectPlace(address) {
-//     console.log("selectPlace 함수 호출됨, 주소:", address);
-    
-//     if (!previousPage) {
-//         console.error("이전 페이지 정보가 없습니다.");
-//         return;
-//     }
 
-//     let type = previousPage.replace('Page', '');
-//     let inputField = document.getElementById(`${type}-place`);
-    
-//     if (inputField) {
-//         inputField.value = address;
-//         console.log(`주소 "${address}"가 ${type} 페이지에 저장되었습니다.`);
-//     } else {
-//         console.error(`${type}-place 입력 필드를 찾을 수 없습니다.`);
-//     }
-    
-//     showPage(previousPage);
-// }
 function selectPlace(title, address) {
     title = title.replace(/<[^>]*>/g, '');
     address = address.replace(/<[^>]*>/g, '');
@@ -376,7 +308,7 @@ function selectPlace(title, address) {
 
 
     // 여행 계획 불러오기
-    function loadPlans(category) {
+function loadPlans(category) {
     const url = `/group/${groupId}/get_plans/?category=${category}`;
     console.log('Request URL:', url);
     fetch(url)
@@ -418,6 +350,8 @@ function selectPlace(title, address) {
     });
 }
 
+
+
     // 여행 계획 삭제
     function deleteTravelPlan() {
         if (currentItemId !== null) {
@@ -456,32 +390,59 @@ function selectPlace(title, address) {
     }
 
     // 여행 세부 정보 보기 함수
-    function viewDetail(type, place, description, author, itemId) {
-        currentItemId = itemId;
-        currentType = type;
-        let detailContent = `
-            <p>유형: ${type.toUpperCase()}</p>
-            <p>작성자: ${author}</p>
-            <p>장소: ${place}</p>
-            <p>설명: ${description}</p>
-            <button class="post__like" onclick="event.stopPropagation(); onClickLike(${itemId})">
-                <i class="bi bi-heart" id="heart-icon-${itemId}"></i>
-                <span class="like-count" id="like-count-${itemId}">0</span>
-            </button>
-        `;
-        document.getElementById('travelDetailContent').innerHTML = detailContent;
-        document.getElementById('travelDetailComments').innerHTML = `
-            <p class="comment-count">댓글 <span id="comment_count_${itemId}">0</span></p>
-            <div id="comment_list_${itemId}">
-            </div>
-            <input type="text" id="comment_${itemId}" name="content" placeholder="이 여행지에 대한 댓글을 작성해보세요">
-            <button onclick="make_comment(${itemId})" type="submit">
-            <img src="{% static 'image/send.svg' %}" alt="back-btn" width="24" height="24" class="send-btn"> 
-            </button>
-        `;
-        showPage('travelDetail');
-        updateCommentCount(itemId);
-    }
+function viewDetail(type, place, description, author, itemId) {
+    currentItemId = itemId;
+    currentType = type;
+
+    let detailContent = `
+        <p>유형: ${type.toUpperCase()}</p>
+        <p>작성자: ${author}</p>
+        <p>장소: ${place}</p>
+        <p>설명: ${description}</p>
+        <button class="post__like" onclick="event.stopPropagation(); onClickLike(${itemId})">
+            <i class="bi bi-heart" id="heart-icon-${itemId}"></i>
+            <span class="like-count" id="like-count-${itemId}">0</span>
+        </button>
+    `;
+    document.getElementById('travelDetailContent').innerHTML = detailContent;
+
+    // 댓글 데이터를 로드하여 출력하는 부분 추가
+    fetch(`/plans/${itemId}/comments/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let commentsHtml = '';
+                data.comments.forEach(comment => {
+                    commentsHtml += `
+                        <div class="comment-item" id="comment-${comment.id}">
+                            <p>댓글 작성자: ${comment.user}</p>
+                            <p>${comment.content}</p>
+                            <button onclick="delete_comment(${comment.id})">삭제</button>
+                        </div>
+                    `;
+                });
+                document.getElementById(`comment_list_${itemId}`).innerHTML = commentsHtml;
+                document.getElementById(`comment_count_${itemId}`).textContent = data.comments.length;
+            } else {
+                document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching comments:', error);
+            document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+        });
+
+    document.getElementById('travelDetailComments').innerHTML = `
+        <p>댓글 <span id="comment_count_${itemId}">0</span></p>
+        <div id="comment_list_${itemId}">
+        </div>
+        <input type="text" id="comment_${itemId}" name="content" placeholder="댓글 입력">
+        <button onclick="make_comment(${itemId})" type="submit">작성</button>
+    `;
+
+    showPage('travelDetail');
+}
+
 
     // 여행 계획 삭제 함수
     function deleteTravelPlan() {
@@ -527,53 +488,119 @@ function selectPlace(title, address) {
 
     // 좋아요(하트) 누르면 숫자 1개 올라가고 다시 누르면 1개 줄어드는 함수
     let onClickLike = (id) => {
-        let heartIcon = document.getElementById(`heart-icon-${id}`);
-        let likeCount = document.getElementById(`like-count-${id}`);
-        let isLiked = heartIcon.classList.contains("bi-heart-fill");
-        if (isLiked) {
+    let heartIcon = document.getElementById(`heart-icon-${id}`);
+    let likeCount = document.getElementById(`like-count-${id}`);
+    
+    fetch(`/like/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("데이터 잘 받아짐");
+        console.log(data);
+        if (data.liked == true) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+        } else {
             heartIcon.classList.remove("bi-heart-fill");
             heartIcon.classList.add("bi-heart");
-            likeCount.textContent = parseInt(likeCount.textContent) - 1;
+        }
+        likeCount.textContent = data.like_count;
+    })
+    .catch(error => console.error('Error:', error));
+};
+
+
+
+let make_comment = (id) => {
+    let content = document.getElementById(`comment_${id}`).value;
+    if (!content) {
+        alert("댓글을 입력해주세요.");
+        return;
+    }
+
+    fetch(`/comment/add/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({ 'content': content })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 새로운 댓글을 화면에 추가
+            let commentList = document.getElementById(`comment_list_${id}`);
+            let newComment = document.createElement('div');
+            newComment.classList.add('comment-item');
+            newComment.id = `comment-${data.comment.id}`;  // 고유 ID 할당
+            newComment.innerHTML = `
+                <p>댓글 작성자: ${data.comment.user}</p>
+                <p>${data.comment.content}</p>
+                <button onclick="delete_comment(${data.comment.id})">삭제</button>
+            `;
+            commentList.appendChild(newComment); // 새로운 댓글을 목록에 추가
+            document.getElementById(`comment_${id}`).value = ""; // 입력 필드 초기화
+
+            // 댓글 수 업데이트
+            document.getElementById(`comment_count_${id}`).textContent = data.comment_count;
         } else {
-            heartIcon.classList.add("bi-heart-fill");
-            heartIcon.classList.remove("bi-heart");
-            likeCount.textContent = parseInt(likeCount.textContent) + 1;
+            alert(data.error);
         }
-    };
+    })
+    .catch(error => console.error('Error:', error));
+};
+    
+    
 
-    // 댓글 다는 함수, 댓글 작성하면 삭제 버튼 추가(innerHTML)
-    let make_comment = (id) => {
-        let content = document.getElementById(`comment_${id}`).value;
-        if (!content) {
-            alert("댓글을 입력해주세요.");
-            return;
+// 댓글 삭제 함수
+let delete_comment = (comment_id) => {
+    console.log("Deleting comment with ID:", comment_id);
+    const commentElement = document.getElementById(`comment-${comment_id}`);
+
+    if (commentElement) {
+        commentElement.remove();  // 댓글 요소를 화면에서 제거
+        console.log(`Comment element with ID ${comment_id} removed from DOM`);
+        updateCommentCount(currentItemId); // 댓글 수를 업데이트
+    } else {
+        console.error(`Comment element not found for ID: ${comment_id}`);
+        return;  // 요소가 없으면 더 이상 진행하지 않음
+    }
+
+    fetch(`/comment/delete/${comment_id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
         }
-        let commentList = document.getElementById(`comment_list_${id}`);
-        let commentId = `comment-${Date.now()}`;
-        let newComment = document.createElement('div');
-        newComment.classList.add('comment-item');
-        newComment.id = commentId;
-        newComment.innerHTML = `
-            <p>댓글 작성자: 00</p><p class="comment-content">${content}</p>
-            <button onclick="delete_comment('${commentId}')">삭제</button>
-        `;
-        commentList.appendChild(newComment);
-        document.getElementById(`comment_${id}`).value = "";
-        updateCommentCount(id); // 댓글 추가 시 댓글 수 업데이트
-    };
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(`Comment with ID ${comment_id} successfully deleted from the server`);
+        } else {
+            alert(data.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+};
 
-    // 댓글 삭제
-    let delete_comment = (id) => {
-        let commentElement = document.getElementById(id);
-        commentElement.remove();
-        updateCommentCount(currentItemId); // 댓글 삭제 시 댓글 수 업데이트
-    };
-
-    // 댓글 수 업데이트 함수
-    let updateCommentCount = (itemId) => {
-        const commentCount = document.querySelectorAll(`#comment_list_${itemId} .comment-item`).length;
+// 댓글 수를 업데이트하는 함수
+function updateCommentCount(itemId) {
+    // 현재 댓글 목록에서 댓글 수를 계산
+    const commentList = document.getElementById(`comment_list_${itemId}`);
+    if (commentList) {
+        const commentCount = commentList.children.length;
         document.getElementById(`comment_count_${itemId}`).textContent = commentCount;
-    };
+        console.log(`Comment count updated to ${commentCount}`);
+    }
+}
+
+
+
 </script>
 
 <style>

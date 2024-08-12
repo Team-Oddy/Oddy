@@ -155,17 +155,6 @@ document.getElementById('travelName').addEventListener('input', function() {
     }
 });
 
-// 수정된 부분: 날짜 입력 시 포맷팅과 검증을 처리
-document.getElementById('travelStartDate').addEventListener('input', function() {
-    formatInputDate(this);
-    validateDateInput();  // 시작일이 현재 날짜보다 이전인지 확인
-});
-
-document.getElementById('travelEndDate').addEventListener('input', function() {
-    formatInputDate(this);
-    validateDateInput();  // 종료일이 시작일보다 빠른지 확인
-});
-
 // 날짜 입력 시 '-' 문자를 자동으로 삽입하는 함수
 function formatInputDate(input) {
     let value = input.value.replace(/[^0-9]/g, '');
@@ -182,21 +171,24 @@ function validateDateInput() {
     let endDate = new Date(endDateInput.value);
     let today = new Date();
     
-    // 시작일이 오늘 날짜보다 이전인지 확인
-    if (startDateInput.value && startDate < today.setHours(0, 0, 0, 0)) {
-        alert("시작일은 오늘 이후로 설정해야 합니다."); // alert로 변경
-        return false;
-    }
+    // 날짜가 모두 입력된 경우에만 유효성 검사 실행
+    if (startDateInput.value.length === 10 && endDateInput.value.length === 10) {
+        // 시작일이 오늘 날짜보다 이전인지 확인
+        if (startDate < today.setHours(0, 0, 0, 0)) {
+            alert("시작일은 오늘 이후로 설정해야 합니다.");
+            return false;
+        }
 
-    // 종료일이 시작일보다 빠른지 확인
-    if (endDateInput.value && startDateInput.value && endDate < startDate) {
-        alert("종료일은 시작일 이후로 설정해야 합니다."); // alert로 변경
-        return false;
+        // 종료일이 시작일보다 빠른지 확인
+        if (endDate < startDate) {
+            alert("종료일은 시작일 이후로 설정해야 합니다.");
+            return false;
+        }
     }
 
     // 유효한 날짜 입력 시 버튼 활성화
     let button = document.getElementById('travelDateButton');
-    if (startDateInput.value.trim() !== "" && endDateInput.value.trim() !== "") {
+    if (startDateInput.value.length === 10 && endDateInput.value.length === 10) {
         button.classList.add('active');
     } else {
         button.classList.remove('active');
@@ -204,7 +196,22 @@ function validateDateInput() {
     return true;
 }
 
-// 수정된 부분: 날짜 검증을 통과했는지 확인
+// 날짜 입력 시 포맷팅과 검증을 처리
+document.getElementById('travelStartDate').addEventListener('input', function() {
+    formatInputDate(this);
+    if (this.value.length === 10) {
+        validateDateInput();  // 날짜가 완전히 입력된 후에만 유효성 검사 수행
+    }
+});
+
+document.getElementById('travelEndDate').addEventListener('input', function() {
+    formatInputDate(this);
+    if (this.value.length === 10) {
+        validateDateInput();  // 날짜가 완전히 입력된 후에만 유효성 검사 수행
+    }
+});
+
+// 날짜 검증을 통과했는지 확인
 function nextStepDates(startInputId, endInputId) {
     let startValue = document.getElementById(startInputId).value;
     let endValue = document.getElementById(endInputId).value;
@@ -221,6 +228,10 @@ function nextStepDates(startInputId, endInputId) {
     // 여행 정보 저장
     submitTravelInfo();
 }
+
+
+
+
 
 function joinGroup() {
     window.location.href = "{% url 'plans:join_group_page' %}";

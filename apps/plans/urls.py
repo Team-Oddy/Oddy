@@ -33,4 +33,10 @@ urlpatterns=[
     path('timetable/<int:travel_group_id>/', views.timetable_view, name='timetable'),
     path('add_timetable_plan/<int:travel_group_id>/', views.add_timetable_plan, name='add_timetable_plan'),
     path('update_plan_datetime/', views.update_plan_datetime, name='update_plan_datetime'),
+
+    path('like/<int:id>/', toggle_like, name='toggle_like'),
+    path('plans/<int:plan_id>/comments/', get_comments, name='get_comments'),
+    path('comment/add/<int:plan_id>/', add_comment, name='add_comment'),
+    path('comment/delete/<int:comment_id>/', delete_comment, name='delete_comment'),
+
 ]
