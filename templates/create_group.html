@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Oddy-create_group{% endblock %}
+{% block title %}Oddy{% endblock %}
 
 {% block content %}
 <div id="createGroupPage" class="create_group-page create_group-active">
@@ -16,7 +16,7 @@
     <div class="create_group-nickname-bottom"></div>
     <p class="create_group-nickname-comment">오디에서 사용할 닉네임을 알려주세요!</p><br>
     <input class="create_group-nickname-input" type="text" id="nickname" placeholder="  닉네임을 입력하세요">
-    <p id="nicknameError" class="create_group-error">닉네임은 5글자 이내로 작성해주세요.</p><br>
+    <p id="nicknameError" class="create_group-error">5자 이내로 작성해주세요!</p><br>
     <p id="nicknameLength" class="create_group-nickname-length">0/5</p>
     <button onclick="nextStep('nickname', 'entryPage')" class="create_group-nickname-button" id="submitButton">
         <span>다음</span>
@@ -51,7 +51,7 @@
     <div class="create_group-travelName-bottom">
         <p class="create_group-travelName-comment">여행 이름을 알려주세요!</p><br>
         <input class="create_group-travelName-input" type="text" id="travelName" placeholder="  여행 이름을 입력하세요 0/15">
-        <p id="travelNameError" class="create_group-error">여행 이름은 15글자 이내로 작성해주세요.</p><br>
+        <p id="travelNameError" class="create_group-error">15글자 이내로 작성해주세요!</p><br>
         <button onclick="nextStep('travelName', 'travelDatePage')" class="create_group-travelName-button" id="travelNameButton">
             <span>다음</span></button>
     </div>

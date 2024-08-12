@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Oddy-create_travel{% endblock %}
+{% block title %}Oddy{% endblock %}
 
 {% block content %}
 <!--여행 모임 입장하기 누르면 나오는 메인-->
@@ -219,7 +219,7 @@
         if (selectedPlan) {
             showPage(selectedPlan + 'Page');
         } else {
-            alert('추가할 여행 유형을 선택하세요.');
+            alert('장소 카테고리를 먼저 선택해주세요!');
         }
     }
 
@@ -354,7 +354,7 @@ function loadPlans(category) {
                         <p class="plan-description">${plan.description}</p>
                         <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
                             <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
-                            <span class="like-count" id="like-count-${plan.id}">${plan.likes || 0}명</span>
+                            <span class="like-count-1" id="like-count-${plan.id}">${plan.likes || 0}명</span>
                         </button>
                     </div>
                 </div>
@@ -426,7 +426,7 @@ function loadPlans(category) {
                 <p class="detail-description">${description}</p>
                 <button class="post__like" onclick="event.stopPropagation(); onClickLike(${itemId})">
                     <i class="bi bi-heart" id="heart-icon-${itemId}"></i>
-                    <span class="like-count" id="like-count-${itemId}">0</span>
+                    <span class="like-count-2" id="like-count-${itemId}">0</span>
                 </button>
             </div>
         </div>
@@ -440,8 +440,8 @@ function loadPlans(category) {
                 data.comments.forEach(comment => {
                     commentsHtml += `
                         <div class="comment-item" id="comment-${comment.id}">
-                            <p>댓글 작성자: ${comment.user}</p>
-                            <p>${comment.content}</p>
+                            <p class="comment-user">${comment.user}</p>
+                            <p class="comment-text">${comment.content}</p>
                             <button onclick="delete_comment(${comment.id})">삭제</button>
                         </div>
                     `;

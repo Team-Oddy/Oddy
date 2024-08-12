@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Oddy-my_page{% endblock %}
+{% block title %}Oddy{% endblock %}
 
 {% block content %}
 <div id="profilePage">
@@ -13,7 +13,8 @@
 
     <div>
         <div class="my-page-container"></div>
-        <a href="{% url 'plans:kakao_logout' %}">로그아웃</a><br>
+        <a href="{% url 'plans:kakao_logout' %}" class="logout-btn">
+            <span>로그아웃</span></a><br>
         <div class="modify-nickname-container">
         <a href="javascript:void(0);" onclick="nicknameEdit()" class="modify-nickname">닉네임 수정</a><br>
         </div>
