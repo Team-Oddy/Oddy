@@ -77,19 +77,31 @@ def set_nickname(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def create_group(request):
+    user = request.user
+    user_profile, created = UserProfile.objects.get_or_create(user=user)
+
     if request.method == 'POST':
         data = json.loads(request.body)
         nickname = data.get('nickname')
         if nickname and len(nickname) <= 5:
-            user = request.user
-            user_profile, created = UserProfile.objects.update_or_create(
-                user=user,
-                defaults={'nickname': nickname}
-            )
+            user_profile.nickname = nickname
+            user_profile.save()
             return JsonResponse({'success': True, 'message': '닉네임 저장 완료'})
         else:
             return JsonResponse({'success': False, 'error': '닉네임은 5글자 이내로 작성해주세요.'})
-    return render(request, 'create_group.html')
+    
+    # GET 요청 처리
+    has_nickname = bool(user_profile.nickname)
+    has_travel_group = TravelGroup.objects.filter(creator=user_profile).exists()
+    has_travel_type = bool(user_profile.travel_type)
+
+    context = {
+        'has_nickname': has_nickname,
+        'has_travel_group': has_travel_group,
+        'has_travel_type': has_travel_type,
+    }
+
+    return render(request, 'create_group.html', context)
 
 @csrf_exempt
 @login_required
