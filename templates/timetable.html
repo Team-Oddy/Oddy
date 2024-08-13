@@ -43,12 +43,13 @@
 </div>
 
 
-<div class="plan-management">
-    <div class="category-buttons">
-        <button onclick="showPlans('play')">PLAY</button>
-        <button onclick="showPlans('eat')">EAT</button>
-        <button onclick="showPlans('stay')">STAY</button>
-        <button onclick="showPlans('others')">OTHERS</button>
+<div class="tt-plan-management">
+    <div class="tt-category-buttons">
+        <button class="tt-all-play" data-category="play" onclick="showPlans('play')">PLAY</button>
+        <button class="tt-all-eat" data-category="eat" onclick="showPlans('eat')">EAT</button>
+        <button class="tt-all-stay" data-category="stay" onclick="showPlans('stay')">STAY</button>
+        <button class="tt-all-others" data-category="others" onclick="showPlans('others')">OTHERS</button>
+</div>
     </div>
     <div id="plan-list"></div>
 </div>
@@ -302,35 +303,69 @@ function addPlanToTimetable(plan) {
 }
 
 function showPlans(category) {
+    // 기존에 활성화된 버튼에서 active 클래스 제거
+    const buttons = document.querySelectorAll('.tt-category-buttons button');
+    buttons.forEach(button => button.classList.remove('active'));
+
+    // 클릭된 버튼에 active 클래스 추가
+    const activeButton = document.querySelector(`.tt-category-buttons button[data-category="${category}"]`);
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
+
     fetch("{% url 'plans:get_plans' travel_group.id %}?category=" + category)
     .then(response => response.json())
     .then(plans => {
-        console.log(plans)
+        console.log(plans);
         const planList = document.getElementById('plan-list');
-        planList.innerHTML = '';
+        planList.innerHTML = '';  // 기존 내용을 비웁니다.
+
         plans.forEach(plan => {
-            const planElement = document.createElement('div');
-            planElement.className = 'plan-item';
             const showAirplaneText = plan.date && plan.plan_start_time && plan.plan_end_time;
-            planElement.innerHTML = `
-                <p>유형: ${category.toUpperCase()}</p>
-                <p>작성자: ${plan.creator}</p>
-                <p>장소: ${plan.place}</p>
-                <p>설명: ${plan.description}</p>
-                <p>좋아요 개수: ${plan.like_count || 0}</p>
-                ${showAirplaneText ? '<p>비행기</p>' : ''}
+
+            planList.innerHTML += `
+                <img src="/static/image/${category.toLowerCase()}.svg" alt="${category} icon" class="tt-category-icon" onclick="openDateTimeModal(${plan.id})">
+                <div class="tt-plan-item-content">
+                    <div class="tt-plan-details">
+                        <p class="tt-plan-category">${category.toUpperCase()}</p>
+                        <p class="tt-plan-creator">${plan.creator || '알 수 없음'}</p>
+                        <p class="tt-plan-place ellipsis-text">${plan.place || '장소 미정'}</p>
+                        <p class="tt-plan-description">${plan.description || '설명 없음'}</p>
+                        <button class="post__like">
+                            <i class="bi ${plan.liked ? 'bi-heart-fill' : 'bi-heart'} tt-bi-heart" id="heart-icon-${plan.id}"></i>
+                            <span class="tt-like-count" id="like-count-${plan.id}">${plan.like_count || 0}명</span>
+                        </button>
+                        ${showAirplaneText ? '<img src="/static/image/airplane.svg" alt="airplane icon" class="tt-airplane_icon">' : ''}
+                    </div>
+                </div>
             `;
 
-            // "비행기" 글자가 표시되면 서버에 요청하여 데이터베이스 업데이트
-            if (showAirplaneText) {
-                saveAirplaneTextToDB(plan.id);
-            }
-
-            planElement.onclick = () => openDateTimeModal(plan.id);
-            planList.appendChild(planElement);
+            // 좋아요 상태를 업데이트
+            updateLikeStatus(plan.id);  // 수정: 좋아요 상태 초기화
         });
     });
 }
+
+function updateLikeStatus(planId) {
+    fetch(`/like/status/${planId}/`)
+    .then(response => response.json())
+    .then(data => {
+        const likeCount = document.getElementById(`like-count-${planId}`);
+        const heartIcon = document.getElementById(`heart-icon-${planId}`);
+        
+        likeCount.textContent = `${data.like_count}명`;
+        if (data.liked) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+        } else {
+            heartIcon.classList.remove("bi-heart-fill");
+            heartIcon.classList.add("bi-heart");
+        }
+    })
+    .catch(error => console.error('Error updating like status:', error));
+}
+
+
 
 function saveAirplaneTextToDB(planId) {
     fetch("{% url 'plans:save_airplane_text' %}", {
@@ -359,4 +394,149 @@ function changePage(url) {
     window.location.href = url;
 }
 </script>
+<style>
+/*
+#plan-list {
+    max-height: 400px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 15px; 
+}*/
+
+.tt-plan-management {
+    margin-top: 650px;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 5px;
+}
+
+.tt-category-buttons {
+    position: absolute;
+    top: 647px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 38px;
+}
+
+.tt-category-buttons a {
+    color: #616161; 
+    text-decoration: none;
+    position: relative;
+}
+
+.tt-all-play,
+.tt-all-eat,
+.tt-all-stay,
+.tt-all-others {
+    font: var(--text-style-pretendard-semibold-18);
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    color: #616161; 
+}
+
+.tt-all-play::after,
+.tt-all-eat::after,
+.tt-all-stay::after,
+.tt-all-others::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px; 
+    width: 100%; 
+    height: 2.5px;
+    z-index: 1;
+}
+
+.tt-category-buttons::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;  
+    height: 1.5px;
+    background-color: var(--gray01);
+    z-index: 0;
+}
+
+.tt-play-title {color: var(--play);}
+.tt-eat-title {color: var(--eat);}
+.tt-stay-title {color: var(--stay);}
+.tt-others-title {color: var(--others);}
+
+.tt-all-menu a {
+    color: #616161; 
+    text-decoration: none;
+    position: relative;
+}
+
+.tt-all-play.active::after { background-color: var(--play);}
+.tt-all-eat.active::after { background-color: var(--eat);}
+.tt-all-stay.active::after { background-color: var(--stay);}
+.tt-all-others.active::after { background-color: var(--others);}
+
+.tt-all-play.active {color: var(--play); }
+.tt-all-eat.active { color: var(--eat); }
+.tt-all-stay.active { color: var(--stay); }
+.tt-all-others.active { color: var(--others); }
+
+.tt-plan-item-content {
+    position: relative;
+}
+
+.tt-category-icon {
+    position: relative; /* relative로 변경하여 부모 요소 내에서만 이동 */
+    top: 10px;
+    transform: translateX(-50%);  
+    left: 50%;  
+    cursor: pointer;
+}
+
+
+.tt-plan-category {
+    display: none;
+}
+
+.tt-plan-creator {
+    position: absolute;
+    left: 295px;
+    top: -16px; /* icon과 상호작용하는 요소들 위치 수정(167px씩 빼기) */
+    font: var(--text-style-pretendard-regular-12);
+    color: var(--black);
+}
+
+.tt-plan-place {
+    position: absolute;
+    left: 63px;
+    top: -74px;
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+}
+
+.tt-plan-description {
+    position: absolute;
+    left: 63px;
+    top: -37px; /* icon과 상호작용하는 요소들 위치 수정 */
+    font: var(--text-style-pretendard-regular-12);
+    color: var(--black);
+}
+.tt-bi-heart{
+    position: absolute;
+    left: 44px;
+    top: -15px /*167px 빼기*/
+}
+.tt-like-count{
+    position: absolute;
+    left: 64px;
+    top: -19px
+}
+.tt-airplane_icon {
+    position: absolute;
+    top: -74px;
+    left: 239px;
+}
+</style>
 {% endblock %}

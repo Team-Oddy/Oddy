@@ -502,6 +502,7 @@ def get_all_plans(request, travel_group_id):
         'category': plan.category,
         'place': plan.place,
         'description': plan.description,
+        'creator': plan.creator.nickname,
         'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
         'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
         'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
@@ -521,6 +522,7 @@ def get_plans(request, travel_group_id):
         'category': plan.category,
         'place': plan.place,
         'description': plan.description,
+        'creator': plan.creator.nickname,
         'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
         'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
         'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None

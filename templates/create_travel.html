@@ -462,7 +462,7 @@ function viewDetail(type, place, description, author, itemId) {
                 <p class="detail-author">${author}</p>
                 <p class="detail-place ellipsis-text">${place}</p>
                 <p class="detail-description">${description}</p>
-                <button class="post__like" onclick="event.stopPropagation(); onClickLike(${itemId})">
+                <button class="post__like">
                     <i class="bi bi-heart bi-heart-btn2" id="heart-icon-detail-${itemId}"></i>
                     <span class="like-count-2" id="like-count-detail-${itemId}">0명</span>
                 </button>
@@ -488,8 +488,6 @@ function viewDetail(type, place, description, author, itemId) {
     // 댓글 로드
     loadComments(itemId);
 }
-
-
 
 
     // 여행 계획 삭제 함수
@@ -550,6 +548,8 @@ function onClickLike(id) {
     })
     .catch(error => console.error('Error:', error));
 }
+
+
 
 
 let make_comment = (id) => {
