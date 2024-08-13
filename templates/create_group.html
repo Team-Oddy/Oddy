@@ -155,7 +155,6 @@ document.getElementById('travelName').addEventListener('input', function() {
     }
 });
 
-// 날짜 입력 시 '-' 문자를 자동으로 삽입하는 함수
 function formatInputDate(input) {
     let value = input.value.replace(/[^0-9]/g, '');
     if (value.length >= 4) value = value.slice(0, 4) + '-' + value.slice(4);
@@ -163,7 +162,6 @@ function formatInputDate(input) {
     input.value = value;
 }
 
-// 입력된 날짜를 검증하는 함수
 function validateDateInput() {
     let startDateInput = document.getElementById('travelStartDate');
     let endDateInput = document.getElementById('travelEndDate');
@@ -171,22 +169,16 @@ function validateDateInput() {
     let endDate = new Date(endDateInput.value);
     let today = new Date();
     
-    // 날짜가 모두 입력된 경우에만 유효성 검사 실행
     if (startDateInput.value.length === 10 && endDateInput.value.length === 10) {
-        // 시작일이 오늘 날짜보다 이전인지 확인
         if (startDate < today.setHours(0, 0, 0, 0)) {
             alert("시작일은 오늘 이후로 설정해야 합니다.");
             return false;
         }
-
-        // 종료일이 시작일보다 빠른지 확인
         if (endDate < startDate) {
             alert("종료일은 시작일 이후로 설정해야 합니다.");
             return false;
         }
     }
-
-    // 유효한 날짜 입력 시 버튼 활성화
     let button = document.getElementById('travelDateButton');
     if (startDateInput.value.length === 10 && endDateInput.value.length === 10) {
         button.classList.add('active');
@@ -196,20 +188,38 @@ function validateDateInput() {
     return true;
 }
 
-// 날짜 입력 시 포맷팅과 검증을 처리
 document.getElementById('travelStartDate').addEventListener('input', function() {
     formatInputDate(this);
     if (this.value.length === 10) {
-        validateDateInput();  // 날짜가 완전히 입력된 후에만 유효성 검사 수행
+        validateDateInput();
     }
 });
 
 document.getElementById('travelEndDate').addEventListener('input', function() {
     formatInputDate(this);
     if (this.value.length === 10) {
-        validateDateInput();  // 날짜가 완전히 입력된 후에만 유효성 검사 수행
+        validateDateInput();
     }
 });
+
+// 추가함!!!!!!!!!!!!
+
+document.addEventListener('DOMContentLoaded', function() {
+    const hasNickname = {{ has_nickname|yesno:"true,false" }};
+    const hasTravelGroup = {{ has_travel_group|yesno:"true,false" }};
+    const hasTravelType = {{ has_travel_type|yesno:"true,false" }};
+
+    if (!hasNickname) {
+        showPage('createGroupPage');
+    } else if (!hasTravelType) {
+        showPage('entryPage');
+    } else if (hasNickname && !hasTravelGroup) {
+        showPage('optionsPage');
+    } else {
+        window.location.href = "{% url 'plans:create_travel' %}";
+    }
+});
+
 
 // 날짜 검증을 통과했는지 확인
 function nextStepDates(startInputId, endInputId) {
@@ -244,8 +254,9 @@ function startTravel() {
 function showPage(pageId) {
     document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));
     document.getElementById(pageId).classList.add('create_group-active');
-    document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none'); // 페이지 전환 시 에러 메시지 숨기기
+    document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none');
 }
+
 
 function nextStep(inputId, nextPageId) {
     let value = document.getElementById(inputId).value;
@@ -285,7 +296,6 @@ function getCookie(name) {
     return cookieValue;
 }
 
-// 폼 데이터를 서버로 전송하는 함수
 function submitNickname() {
     fetch('/create_group/', {
         method: 'POST',
