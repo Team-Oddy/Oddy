@@ -669,7 +669,7 @@ function updateLikeStatus(planId) {
         const likeCount = document.getElementById(`like-count-${planId}`);
         const heartIcon = document.getElementById(`heart-icon-${planId}`);
         
-        likeCount.textContent = `(${data.like_count} 명)`;
+        likeCount.textContent = `${data.like_count} 명`;
         if (data.liked) {
             heartIcon.classList.remove("bi-heart");
             heartIcon.classList.add("bi-heart-fill");
