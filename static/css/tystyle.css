@@ -404,6 +404,29 @@
     color: var(--gray04);
 }
 
+.logout-btn {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 0px;
+    border-color: var(--gray02);
+    background: var(--gray02);
+    position: absolute;
+    top: 705px;
+    left: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.logout-btn span {
+    position: static;
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+}
+
 .test-page-container-top {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--pink02);
@@ -479,7 +502,7 @@
     border-radius: 30px;
     background: var(--pink01);
     position: absolute;
-    top: 270px;
+    top: 322px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -529,7 +552,7 @@
     transform: translateX(-50%);
     text-align: center;
     font: var(--text-style-pretendard-semibold-16);
-    color: var(--gray04);
+    color: var(--black);
     width: 100%;  
 }
 
@@ -843,8 +866,7 @@ label[for="id_invite_code"] {
 .comment-item:first-child {
     position: absolute;
     top: 343px; /* 원하는 고정 위치 */
-    left: 0;
-    width: 100%; /* 너비를 설정하여 다음 댓글의 위치를 조정 */
+    left: 20px;
 }
 
 .comment-item:not(:first-child) {
@@ -972,11 +994,18 @@ label[for="id_invite_code"] {
     display: none; /* 우선 숨겨놓고 화현 ver이랑 합치면 수정 */
 }
 
-#post__like {
+.bi-heart::before {
     position: absolute;
-    left: 67px;
-    top: 150px; 
+    left: 53px;
+    top: 152px
+}
 
+.like-count-1 {
+    position: absolute;
+    font: var(--text-style-pretendard-regular-12);
+    color: var(--black);
+    left: 72px;
+    top: 150.5px
 }
 
 /*여행계획 상세보기 페이지*/
@@ -1014,6 +1043,14 @@ label[for="id_invite_code"] {
     color: var(--black);
 }
 
+.like-count-2 {
+    position: absolute;
+    left: 73px;
+    top: 186.5px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--black);
+}
+
 .delete-plan {
     width: 60px;
     height: 22px;
@@ -1037,3 +1074,198 @@ label[for="id_invite_code"] {
     text-align: center;
 }
 
+.timetable-top {
+    color: var(--pink02);
+    font: var(--text-style-pretendard-semibold-16);
+    position: absolute;
+    top: 63px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.timetable-return-btn,
+.timetable-next-btn {
+    color: var(--pink02);
+    font: var(--text-style-pretendard-semibold-16);
+    position: absolute;
+    top: 610px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap; 
+}
+
+.pagination button {
+    cursor: pointer;
+}
+
+.timetable {
+    width: 370px;
+    height: 432px;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+
+}
+
+.timetable-date,
+.timetable-time {
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--black);
+}
+
+.timetable th, .timetable td {
+    border: 1.5px solid var(--gray02);
+    padding: 8px;
+    text-align: center;
+    position: relative;
+}
+
+
+.plan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0px;
+    padding: 2px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.play { background-color: var(--play); }
+.eat { background-color: var(--eat); }
+.stay { background-color: var(--stay); }
+.others { background-color: var(--others); }
+
+.plan-management {
+    margin-top: 650px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+.category-buttons {
+    margin-bottom: 10px;
+}
+.category-buttons button {
+    margin-right: 10px;
+}
+.plan-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000; /* 모달이 다른 요소들 위에 위치하도록 z-index 값 설정 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+        width: 273px;
+        height: 207px;
+        flex-shrink: 0;
+        border-radius: 30px;
+        background: var(--pink01);
+        position: absolute;
+        top: 322px;
+        left: 50%;
+        transform: translateX(-50%);
+}
+
+.modal-content h3 {
+    color: var(--black);
+    font: var(--text-style-pretendard-semibold-20);
+    position: absolute;
+    top: 76px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+}
+
+.close-btn {
+    position: absolute;
+    left: 228px;
+    top: 11px;
+}
+
+.modal-modify {
+        color: var(--black);
+        font: var(--text-style-pretendard-semibold-16);
+        position: absolute;
+        left: 71px;
+        top: 159px;
+}
+
+.modal-delete {
+    color: var(--black);
+    font: var(--text-style-pretendard-semibold-16);
+    position: absolute;
+    left: 164px;
+    top: 159px;
+
+}
+
+.modal-next,
+.modal-complete {
+    color: var(--black);
+    font: var(--text-style-pretendard-semibold-16);
+    position: absolute;
+    top: 159px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+    /* 날짜 선택기 컨테이너 */
+.date-picker-container {
+    border-radius: 15px;
+    font: var(--text-style-pretendard-regular-14);
+    width: 240px;
+    position: relative;
+    cursor: pointer;
+    position: absolute;
+    top: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* 선택 요소 스타일링 */
+  #modal-date {
+    font: var(--text-style-pretendard-regular-14);
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--white);
+    color: #333;
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  /* 커스텀 화살표 추가 */
+  .date-picker-container::after {
+    content: '\25BC'; /* 아래쪽 화살표 유니코드 */
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #FF69B4;
+  }

@@ -1,21 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>{{ travel_group.travel_name }} 시간표</h2>
+<h2 class="timetable-top">{{ travel_group.travel_name }} 시간표 보기</h2>
 
 <div class="timetable-container">
     <table class="timetable">
         <thead>
             <tr>
-                <th>시간</th>
+                <th class="timebale-blank"></th>
                 {% for date in date_range %}
-                    <th>{{ date|date:"m/d (D)" }}</th>
+                <th class="timetable-date">
+                    {{ date|date:"m/d" }}<br>
+                    {{ date|date:"(D)" }}
+                </th>
                 {% endfor %}
             </tr>
         </thead>
         <tbody>
             {% for hour in hours %}
                 <tr>
-                    <th>{{ hour }}:00</th>
+                    <th class="timetable-time">{{ hour }}:00</th>
                     {% for date in date_range %}
                         <td data-date="{{ date|date:'Y-m-d' }}" data-hour="{{ hour }}"></td>
                     {% endfor %}
@@ -27,10 +30,10 @@
 
 <div class="pagination">
     {% if has_previous %}
-        <button onclick="changePage('{{ previous_page_url }}')">이전</button>
+        <button onclick="changePage('{{ previous_page_url }}')" class="timetable-return-btn">이전</button>
     {% endif %}
     {% if has_next %}
-        <button onclick="changePage('{{ next_page_url }}')">다음</button>
+        <button onclick="changePage('{{ next_page_url }}')" class="timetable-next-btn">다음</button>
     {% endif %}
 </div>
 
@@ -45,24 +48,33 @@
 </div>
 
 <div id="modify-or-delete-modal" class="modal">
-    <div class="modal-content">
-        <h3>계획 관리</h3>
-        <button onclick="openDateTimeModal(currentPlanId)">수정</button>
-        <button onclick="confirmDeletePlan(currentPlanId)">삭제</button>
-        <button onclick="closeModifyOrDeleteModal()">취소</button>
+    <div class="modal-content">     
+        <img src="/static/image/white-small-cloud.svg" alt="white cloud" width="46.83" height="45.94" class="join_group-white_cloud">
+        <h3>여행 계획 관리하기</h3>
+        <button onclick="openDateTimeModal(currentPlanId)" class="modal-modify">계획 수정</button>
+        <button onclick="confirmDeletePlan(currentPlanId)" class="modal-delete">삭제</button>
+        <button onclick="closeModifyOrDeleteModal()">
+            
+<img src="/static/image/close-btn.svg" alt="close btn" width="31" height="31" class="close-btn">
+        </button>
     </div>
 </div>
 
 <div id="date-modal" class="modal">
     <div class="modal-content">
+        <img src="/static/image/white-small-cloud.svg" alt="white cloud" width="46.83" height="45.94" class="join_group-white_cloud">
         <h3>방문 날짜 선택</h3>
+        <div class="date-picker-container">
         <select id="modal-date">
             {% for date in available_dates %}
                 <option value="{{ date|date:'Y-m-d' }}">{{ date|date:"Y년 m월 d일" }}</option>
             {% endfor %}
         </select>
-        <button onclick="openTimeModal()">다음</button>
-        <button onclick="closeDateModal()">취소</button>
+        </div>
+        <button onclick="openTimeModal()" class="modal-next">다음</button>
+        <button onclick="closeDateModal()">
+            <img src="/static/image/close-btn.svg" alt="close btn" width="31" height="31" class="close-btn">
+        </button>
     </div>
 </div>
 
@@ -81,8 +93,10 @@
                 <option value="{{ hour|stringformat:'02d' }}:00">{{ hour }}:00</option>
             {% endfor %}
         </select>
-        <button onclick="saveDateTimeAndClose()">저장</button>
-        <button onclick="closeTimeModal()">취소</button>
+        <button onclick="saveDateTimeAndClose()" class="modal-complete">저장</button>
+        <button onclick="closeTimeModal()">
+        <img src="/static/image/close-btn.svg" alt="close btn" width="31" height="31" class="close-btn">
+    </button>
     </div>
 </div>
 
@@ -256,7 +270,7 @@ function addPlanToTimetable(plan) {
         const cell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${startHour}"]`);
         if (cell) {
             const planElement = document.createElement('div');
-            planElement.textContent = `${plan.category}: ${plan.place}`;
+            planElement.textContent = `${plan.place}`;
             planElement.className = `plan ${plan.category}`;
             planElement.onclick = function() { openModifyOrDeleteModal(plan.id); };
 
@@ -301,91 +315,4 @@ function changePage(url) {
     window.location.href = url;
 }
 </script>
-
-<style>
-    .timetable-container {
-        overflow-x: auto;
-    }
-    .timetable {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .timetable th, .timetable td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-        position: relative;
-    }
-    .plan {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        margin: 2px;
-        padding: 2px;
-        border-radius: 3px;
-        font-size: 0.8em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .play { background-color: #ffd700; }
-    .eat { background-color: #90ee90; }
-    .stay { background-color: #add8e6; }
-    .others { background-color: #d3d3d3; }
-    .plan-management {
-        margin-top: 20px;
-        padding: 20px;
-        background-color: #f8f8f8;
-        border-radius: 5px;
-    }
-    .category-buttons {
-        margin-bottom: 10px;
-    }
-    .category-buttons button {
-        margin-right: 10px;
-    }
-    .plan-item {
-        margin-bottom: 10px;
-        padding: 10px;
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000; /* 모달이 다른 요소들 위에 위치하도록 z-index 값 설정 */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4);
-    }
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-    }
-    .pagination {
-        text-align: center;
-    }
-    .pagination button {
-        cursor: pointer;
-    }
-    .pagination span {
-        font-size: 1.2em;
-        margin: 0 15px;
-        vertical-align: middle;
-    }
-    .pagination button:hover {
-        color: #007bff;
-    }
-</style>
-
 {% endblock %}

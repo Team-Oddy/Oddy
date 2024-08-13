@@ -78,8 +78,11 @@
     display: block;
 }
 .create_group-error {
-    color: red;
-    display: none;
+  position: absolute;
+  left: 40px;
+  top: 228px;
+  color: #EA636A;
+  font: var(--text-style-pretendard-regular-14);
 }
 
 .test-page {
