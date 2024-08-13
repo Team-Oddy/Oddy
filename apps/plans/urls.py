@@ -40,5 +40,7 @@ urlpatterns=[
     path('plans/<int:plan_id>/comments/', get_comments, name='get_comments'),
     path('comment/add/<int:plan_id>/', add_comment, name='add_comment'),
     path('comment/delete/<int:comment_id>/', delete_comment, name='delete_comment'),
+    
+    path('save_airplane_text/', views.save_airplane_text, name='save_airplane_text'),
 
 ]

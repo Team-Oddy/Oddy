@@ -696,3 +696,24 @@ def create_group_like(request):
     return render(request, 'create_group.html', {
         'scroll_to_options': True  # optionsPage로 이동하기 위한 플래그
     })
+
+
+@require_POST
+def save_airplane_text(request):
+    try:
+        data = json.loads(request.body)
+        plan_id = data.get('plan_id')
+        airplane_text = data.get('airplane_text')
+
+        plan = get_object_or_404(TravelPlan, id=plan_id)
+        # 여기에 airplane_text를 저장할 필드가 있다고 가정합니다.
+        plan.airplane_text = airplane_text
+        plan.save()
+
+        return JsonResponse({'status': 'success'})
+    
+    except TravelPlan.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Plan not found'}, status=404)
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
