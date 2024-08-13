@@ -626,7 +626,15 @@ def toggle_like(request, id):
         'like_count': travel_plan.like_count
     })
 
-
+@login_required
+def get_like_status(request, id):
+    user = request.user.userprofile
+    travel_plan = get_object_or_404(TravelPlan, id=id)
+    liked = Like.objects.filter(travel_plan=travel_plan, user=user).exists()
+    return JsonResponse({
+        'liked': liked,
+        'like_count': travel_plan.likes.count()
+    })
     
 @login_required
 @require_POST

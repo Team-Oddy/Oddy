@@ -352,16 +352,11 @@ function loadPlans(category) {
             planElement.className = `${category}-item`;
             planElement.id = `${category}-item-${plan.id}`;
 
-            let iconTopOffset = 177;
-
-            // SVG 이미지 경로 설정
-            const svgPath = `/static/image/${category.toLowerCase()}.svg`;
-
             planElement.innerHTML = `
-                                <img src="${svgPath}" alt="${category} icon" class="category-icon" 
+                <img src="/static/image/${category.toLowerCase()}.svg" alt="${category} icon" class="category-icon" 
                     onclick="viewDetail('${category}', '${plan.place.replace(/'/g, "\\'")}', 
                     '${plan.description.replace(/'/g, "\\'")}', 
-                    '${plan.creator.replace(/'/g, "\\'")}', ${plan.id}); event.stopPropagation();">
+                    '${plan.creator.replace(/'/g, "\\'")}', ${plan.id})">
                 <div class="plan-item-content">
                     <div class="plan-details">
                         <p class="timetable-add">시간표에 추가 여부 o/x</p>
@@ -370,14 +365,15 @@ function loadPlans(category) {
                         <p class="plan-place ellipsis-text">${plan.place}</p>
                         <p class="plan-description">${plan.description}</p>
                         <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})" >
-                        <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
-                        <span class="like-count-1" id="like-count-${plan.id}">(${plan.likes || 0} 명)</span>
+                            <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
+                            <span class="like-count" id="like-count-${plan.id}">0명</span>
                         </button>
                     </div>
                 </div>
             `;
 
             contentContainer.appendChild(planElement);
+            updateLikeStatus(plan.id);
         });
     })
     .catch(error => {
@@ -386,7 +382,32 @@ function loadPlans(category) {
     });
 }
 
-
+function loadComments(itemId) {
+    fetch(`/plans/${itemId}/comments/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let commentsHtml = '';
+                data.comments.forEach(comment => {
+                    commentsHtml += `
+                        <div class="comment-item" id="comment-${comment.id}">
+                            <p class="comment-user">${comment.user}</p>
+                            <p class="comment-text">${comment.content}</p>
+                            <button onclick="delete_comment(${comment.id})">삭제</button>
+                        </div>
+                    `;
+                });
+                document.getElementById(`comment_list_${itemId}`).innerHTML = commentsHtml;
+                document.getElementById(`comment_count_${itemId}`).textContent = data.comments.length;
+            } else {
+                document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching comments:', error);
+            document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+        });
+}
 
     // 여행 계획 삭제
     function deleteTravelPlan() {
@@ -442,38 +463,12 @@ function viewDetail(type, place, description, author, itemId) {
                 <p class="detail-place ellipsis-text">${place}</p>
                 <p class="detail-description">${description}</p>
                 <button class="post__like" onclick="event.stopPropagation(); onClickLike(${itemId})">
-                    <i class="bi bi-heart bi-heart-btn2" id="heart-icon-${itemId}"></i>
-                    <span class="like-count-2" id="like-count-${itemId}">0</span>
+                    <i class="bi bi-heart bi-heart-btn2" id="heart-icon-detail-${itemId}"></i>
+                    <span class="like-count-2" id="like-count-detail-${itemId}">0명</span>
                 </button>
             </div>
         </div>
     `;
-
-    // 댓글 데이터를 로드하여 출력하는 부분 추가
-    fetch(`/plans/${itemId}/comments/`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                let commentsHtml = '';
-                data.comments.forEach(comment => {
-                    commentsHtml += `
-                        <div class="comment-item" id="comment-${comment.id}">
-                            <p class="comment-user">${comment.user}</p>
-                            <p class="comment-text">${comment.content}</p>
-                            <button onclick="delete_comment(${comment.id})">삭제</button>
-                        </div>
-                    `;
-                });
-                document.getElementById(`comment_list_${itemId}`).innerHTML = commentsHtml;
-                document.getElementById(`comment_count_${itemId}`).textContent = data.comments.length;
-            } else {
-                document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching comments:', error);
-            document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
-        });
 
     document.getElementById('travelDetailContent').innerHTML = detailContent;
     document.getElementById('travelDetailComments').innerHTML = `
@@ -482,30 +477,16 @@ function viewDetail(type, place, description, author, itemId) {
         </div>
         <input type="text" id="comment_${itemId}" name="content" placeholder="이 여행지에 대한 댓글을 작성해보세요">
         <button onclick="make_comment(${itemId})" type="submit">
-        <img src="{% static 'image/send.svg' %}" alt="back-btn" width="24" height="24" class="send-btn"> 
+        <img src="/static/image/send.svg" alt="back-btn" width="24" height="24" class="send-btn"> 
         </button>
     `;
     showPage('travelDetail');
     updateCommentCount(itemId);
+    updateLikeStatus(itemId);
+    updateDetailLikeStatus(itemId);
 
-    // **수정 부분 시작: 좋아요(하트) 상태 초기화 및 좋아요 카운트 업데이트**
-    fetch(`/like/status/${itemId}/`)
-    .then(response => response.json())
-    .then(data => {
-        const heartIcon = document.getElementById(`heart-icon-${itemId}`);
-        const likeCount = document.getElementById(`like-count-${itemId}`);
-        
-        if (data.liked) {
-            heartIcon.classList.remove("bi-heart");
-            heartIcon.classList.add("bi-heart-fill");
-        } else {
-            heartIcon.classList.remove("bi-heart-fill");
-            heartIcon.classList.add("bi-heart");
-        }
-        likeCount.textContent = data.like_count;
-    })
-    .catch(error => console.error('Error:', error));
-    // **수정 부분 끝: 좋아요(하트) 상태 초기화 및 좋아요 카운트 업데이트**
+    // 댓글 로드
+    loadComments(itemId);
 }
 
 
@@ -541,6 +522,7 @@ function viewDetail(type, place, description, author, itemId) {
         loadPlans('eat');
         loadPlans('stay');
         loadPlans('others');
+        initializeLikeStatuses();
     });
     // 입력 필드 초기화 함수
     function clearForm(type) {
@@ -552,31 +534,21 @@ function viewDetail(type, place, description, author, itemId) {
     }
 
     // 좋아요(하트) 누르면 숫자 1개 올라가고 다시 누르면 1개 줄어드는 함수
-    let onClickLike = (id) => {
-    let heartIcon = document.getElementById(`heart-icon-${id}`);
-    let likeCount = document.getElementById(`like-count-${id}`);
-    
+function onClickLike(id) {
     fetch(`/like/${id}/`, {
         method: 'POST',
         headers: {
-            'X-CSRFToken': csrftoken
-        }
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'
+        },
     })
     .then(response => response.json())
     .then(data => {
-        console.log("데이터 잘 받아짐");
-        console.log(data);
-        if (data.liked == true) {
-            heartIcon.classList.remove("bi-heart");
-            heartIcon.classList.add("bi-heart-fill");
-        } else {
-            heartIcon.classList.remove("bi-heart-fill");
-            heartIcon.classList.add("bi-heart");
-        }
-        likeCount.textContent = data.like_count;
+        updateLikeStatus(id);
     })
     .catch(error => console.error('Error:', error));
-};
+}
+
 
 
 
@@ -663,6 +635,51 @@ function updateCommentCount(itemId) {
         console.log(`Comment count updated to ${commentCount}`);
         
     }
+}
+
+function updateDetailLikeStatus(itemId) {
+    fetch(`/like/status/${itemId}/`)
+    .then(response => response.json())
+    .then(data => {
+        const likeCount = document.getElementById(`like-count-detail-${itemId}`);
+        const heartIcon = document.getElementById(`heart-icon-detail-${itemId}`);
+        
+        likeCount.textContent = `${data.like_count}명`;
+        if (data.liked) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+        } else {
+            heartIcon.classList.remove("bi-heart-fill");
+            heartIcon.classList.add("bi-heart");
+        }
+    })
+    .catch(error => console.error('Error updating detail like status:', error));
+}
+
+function initializeLikeStatuses() {
+    document.querySelectorAll('[id^="heart-icon-"]').forEach(element => {
+        const itemId = element.id.split('-')[2];
+        updateLikeStatus(itemId);
+    });
+}
+
+function updateLikeStatus(planId) {
+    fetch(`/like/status/${planId}/`)
+    .then(response => response.json())
+    .then(data => {
+        const likeCount = document.getElementById(`like-count-${planId}`);
+        const heartIcon = document.getElementById(`heart-icon-${planId}`);
+        
+        likeCount.textContent = `${data.like_count} 명`;
+        if (data.liked) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+        } else {
+            heartIcon.classList.remove("bi-heart-fill");
+            heartIcon.classList.add("bi-heart");
+        }
+    })
+    .catch(error => console.error('Error updating like status:', error));
 }
 
 </script>
