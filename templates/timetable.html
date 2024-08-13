@@ -153,6 +153,10 @@ function saveDateTimeAndClose() {
         alert('시간을 입력해주세요.');
         return;
     }
+    if (startTime >= endTime) {
+        alert('시작 시간은 종료 시간보다 이르게 설정해주세요.');
+        return;
+    }
 
     fetch("{% url 'plans:update_plan_datetime' %}", {
         method: 'POST',
