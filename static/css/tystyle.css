@@ -1,6 +1,12 @@
-.container {
-    overflow-y:auto !important;
-}
+.create_travel-page {
+    display: none;
+  }
+.create_travel-page.active {
+    display: block;
+  }
+.create_travel-all-content {
+    display: none;
+  }
 
 .main-mypage img {
     position: absolute;
@@ -993,12 +999,10 @@ label[for="id_invite_code"] {
     top: 152px
 }
 
-.like-count-1 {
+.like-count{
     position: absolute;
-    font: var(--text-style-pretendard-regular-12);
-    color: var(--black);
     left: 72px;
-    top: 150.5px
+    top: 148px
 }
 
 /*여행계획 상세보기 페이지*/
@@ -1046,7 +1050,7 @@ label[for="id_invite_code"] {
 .like-count-2 {
     position: absolute;
     left: 73px;
-    top: 186.5px;
+    top: 186px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
 }
@@ -1212,7 +1216,16 @@ label[for="id_invite_code"] {
         top: 159px;
 }
 
-.modal-delete {
+.modal-remove {
+    color: #EA636A;
+    font: var(--text-style-pretendard-semibold-16);
+    position: absolute;
+    left: 71px;
+    top: 159px;
+}
+
+.modal-delete,
+.modal-undo {
     color: var(--black);
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
@@ -1269,8 +1282,38 @@ label[for="id_invite_code"] {
     pointer-events: none;
     color: #FF69B4;
   }
-  .like-count{
+
+  /* 시간 선택기 컨테이너 */
+.time-picker-container {
+    margin-bottom: 15px;
+}
+
+
+/* 라벨 스타일 */
+.modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    font: var(--text-style-pretendard-regular-14);
+}
+
+  #modal-start-time,
+  #modal-end-time {
+      font: var(--text-style-pretendard-regular-14);
+      width: 35%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: var(--white);
+      color: #333;
+      appearance: none; 
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      margin-bottom: 15px;
+  }
+
+  #modal-start-time {
     position: absolute;
+<<<<<<< HEAD
     left: 72px;
     top: 150.5px
 }
@@ -1280,4 +1323,38 @@ label[for="id_invite_code"] {
 }
 .create_travel-page.active {
     display: block;
+=======
+    left: 32px;
+    top: 112px;
+  }
+
+  #modal-end-time  {
+    position: absolute;
+    left: 147px;
+    top: 112px;
+  }
+  
+  /* 커스텀 화살표 추가 */
+  .time-picker-container {
+      position: relative;
+  }
+
+  .modal-date-start::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #FF69B4;
+}
+
+  .time-modal-center {
+    width: 8px;
+    height: 1.5px;
+    background: var(--white);
+    position: absolute;
+    top: 130px;
+    left: 133px
+>>>>>>> 845ab2d8aa26433981e54ec3b2d73a5f3e33d7d1
 }

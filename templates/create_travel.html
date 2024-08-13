@@ -4,6 +4,7 @@
 {% block title %}Oddy{% endblock %}
 
 {% block content %}
+
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <div class="create_travel-main-header">
@@ -669,7 +670,7 @@ function updateLikeStatus(planId) {
         const likeCount = document.getElementById(`like-count-${planId}`);
         const heartIcon = document.getElementById(`heart-icon-${planId}`);
         
-        likeCount.textContent = `${data.like_count} 명`;
+        likeCount.textContent = `${data.like_count}명`;
         if (data.liked) {
             heartIcon.classList.remove("bi-heart");
             heartIcon.classList.add("bi-heart-fill");
@@ -684,9 +685,6 @@ function updateLikeStatus(planId) {
 </script>
 
 <style>
-    .create_travel-all-content {
-        display: none;
-    }
 
     .create_travel-addPlans-container div,
     .create_travel-main-addPlans,

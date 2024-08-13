@@ -173,11 +173,11 @@ function validateDateInput() {
     
     if (startDateInput.value.length === 10 && endDateInput.value.length === 10) {
         if (startDate < today.setHours(0, 0, 0, 0)) {
-            alert("시작일은 오늘 이후로 설정해야 합니다.");
+            alert("시작을은 오늘 이후로 설정해주세요!");
             return false;
         }
         if (endDate < startDate) {
-            alert("종료일은 시작일 이후로 설정해야 합니다.");
+            alert("종료일을 시작일 이후로 설정해주세요!");
             return false;
         }
     }
