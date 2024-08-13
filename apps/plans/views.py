@@ -626,7 +626,15 @@ def toggle_like(request, id):
         'like_count': travel_plan.like_count
     })
 
-
+@login_required
+def get_like_status(request, id):
+    user = request.user.userprofile
+    travel_plan = get_object_or_404(TravelPlan, id=id)
+    liked = Like.objects.filter(travel_plan=travel_plan, user=user).exists()
+    return JsonResponse({
+        'liked': liked,
+        'like_count': travel_plan.likes.count()
+    })
     
 @login_required
 @require_POST
@@ -689,21 +697,31 @@ def travel_map(request, travel_group_id):
     }
     return render(request, 'travel_map.html', context)
 
-from django.http import JsonResponse
 
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from .models import TravelPlan, Like
+from django.shortcuts import render
 
-def like_status(request, item_id):
-    travel_plan = get_object_or_404(TravelPlan, id=item_id)
+def create_group_like(request):
+    return render(request, 'create_group.html', {
+        'scroll_to_options': True  # optionsPage로 이동하기 위한 플래그
+    })
+
+
+@require_POST
+def save_airplane_text(request):
+    try:
+        data = json.loads(request.body)
+        plan_id = data.get('plan_id')
+        airplane_text = data.get('airplane_text')
+
+        plan = get_object_or_404(TravelPlan, id=plan_id)
+        # 여기에 airplane_text를 저장할 필드가 있다고 가정합니다.
+        plan.airplane_text = airplane_text
+        plan.save()
+
+        return JsonResponse({'status': 'success'})
     
-    # 현재 사용자가 해당 여행 계획에 좋아요를 눌렀는지 확인
-    is_liked = Like.objects.filter(user=request.user.userprofile, travel_plan=travel_plan).exists()
-    
-    # 좋아요 수 계산
-    like_count = travel_plan.likes.count()
+    except TravelPlan.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Plan not found'}, status=404)
 
-    return JsonResponse({'liked': is_liked, 'like_count': like_count})
-
-
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

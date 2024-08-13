@@ -302,24 +302,55 @@ function showPlans(category) {
     fetch("{% url 'plans:get_plans' travel_group.id %}?category=" + category)
     .then(response => response.json())
     .then(plans => {
+        console.log(plans)
         const planList = document.getElementById('plan-list');
         planList.innerHTML = '';
         plans.forEach(plan => {
             const planElement = document.createElement('div');
             planElement.className = 'plan-item';
+            const showAirplaneText = plan.date && plan.plan_start_time && plan.plan_end_time;
             planElement.innerHTML = `
                 <p>유형: ${category.toUpperCase()}</p>
                 <p>작성자: ${plan.creator}</p>
                 <p>장소: ${plan.place}</p>
                 <p>설명: ${plan.description}</p>
                 <p>좋아요 개수: ${plan.like_count || 0}</p>
-                ${plan.date && plan.plan_start_time && plan.plan_end_time ? '<p>비행기</p>' : ''}
+                ${showAirplaneText ? '<p>비행기</p>' : ''}
             `;
+
+            // "비행기" 글자가 표시되면 서버에 요청하여 데이터베이스 업데이트
+            if (showAirplaneText) {
+                saveAirplaneTextToDB(plan.id);
+            }
+
             planElement.onclick = () => openDateTimeModal(plan.id);
             planList.appendChild(planElement);
         });
     });
 }
+
+function saveAirplaneTextToDB(planId) {
+    fetch("{% url 'plans:save_airplane_text' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            plan_id: planId,
+            airplane_text: '비행기'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Successfully saved airplane text for plan:', planId);
+        } else {
+            console.error('Failed to save airplane text:', data.message);
+        }
+    });
+}
+
 
 function changePage(url) {
     window.location.href = url;

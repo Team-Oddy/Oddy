@@ -4,6 +4,8 @@
 {% block title %}Oddy{% endblock %}
 
 {% block content %}
+
+
 <div id="createGroupPage" class="create_group-page create_group-active">
     <div class="create_group-nickname-top">
         <p class="create_group-nickname-top-content">닉네임 입력</p>
@@ -16,7 +18,7 @@
     <div class="create_group-nickname-bottom"></div>
     <p class="create_group-nickname-comment">오디에서 사용할 닉네임을 알려주세요!</p><br>
     <input class="create_group-nickname-input" type="text" id="nickname" placeholder="  닉네임을 입력하세요">
-    <p id="nicknameError" class="create_group-error">5자 이내로 작성해주세요!</p><br>
+    <p id="nicknameError" class="create_group-error" style="display: none;">5자 이내로 작성해주세요!</p>
     <p id="nicknameLength" class="create_group-nickname-length">0/5</p>
     <button onclick="nextStep('nickname', 'entryPage')" class="create_group-nickname-button" id="submitButton">
         <span>다음</span>
@@ -74,8 +76,8 @@
     </div>
     <div class="create_group-travelDate-bottom">
         <p class="create_group-travelDate-comment">여행 일정을 알려주세요!</p><br>
-        <input type="text" id="travelStartDate" placeholder="  시작일" class="create_group-travelDate-input-start"><p class="create_group-travelDate-input-center"></p><input type="text" id="travelEndDate" placeholder="  종료일" class="create_group-travelDate-input-end"><br>
-        <p id="travelDateError" class="create_group-error">여행 날짜를 올바르게 입력해주세요.</p><br>
+        <input type="text" id="travelStartDate" placeholder="시작일" class="create_group-travelDate-input-start"><p class="create_group-travelDate-input-center"></p><input type="text" id="travelEndDate" placeholder="종료일" class="create_group-travelDate-input-end"><br>
+        <p id="travelDateError" class="create_group-error">여행 날짜를 올바르게 입력해주세요!</p><br>
         <button onclick="nextStepDates('travelStartDate', 'travelEndDate')" class="create_group-travelDate-button" id="travelDateButton">
         <span>완료</span></button>
     </div>
@@ -119,7 +121,7 @@
         </svg>
         <h2 class="create_group-joinCode-h2">초대 코드 입력하기</h2><br>
         <input class="create_group-joinCode-input" type="text" id="inviteCode" placeholder="초대 코드 6자리를 입력해주세요"><br>
-        <p id="inviteCodeError" class="create_group-error">초대 코드는 6자리 숫자로 입력해주세요.</p><br>
+        <p id="inviteCodeError" class="create_group-error">코드는 6자리로 입력해주세요!</p><br>
         <button class="create_group-joinCode-button">
             <span>완료</span></button><br>
     </div>
@@ -263,13 +265,13 @@ function nextStep(inputId, nextPageId) {
     if (value.trim() === "") {
         return;
     }
-    if (inputId === 'nickname' && value.length > 5) {
-        document.getElementById('nicknameError').style.display = 'block'; 
-        return;
-    }
-    if (inputId === 'travelName' && value.length > 15) {
-        document.getElementById('travelNameError').style.display = 'block'; 
-        return;
+    if (inputId === 'nickname') {
+        if (value.length > 5) {
+            document.getElementById('nicknameError').style.display = 'block';
+            return;
+        } else {
+            document.getElementById('nicknameError').style.display = 'none';
+        }
     }
     formData[inputId] = value;
 
@@ -338,4 +340,21 @@ function submitTravelInfo() {
     });
 }
 </script>
+
+<script>
+    window.onload = function() {
+        // scroll_to_options가 존재하지 않으면 기본값 False로 설정
+        var scrollToOptions = {{ scroll_to_options|default:False|yesno:"true,false" }};
+        if (scrollToOptions === 'true') {
+            showPage('optionsPage');
+        }
+    };
+    
+    function showPage(pageId) {
+        document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));
+        document.getElementById(pageId).classList.add('create_group-active');
+        document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none'); // 페이지 전환 시 에러 메시지 숨기기
+    }
+    </script>
+    
 {% endblock %}

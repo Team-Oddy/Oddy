@@ -64,16 +64,18 @@ body {
 .create_group-nickname-input:focus-visible, .create_group-travelName-input:focus-visible {
     border: 1.5px solid var(--pink02);
     outline: none;
+
 }
 
 .create_group-nickname-input::placeholder,
 .create_group-travelName-input::placeholder
-{
+{   
     position: static;
     left: 44px;
     top: 191px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
+    ;
 }
 
 .create_group-nickname-length {
@@ -82,6 +84,7 @@ body {
     top: 191px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
+    
 }
 
 .create_group-nickname-input-p, .create_group-travelName-p, .create_group-travelDate-p {

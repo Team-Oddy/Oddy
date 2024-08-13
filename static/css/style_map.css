@@ -9,6 +9,7 @@
     top: 74px;
     font: var(--text-style-pretendard-semibold-24);
     color: #F36DA6;
+    cursor: pointer;
 }
 
 #map {
@@ -20,4 +21,34 @@
     position: absolute;
     left: 314px;
     top: 749px;
+}
+
+.custom-info-window {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    max-width: 250px;
+    font-family: Arial, sans-serif;
+    position: relative;
+    text-align: center;
+}
+
+.map-info-title {
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--pink02);
+    margin-bottom: 4px;
+}
+
+.map-info-category {
+    display: none;
+}
+
+.map-info-description {
+    display: none;
+}
+
+.map-info-creator {
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--blue02);
 }
