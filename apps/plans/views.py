@@ -676,3 +676,22 @@ def travel_map(request, travel_group_id):
         'travel_plans': travel_plans,
     }
     return render(request, 'travel_map.html', context)
+
+from django.http import JsonResponse
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import TravelPlan, Like
+
+def like_status(request, item_id):
+    travel_plan = get_object_or_404(TravelPlan, id=item_id)
+    
+    # 현재 사용자가 해당 여행 계획에 좋아요를 눌렀는지 확인
+    is_liked = Like.objects.filter(user=request.user.userprofile, travel_plan=travel_plan).exists()
+    
+    # 좋아요 수 계산
+    like_count = travel_plan.likes.count()
+
+    return JsonResponse({'liked': is_liked, 'like_count': like_count})
+
+

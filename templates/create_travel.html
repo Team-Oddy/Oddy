@@ -425,7 +425,7 @@ function loadPlans(category) {
     }
 
     // 여행 세부 정보 보기 함수
-    function viewDetail(type, place, description, author, itemId) {
+function viewDetail(type, place, description, author, itemId) {
     currentItemId = itemId;
     currentType = type;
     
@@ -447,6 +447,7 @@ function loadPlans(category) {
             </div>
         </div>
     `;
+
     // 댓글 데이터를 로드하여 출력하는 부분 추가
     fetch(`/plans/${itemId}/comments/`)
         .then(response => response.json())
@@ -485,7 +486,27 @@ function loadPlans(category) {
     `;
     showPage('travelDetail');
     updateCommentCount(itemId);
-    }
+
+    // **수정 부분 시작: 좋아요(하트) 상태 초기화 및 좋아요 카운트 업데이트**
+    fetch(`/like/status/${itemId}/`)
+    .then(response => response.json())
+    .then(data => {
+        const heartIcon = document.getElementById(`heart-icon-${itemId}`);
+        const likeCount = document.getElementById(`like-count-${itemId}`);
+        
+        if (data.liked) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+        } else {
+            heartIcon.classList.remove("bi-heart-fill");
+            heartIcon.classList.add("bi-heart");
+        }
+        likeCount.textContent = data.like_count;
+    })
+    .catch(error => console.error('Error:', error));
+    // **수정 부분 끝: 좋아요(하트) 상태 초기화 및 좋아요 카운트 업데이트**
+}
+
 
     // 여행 계획 삭제 함수
     function deleteTravelPlan() {
