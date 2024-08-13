@@ -357,20 +357,20 @@ function loadPlans(category) {
             const svgPath = `/static/image/${category.toLowerCase()}.svg`;
 
             planElement.innerHTML = `
-                <div class="plan-item-content">
-                    <img src="${svgPath}" alt="${category} icon" class="category-icon" 
+                                <img src="${svgPath}" alt="${category} icon" class="category-icon" 
                     onclick="viewDetail('${category}', '${plan.place.replace(/'/g, "\\'")}', 
                     '${plan.description.replace(/'/g, "\\'")}', 
                     '${plan.creator.replace(/'/g, "\\'")}', ${plan.id}); event.stopPropagation();">
+                <div class="plan-item-content">
                     <div class="plan-details">
                         <p class="timetable-add">시간표에 추가 여부 o/x</p>
                         <p class="plan-category">${category.toUpperCase()}</p>
                         <p class="plan-creator">${plan.creator}</p>
                         <p class="plan-place ellipsis-text">${plan.place}</p>
                         <p class="plan-description">${plan.description}</p>
-                        <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
-                            <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
-                            <span class="like-count-1" id="like-count-${plan.id}">(${plan.likes || 0} 명)</span>
+                        <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})" >
+                        <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
+                        <span class="like-count-1" id="like-count-${plan.id}">(${plan.likes || 0} 명)</span>
                         </button>
                     </div>
                 </div>

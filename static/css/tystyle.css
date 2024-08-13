@@ -654,7 +654,6 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-semibold-20);
 }
 
-/*
 .create_travel-play-title {
     color: var(--play);
 }
@@ -669,7 +668,7 @@ label[for="id_invite_code"] {
 
 .create_travel-others-title {
     color: var(--others);
-}*/
+}
 
 
 .create_travel-all-menu a {
@@ -677,17 +676,6 @@ label[for="id_invite_code"] {
     text-decoration: none;
     position: relative;
 }
-/*
-.create_travel-all-menu a.active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -5px;
-    height: 1.5px;
-    background-color: currentColor;
-    z-index: 0;
-}*/
 
 .create_travel-all-play.active::after {
     background-color: var(--play);
@@ -952,11 +940,9 @@ label[for="id_invite_code"] {
     top: 177px;
     transform: translateX(-50%);  
     left: 50%;  
+    cursor: pointer;
 }
 
-.plan-details {
-    position: relative;
-}
 
 .plan-category {
     display: none;

@@ -74,10 +74,13 @@
 .create_group-page {
     display: none;
 }
+
 .create_group-page.create_group-active {
     display: block;
 }
-.create_group-error {
+
+.create_group-error,
+#nicknameError {
   position: absolute;
   left: 40px;
   top: 228px;

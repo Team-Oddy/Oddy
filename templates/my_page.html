@@ -210,7 +210,7 @@
     <span class="nicknameedit-top">닉네임 수정</span>
     <h2 class="nicknameedit-text">수정할 닉네임을 알려주세요!</h2><br>
     <input type="text" id="nicknameInput" placeholder="닉네임을 입력하세요 0/5" value="{{ user_profile.nickname }}"><br>
-    <p id="nicknameError" style="color: red; display: none;">닉네임은 5글자 이내로 작성해주세요.</p><br>
+    <p id="nicknameError" style="display: none;">5자 이내로 작성해주세요!</p><br>
     <button onclick="submitNickname()" class="nicknameedit-complete-btn"><span>완료</span></button><br>
     <button type="button" onclick="showProfilePage()">
         <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn"> 
