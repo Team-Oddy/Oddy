@@ -85,14 +85,16 @@
 
 <div id="time-modal" class="modal">
     <div class="modal-content">
-        <h3>방문 시간 입력</h3>
-        <label for="modal-start-time">시작 시간:</label>
+        <img src="/static/image/white-small-cloud.svg" alt="white cloud" width="46.83" height="45.94" class="join_group-white_cloud">
+        <h3>방문 시간 선택</h3>
+        <label for="modal-start-time"></label>
         <select id="modal-start-time">
             {% for hour in hours %}
                 <option value="{{ hour|stringformat:'02d' }}:00">{{ hour }}:00</option>
             {% endfor %}
         </select><br>
-        <label for="modal-end-time">종료 시간:</label>
+        <p class="time-modal-center"></p>
+        <label for="modal-end-time"></label>
         <select id="modal-end-time">
             {% for hour in hours %}
                 <option value="{{ hour|stringformat:'02d' }}:00">{{ hour }}:00</option>
@@ -107,9 +109,10 @@
 
 <div id="delete-modal" class="modal">
     <div class="modal-content">
-        <h3>이 계획을 시간표에서 제거하시겠습니까?</h3>
-        <button onclick="removePlanFromTimetable()">제거</button>
-        <button onclick="closeDeleteModal()">취소</button>
+        <img src="/static/image/white-small-cloud.svg" alt="white cloud" width="46.83" height="45.94" class="join_group-white_cloud">
+        <h3>이 계획을 시간표에서<br>제거하시겠습니까?</h3>
+        <button onclick="removePlanFromTimetable()" class="modal-remove">제거</button>
+        <button onclick="closeDeleteModal()" class="modal-undo">취소</button>
     </div>
 </div>
 
@@ -159,7 +162,7 @@ function saveDateTimeAndClose() {
         return;
     }
     if (startTime >= endTime) {
-        alert('시작 시간은 종료 시간보다 이르게 설정해주세요.');
+        alert('시작 시간은 종료 시간보다 빨라야 합니다!');
         return;
     }
 
