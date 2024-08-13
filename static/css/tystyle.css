@@ -988,13 +988,16 @@ label[for="id_invite_code"] {
 
 .bi-heart-fill {
     color: #EA636A;
+    position: absolute;
+    left: 53px;
+    top: 152px
 }
 
 .timetable-add { 
     display: none; /* 우선 숨겨놓고 화현 ver이랑 합치면 수정 */
 }
 
-.bi-heart::before {
+.bi-heart{
     position: absolute;
     left: 53px;
     top: 152px
@@ -1041,6 +1044,13 @@ label[for="id_invite_code"] {
     top: 166px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
+}
+
+.bi-heart-btn2 {
+    position: absolute;
+    left: 53px;
+    top: 187px;
+
 }
 
 .like-count-2 {

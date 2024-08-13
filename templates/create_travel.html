@@ -370,7 +370,7 @@ function loadPlans(category) {
                         <p class="plan-description">${plan.description}</p>
                         <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
                             <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
-                            <span class="like-count-1" id="like-count-${plan.id}">${plan.likes || 0}명</span>
+                            <span class="like-count-1" id="like-count-${plan.id}">(${plan.likes || 0} 명)</span>
                         </button>
                     </div>
                 </div>
@@ -441,7 +441,7 @@ function loadPlans(category) {
                 <p class="detail-place">${place}</p>
                 <p class="detail-description">${description}</p>
                 <button class="post__like" onclick="event.stopPropagation(); onClickLike(${itemId})">
-                    <i class="bi bi-heart" id="heart-icon-${itemId}"></i>
+                    <i class="bi bi-heart bi-heart-btn2" id="heart-icon-${itemId}"></i>
                     <span class="like-count-2" id="like-count-${itemId}">0</span>
                 </button>
             </div>
@@ -639,6 +639,7 @@ function updateCommentCount(itemId) {
         const commentCount = commentList.children.length;
         document.getElementById(`comment_count_${itemId}`).textContent = commentCount;
         console.log(`Comment count updated to ${commentCount}`);
+        
     }
 }
 

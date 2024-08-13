@@ -161,9 +161,6 @@ def update_nickname(request):
     return JsonResponse({'success': False, 'error': '잘못된 요청입니다.'})
 
 
-
-
-#여행유형 저장(선아)
 #여행유형 저장(선아)
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
