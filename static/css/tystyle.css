@@ -1270,3 +1270,10 @@ label[for="id_invite_code"] {
     left: 72px;
     top: 150.5px
 }
+
+.create_travel-page {
+    display: none;
+}
+.create_travel-page.active {
+    display: block;
+}
