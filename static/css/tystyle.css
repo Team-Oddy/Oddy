@@ -1,3 +1,13 @@
+.create_travel-page {
+    display: none;
+  }
+.create_travel-page.active {
+    display: block;
+  }
+.create_travel-all-content {
+    display: none;
+  }
+
 .main-mypage img {
     position: absolute;
     left: 341px;
@@ -985,12 +995,10 @@ label[for="id_invite_code"] {
     top: 152px
 }
 
-.like-count-1 {
+.like-count{
     position: absolute;
-    font: var(--text-style-pretendard-regular-12);
-    color: var(--black);
     left: 72px;
-    top: 150.5px
+    top: 148px
 }
 
 /*여행계획 상세보기 페이지*/
@@ -1038,7 +1046,7 @@ label[for="id_invite_code"] {
 .like-count-2 {
     position: absolute;
     left: 73px;
-    top: 186.5px;
+    top: 186px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
 }
@@ -1333,9 +1341,4 @@ label[for="id_invite_code"] {
     position: absolute;
     top: 130px;
     left: 133px
-}
-  .like-count{
-    position: absolute;
-    left: 72px;
-    top: 150.5px
 }
