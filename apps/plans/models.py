@@ -63,6 +63,7 @@ class TravelPlan(models.Model):
     comment_count = models.PositiveIntegerField(default=0)  # 댓글 수 필드 추가
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    airplane_text = models.CharField(max_length=50, null=True, blank=True)  # 비행기 텍스트 저장 필드 추가
 
     def __str__(self):
         return f"{self.travel_group.travel_name} - {self.category}: {self.place} on {self.date} from {self.plan_start_time} to {self.plan_end_time}"

@@ -4,6 +4,8 @@
 {% block title %}Oddy{% endblock %}
 
 {% block content %}
+
+
 <div id="createGroupPage" class="create_group-page create_group-active">
     <div class="create_group-nickname-top">
         <p class="create_group-nickname-top-content">닉네임 입력</p>
@@ -338,4 +340,21 @@ function submitTravelInfo() {
     });
 }
 </script>
+
+<script>
+    window.onload = function() {
+        // scroll_to_options가 존재하지 않으면 기본값 False로 설정
+        var scrollToOptions = {{ scroll_to_options|default:False|yesno:"true,false" }};
+        if (scrollToOptions === 'true') {
+            showPage('optionsPage');
+        }
+    };
+    
+    function showPage(pageId) {
+        document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));
+        document.getElementById(pageId).classList.add('create_group-active');
+        document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none'); // 페이지 전환 시 에러 메시지 숨기기
+    }
+    </script>
+    
 {% endblock %}

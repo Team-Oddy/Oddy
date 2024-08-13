@@ -1034,7 +1034,11 @@ label[for="id_invite_code"] {
 
 .bi-heart-btn2 {
     position: absolute;
+<<<<<<< HEAD
     left: 54px;
+=======
+    left: 53px;
+>>>>>>> 1fbb68bc80560d9422c92e45bebf15318b925b22
     top: 188px;
 
 }
