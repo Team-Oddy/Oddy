@@ -676,3 +676,11 @@ def travel_map(request, travel_group_id):
         'travel_plans': travel_plans,
     }
     return render(request, 'travel_map.html', context)
+
+
+from django.shortcuts import render
+
+def create_group_like(request):
+    return render(request, 'create_group.html', {
+        'scroll_to_options': True  # optionsPage로 이동하기 위한 플래그
+    })

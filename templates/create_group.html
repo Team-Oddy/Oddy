@@ -4,6 +4,8 @@
 {% block title %}Oddy{% endblock %}
 
 {% block content %}
+
+
 <div id="createGroupPage" class="create_group-page create_group-active">
     <div class="create_group-nickname-top">
         <p class="create_group-nickname-top-content">닉네임 입력</p>
@@ -15,7 +17,7 @@
     </div>
     <div class="create_group-nickname-bottom"></div>
     <p class="create_group-nickname-comment">오디에서 사용할 닉네임을 알려주세요!</p><br>
-    <input class="create_group-nickname-input" type="text" id="nickname" placeholder="  닉네임을 입력하세요">
+    <input class="create_group-nickname-input" type="text" id="nickname" placeholder="닉네임을 입력하세요">
     <p id="nicknameError" class="create_group-error">5자 이내로 작성해주세요!</p><br>
     <p id="nicknameLength" class="create_group-nickname-length">0/5</p>
     <button onclick="nextStep('nickname', 'entryPage')" class="create_group-nickname-button" id="submitButton">
@@ -328,4 +330,21 @@ function submitTravelInfo() {
     });
 }
 </script>
+
+<script>
+    window.onload = function() {
+        // scroll_to_options가 존재하지 않으면 기본값 False로 설정
+        var scrollToOptions = {{ scroll_to_options|default:False|yesno:"true,false" }};
+        if (scrollToOptions === 'true') {
+            showPage('optionsPage');
+        }
+    };
+    
+    function showPage(pageId) {
+        document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));
+        document.getElementById(pageId).classList.add('create_group-active');
+        document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none'); // 페이지 전환 시 에러 메시지 숨기기
+    }
+    </script>
+    
 {% endblock %}
