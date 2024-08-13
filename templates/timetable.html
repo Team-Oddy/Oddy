@@ -29,13 +29,19 @@
 </div>
 
 <div class="pagination">
-    {% if has_previous %}
+    {% if has_previous and has_next %}
+        <!-- 중간 페이지: 이전과 다음 버튼 모두 표시 -->
+        <button style="left:170px" onclick="changePage('{{ previous_page_url }}')" class="timetable-return-btn">이전</button>
+        <button style="left:217px" onclick="changePage('{{ next_page_url }}')" class="timetable-next-btn">다음</button>
+    {% elif has_previous %}
+        <!-- 마지막 페이지: 이전 버튼만 표시 -->
         <button onclick="changePage('{{ previous_page_url }}')" class="timetable-return-btn">이전</button>
-    {% endif %}
-    {% if has_next %}
+    {% elif has_next %}
+        <!-- 첫 페이지: 다음 버튼만 표시 -->
         <button onclick="changePage('{{ next_page_url }}')" class="timetable-next-btn">다음</button>
     {% endif %}
 </div>
+
 
 <div class="plan-management">
     <div class="category-buttons">

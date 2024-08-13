@@ -487,25 +487,34 @@ function viewDetail(type, place, description, author, itemId) {
     showPage('travelDetail');
     updateCommentCount(itemId);
 
-    // **수정 부분 시작: 좋아요(하트) 상태 초기화 및 좋아요 카운트 업데이트**
-    fetch(`/like/status/${itemId}/`)
+    // **좋아요 상태 초기화 및 좋아요 카운트 업데이트**
+    fetch(`/like/status/${itemId}/`)  // 좋아요 상태를 가져오는 엔드포인트 사용
     .then(response => response.json())
     .then(data => {
-        const heartIcon = document.getElementById(`heart-icon-${itemId}`);
-        const likeCount = document.getElementById(`like-count-${itemId}`);
-        
+        console.log("데이터 잘 받아짐");
+        console.log(data);
+
+        let heartIcon = document.getElementById(`heart-icon-${itemId}`);
+        let likeCount = document.getElementById(`like-count-${itemId}`);
+
+        // liked 값이 true이면 하트 아이콘을 빨간색으로 변경
         if (data.liked) {
             heartIcon.classList.remove("bi-heart");
             heartIcon.classList.add("bi-heart-fill");
+            heartIcon.style.color = "red";  // 여기서 하트 색상을 빨간색으로 변경
         } else {
             heartIcon.classList.remove("bi-heart-fill");
             heartIcon.classList.add("bi-heart");
+            heartIcon.style.color = "";  // 색상 초기화 (기본값)
         }
-        likeCount.textContent = data.like_count;
+
+        // like_count 값이 정상적으로 존재하면 이를 표시
+        likeCount.textContent = data.like_count !== undefined ? data.like_count : '0';
     })
     .catch(error => console.error('Error:', error));
-    // **수정 부분 끝: 좋아요(하트) 상태 초기화 및 좋아요 카운트 업데이트**
 }
+
+
 
 
     // 여행 계획 삭제 함수
@@ -550,8 +559,8 @@ function viewDetail(type, place, description, author, itemId) {
         if (descriptionField) descriptionField.value = '';
     }
 
-    // 좋아요(하트) 누르면 숫자 1개 올라가고 다시 누르면 1개 줄어드는 함수
-    let onClickLike = (id) => {
+// 좋아요(하트) 누르면 숫자 1개 올라가고 다시 누르면 1개 줄어드는 함수
+let onClickLike = (id) => {
     let heartIcon = document.getElementById(`heart-icon-${id}`);
     let likeCount = document.getElementById(`like-count-${id}`);
     
@@ -576,8 +585,6 @@ function viewDetail(type, place, description, author, itemId) {
     })
     .catch(error => console.error('Error:', error));
 };
-
-
 
 let make_comment = (id) => {
     let content = document.getElementById(`comment_${id}`).value;
@@ -663,6 +670,7 @@ function updateCommentCount(itemId) {
         
     }
 }
+
 
 </script>
 

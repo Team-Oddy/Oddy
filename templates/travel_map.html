@@ -6,7 +6,7 @@
 {% block content %}
 <div id="map-container">
     <div id="map"></div>
-    <h2 onclick="startTravel()" class="map-travel_group_name" >{{ travel_group.travel_name }}</h2>
+    <h2 onclick="startTravel()" class="map-travel_group_name">{{ travel_group.travel_name }}</h2>
     <button id="returnToMyLocation">
         <img src="{% static 'image/now-position-btn.svg' %}" alt="position-btn" width="53" height="53" class="now-position-btn">
     </button>
@@ -16,7 +16,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function startTravel() {
-    window.location.href = "{% url 'plans:create_travel' %}";
+        window.location.href = "{% url 'plans:create_travel' %}";
     }
 
     var staticUrl = "{% static '' %}";
@@ -24,6 +24,7 @@
     var currentLocation = { lat: 0, lng: 0 };
     var currentLocationMarker;
     var markers = [];
+    var currentInfoWindow = null;
 
     function initMap(lat, lng) {
         currentLocation = { lat, lng };
@@ -48,8 +49,12 @@
             icon: currentLocationIcon
         });
 
-        // 여행 계획 마커 추가
         addTravelPlanMarkers();
+
+        // 맵 클릭 이벤트 리스너 추가
+        naver.maps.Event.addListener(map, 'click', function() {
+            closeCurrentInfoWindow();
+        });
     }
 
     function getMarkerIcon(category) {
@@ -68,12 +73,33 @@
             };
         }
 
-        // 기본 아이콘 반환
         return {
             content: `<img src="${staticUrl}image/default-marker.svg" alt="default marker" style="width: 35px; height: 35px;">`,
             size: new naver.maps.Size(35, 35),
             anchor: new naver.maps.Point(17.5, 35)
         };
+    }
+
+    function createInfoWindowContent(plan) {
+        return `
+            <div class="custom-info-window" onclick="goToViewDetail(${plan.id})">
+                <div class="map-info-title">${plan.place}</div>
+                <div class="map-info-category">${plan.category}</div>
+                <div class="map-info-description">${plan.description}</div>
+                <div class="map-info-creator">${plan.creator}</div>
+            </div>
+        `;
+    }
+
+    function goToViewDetail() {
+        window.location.href = "{% url 'plans:create_travel' %}#travelDetail";
+    }
+
+    function closeCurrentInfoWindow() {
+        if (currentInfoWindow) {
+            currentInfoWindow.close();
+            currentInfoWindow = null;
+        }
     }
 
     function addTravelPlanMarkers() {
@@ -95,17 +121,26 @@
                         var marker = new naver.maps.Marker(markerOptions);
                         markers.push(marker);
 
-                        // 정보 창 추가
                         var infoWindow = new naver.maps.InfoWindow({
-                            content: '<div style="padding:10px;"><strong>{{ plan.place }}</strong><br>{{ plan.description }}<br>{{ plan.category }}</div>'
+                            content: createInfoWindowContent({
+                                place: '{{ plan.place }}',
+                                description: '{{ plan.description }}',
+                                category: '{{ plan.category }}',
+                                creator: '{{ plan.creator }}'
+                            }),
+                            backgroundColor: "transparent",
+                            borderWidth: 0,
+                            disableAnchor: true,
+                            pixelOffset: new naver.maps.Point(0, -20)
                         });
 
                         naver.maps.Event.addListener(marker, "click", function(e) {
-                            if (infoWindow.getMap()) {
-                                infoWindow.close();
-                            } else {
-                                infoWindow.open(map, marker);
+                            if (currentInfoWindow) {
+                                currentInfoWindow.close();
                             }
+                            infoWindow.open(map, marker);
+                            currentInfoWindow = infoWindow;
+                            e.domEvent.stopPropagation();
                         });
                     }
                 });
