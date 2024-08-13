@@ -366,7 +366,7 @@ function loadPlans(category) {
                         <p class="timetable-add">시간표에 추가 여부 o/x</p>
                         <p class="plan-category">${category.toUpperCase()}</p>
                         <p class="plan-creator">${plan.creator}</p>
-                        <p class="plan-place">${plan.place}</p>
+                        <p class="plan-place ellipsis-text">${plan.place}</p>
                         <p class="plan-description">${plan.description}</p>
                         <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})">
                             <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>

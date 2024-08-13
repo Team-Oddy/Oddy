@@ -973,7 +973,7 @@ label[for="id_invite_code"] {
 .plan-place {
     position: absolute;
     left: 72px;
-    top: 93px; /* icon과 상호작용하는 요소들 위치 수정 */
+    top: 93px;
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
@@ -1048,8 +1048,8 @@ label[for="id_invite_code"] {
 
 .bi-heart-btn2 {
     position: absolute;
-    left: 53px;
-    top: 187px;
+    left: 54px;
+    top: 188px;
 
 }
 
