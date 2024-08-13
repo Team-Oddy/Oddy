@@ -6,7 +6,7 @@
 {% block content %}
 <div id="map-container">
     <div id="map"></div>
-    <h2 class="map-travel_group_name">{{ travel_group.travel_name }}</h2>
+    <h2 onclick="startTravel()" class="map-travel_group_name" >{{ travel_group.travel_name }}</h2>
     <button id="returnToMyLocation">
         <img src="{% static 'image/now-position-btn.svg' %}" alt="position-btn" width="53" height="53" class="now-position-btn">
     </button>
@@ -15,6 +15,10 @@
 <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=asqg2o00lg&submodules=geocoder"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function startTravel() {
+    window.location.href = "{% url 'plans:create_travel' %}";
+    }
+
     var staticUrl = "{% static '' %}";
     var map;
     var currentLocation = { lat: 0, lng: 0 };

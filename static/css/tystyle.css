@@ -617,11 +617,11 @@ label[for="id_invite_code"] {
     height: 2.5px;
     z-index: 1;
 }
-
+/*
 .create_travel-all-play::after { background-color: var(--play); }
 .create_travel-all-eat::after { background-color: var(--eat); }
 .create_travel-all-stay::after { background-color: var(--stay); }
-.create_travel-all-others::after { background-color: var(--others); }
+.create_travel-all-others::after { background-color: var(--others); }*/
 
 
 .create_travel-all-menu::after {
@@ -629,7 +629,7 @@ label[for="id_invite_code"] {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -5px;  /* 이 값을 조정하여 선의 위치를 변경 */
+    bottom: -5px;  
     height: 1.5px;
     background-color: var(--gray01);
     z-index: 0;
@@ -654,6 +654,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-semibold-20);
 }
 
+/*
 .create_travel-play-title {
     color: var(--play);
 }
@@ -668,7 +669,58 @@ label[for="id_invite_code"] {
 
 .create_travel-others-title {
     color: var(--others);
+}*/
+
+
+.create_travel-all-menu a {
+    color: #616161; 
+    text-decoration: none;
+    position: relative;
 }
+/*
+.create_travel-all-menu a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 1.5px;
+    background-color: currentColor;
+    z-index: 0;
+}*/
+
+.create_travel-all-play.active::after {
+    background-color: var(--play);
+}
+
+.create_travel-all-eat.active::after {
+    background-color: var(--eat);
+}
+
+.create_travel-all-stay.active::after {
+    background-color: var(--stay);
+}
+
+.create_travel-all-others.active::after {
+    background-color: var(--others);
+}
+
+.create_travel-all-play.active {
+    color: var(--play);
+}
+
+.create_travel-all-eat.active {
+    color: var(--eat);
+}
+
+.create_travel-all-stay.active {
+    color: var(--stay);
+}
+
+.create_travel-all-others.active {
+    color: var(--others);
+}
+
 
 .create_travel-play-place span,
 .create_travel-eat-place span,
