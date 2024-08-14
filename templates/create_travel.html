@@ -174,7 +174,10 @@
 
 <div id="groupIdContainer" data-group-id="{{ travel_group.id }}"></div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=asqg2o00lg&submodules=geocoder"></script>
+<script>
+var naverMapClientId = "{{ naver_map_client_id|escapejs }}";
+</script>
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=" + naverMapClientId + "&submodules=geocoder"></script>
 <script>
     const groupId = document.getElementById('groupIdContainer').dataset.groupId;
     let previousPage = '';

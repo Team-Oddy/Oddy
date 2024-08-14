@@ -14,12 +14,11 @@ import random
 import string
 import re
 from .forms import TravelGroupForm
-from .models import TravelGroup, TravelPlan
+from .models import *
 from datetime import datetime, timedelta
 from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404
-from .models import TravelGroup, TravelPlan
-
+from django.conf import settings
 
 #선아 작성 부분
 def main(request):
@@ -403,8 +402,8 @@ def search_view(request):
         if query:
             url = "https://openapi.naver.com/v1/search/local.json"
             headers = {
-                "X-Naver-Client-Id": settings.NAVER_CLIENT_ID,
-                "X-Naver-Client-Secret": settings.NAVER_CLIENT_SECRET
+                "X-Naver-Client-Id": settings.NAVER_SEARCH_CLIENT_ID,
+                "X-Naver-Client-Secret": settings.NAVER_SEARCH_CLIENT_SECRET,
             }
             params = {
                 "query": query,
@@ -433,7 +432,7 @@ def search_view(request):
         context = {
             'results': results,
             'query': query,
-            'ncp_client_id': settings.NAVER_CLIENT_ID
+            'ncp_client_id': settings.NAVER_SEARCH_CLIENT_ID
         }
         return JsonResponse({'results': results, 'query': query})
     
@@ -696,6 +695,7 @@ def travel_map(request, travel_group_id):
     context = {
         'travel_group': travel_group,
         'travel_plans': travel_plans,
+        'naver_map_client_id': settings.NAVER_MAP_CLIENT_ID,
     }
     return render(request, 'travel_map.html', context)
 

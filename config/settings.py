@@ -21,12 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pgp#=2$o_a70o3^lu=z$80gr7_*hhjuzhf^i0=72qlqju5dzba'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOST = ['*']
 
 
 # Application definition
@@ -161,5 +160,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 
-NAVER_CLIENT_ID = 'CCPz3A4MX0wjDBDaMgcH'
-NAVER_CLIENT_SECRET = 'PqCmky7EJL'
+#env파일로 secret key 숨기기
+import os
+from dotenv import load_dotenv
+
+# .env 파일 로드
+load_dotenv()
+
+# SECRET_KEY
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
+# API Keys
+KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY')
+KAKAO_JAVASCRIPT_KEY = os.environ.get('KAKAO_JAVASCRIPT_KEY')
+KAKAO_ADMIN_KEY = os.environ.get('KAKAO_ADMIN_KEY')
+
+NAVER_MAP_CLIENT_ID = os.environ.get('NAVER_MAP_CLIENT_ID')
+NAVER_MAP_CLIENT_SECRET = os.environ.get('NAVER_MAP_CLIENT_SECRET')
+
+NAVER_SEARCH_CLIENT_ID = os.environ.get('NAVER_SEARCH_CLIENT_ID')
+NAVER_SEARCH_CLIENT_SECRET = os.environ.get('NAVER_SEARCH_CLIENT_SECRET')
