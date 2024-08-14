@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Oddy{% endblock %}
+
+{% block content %}
+
+<div id="test-page-container">
+    <span class="test-page-container-top">여행 유형 테스트</span>
+</div>
+
+<style>
+.next-link.active, .complete-btn.active {
+    background: var(--pink02);
+}
+.test-selected  { 
+    background-color: transparent !important;
+    border: 1.5px solid var(--pink02) !important;
+    color: var(--black) !important;
+}
+</style>
+
+<script>
+let questions = [
+    {
+        question: '여행 계획을 세울 때 당신의 스타일은?',
+        answers: ['a)세세한 부분까지 꼼꼼히 계획한다',
+        'b)대략적인 일정만 잡고 즉흥적으로 결정한다',
+        'c)주요 명소 위주로 효율적으로 계획한다']
+    },
+    {
+        question: '새로운 여행지에서 가장 하고 싶은 것은?',
+        answers: ['a)유명 관광지 방문하기',
+        'b)현지 시장이나 골목 탐험하기',
+        'c)현지 맛집 탐방하기']
+    },
+    {
+        question: '여행 중 예상치 못한 상황이 발생했을 때 당신은?',
+        answers: ['a)당황하고 스트레스를 받는다',
+        'b)새로운 모험의 기회로 받아들인다',
+        'c)빠르게 대안을 찾아 해결한다']
+    },
+    {
+        question: '여행에서 가장 중요하게 생각하는 것은?',
+        answers: ['a)효율적인 일정 소화',
+        'b)새로운 문화 체험',
+        'c)충분한 휴식과 여유']
+    },
+    {
+        question: '이상적인 숙소는?',
+        answers: ['a)편안하고 안전한 호텔',
+        'b)현지 문화를 느낄 수 있는 게스트하우스',
+        'c)휴양과 힐링이 가능한 리조트']
+    }
+];
+
+let answers = [];
+let currentPage = 0;
+
+//페이지 생성, 답변 선택 함수+답변 선택하지 않고 다음 누르면 alert창 뜸
+function createPage(index) {
+    let totalPages = questions.length;
+    let pageContainer = document.getElementById('test-page-container');
+
+    let pageDiv = document.createElement('div');
+    pageDiv.id = `test-page${index + 1}`;
+    pageDiv.classList.add('test-page');
+    if (index == 0) pageDiv.classList.add('test-active');
+
+    let nav = document.createElement('h2');
+    if (index > 0) {
+        let prevLink = document.createElement('a');
+        //prevLink.innerHTML = '&lt;'; 
+        prevLink.href = 'javascript:void(0)';
+        prevLink.onclick = () => showPage(index - 1);
+        nav.appendChild(prevLink);
+    }
+
+    let pageNumber = document.createElement('span');
+    pageNumber.classList.add('test-page-number');
+    pageNumber.textContent = `${index + 1} / ${totalPages}`;
+    nav.appendChild(pageNumber);
+    if (index < totalPages - 1) {
+        let nextLink = document.createElement('a');
+        nextLink.classList.add('next-link');
+        nextLink.innerHTML = '다음';
+        nextLink.href = 'javascript:void(0)';
+        nextLink.onclick = () => {
+            if (validateAnswer(index)) {
+                showPage(index + 1);
+            } else {
+                alert("답변을 선택하세요.");
+            }
+        };
+        nav.appendChild(nextLink);
+    }
+    pageDiv.appendChild(nav);
+
+    let question = document.createElement('h3');
+    question.textContent = questions[index].question;
+    pageDiv.appendChild(question);
+
+    questions[index].answers.forEach(answer => {
+        let prefix = answer.substring(0, 2); //a), b), c) 가져옴
+        let answerText = answer.substring(2); // 선택지 텍스트 추출
+
+        let answerButton = document.createElement('button');
+        
+        let prefixSpan = document.createElement('span');
+        prefixSpan.textContent = prefix;
+        prefixSpan.classList.add('hidden-prefix'); // 숨길 문자에 클래스명: 'hidden-prefix'
+        
+        let answerSpan = document.createElement('span');
+        answerSpan.textContent = answerText;
+
+        answerButton.appendChild(prefixSpan);
+        answerButton.appendChild(answerSpan);
+        answerButton.onclick = (event) => selectAnswer(event.currentTarget, index, answer);
+        
+        pageDiv.appendChild(answerButton);
+        pageDiv.appendChild(document.createElement('br'));
+});
+
+    let completeButton = document.createElement('button');
+    completeButton.classList.add('complete-btn');
+    completeButton.textContent = (index === totalPages - 1) ? '완료하기' : '다음';
+    completeButton.onclick = () => {
+        if (index === totalPages - 1) {
+            if (validateAnswer(index)) {
+                completeTest();
+            } else {
+                alert("답변을 선택하세요.");
+            }
+        } else {
+            if (validateAnswer(index)) {
+                showPage(index + 1);
+            } else {
+                alert("답변을 선택하세요.");
+            }
+        }
+    };
+    pageDiv.appendChild(completeButton);
+
+    pageContainer.appendChild(pageDiv);
+}
+
+//답변 선택 확인 함수
+function validateAnswer(index) {
+    return answers[index] !== undefined;
+}
+
+//페이지 전환
+function showPage(pageIndex) {
+    currentPage = pageIndex;
+    document.querySelectorAll('.test-page').forEach(page => page.classList.remove('test-active'));
+    document.getElementById(`test-page${pageIndex + 1}`).classList.add('test-active');
+}
+
+//선택한 답변만 answers배열에 저장되게
+function selectAnswer(button, questionIndex, answer) {
+    let buttons = button.parentNode.querySelectorAll('button');
+    buttons.forEach(btn => btn.classList.remove('test-selected'));
+    button.classList.add('test-selected');
+    answers[questionIndex] = answer;
+
+    // 다음 버튼 색 바꾸기
+    let completeButton = button.parentNode.querySelector('.complete-btn');
+    completeButton.classList.add('active');
+}
+
+function completeTest() { 
+    fetch("{% url 'plans:save_test_result' %}", { //post 요청으로 python save_test_result의 결과값인 Json을 불러옴(view 참고)
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ answers: answers }) // Json을 텍스트화..
+    })
+    .then(response => response.json()) //body == response => js에서 읽을 있게 다시 객체화 
+    .then(data => { //response.json == data값에 대한 콜백
+        /*
+        data{
+        success: boolean,
+        travel_type: string,
+        nickname: string 
+        }
+        */
+        if (data.success) {
+            //받은 데이터의 traveType을 인자값으로 해당 함수에 전달, 함수의 반환 값을 콘솔에 출력
+
+            let travelTypes = {
+                '완벽주의 플래너형': {
+                    className: 'perfect-planner',
+                    svg: `<img src="{% static 'image/character1.svg' %}" alt="pink cloud" width="136.67" height="121.31" class="create_group-pink_cloud-a">`,
+                    name: '완벽주의 플래너형',
+                    keyword1: '#효율적',
+                    keyword2: '#체계적',
+                    characteristics: '세세한 계획을 세우고 주요 관광지를 빠짐없이 방문해요',
+                    advantages: ['시간 관리에 탁월해요', '예산 통제력이 우수해요', '주요 명소를 놓치지 않아요'],
+                    disadvantages: ['융통성이 부족해요', '예상 밖 상황에 스트레스를 받아요']
+                },
+                '자유로운 모험가형': {
+                    className: 'free-planner',
+                    svg: `<img src="{% static 'image/character2.svg' %}" alt="pink cloud" width="135.02" height="151.29" class="create_group-pink_cloud-b">`,
+                    name: '자유로운 모험가형',
+                    keyword1: '#즉흥적',
+                    keyword2: '#문화체험',
+                    characteristics: '현지 문화에 깊이 몰입하며 새로운 경험을 추구해요',
+                    advantages: ['독특한 경험을 발견해요', '현지인과 쉽게 교류해요', '예상 밖 상황을 즐겨요'],
+                    disadvantages: ['중요 일정을 놓칠 수 있어요', '안전 문제가 발생할 수 있어요']
+                },
+                '휴식 추구형': {
+                    className: 'rest',
+                    svg: `<img src="{% static 'image/character3.svg' %}" alt="pink cloud" width="134.83" height="122.54" class="create_group-pink_cloud-c">`,
+                    name: '휴식 추구형',
+                    keyword1: '#힐링',
+                    keyword2: '#여유',
+                    characteristics: '편안한 숙소에서 여유롭게 시간을 보내며 휴식해요',
+                    advantages: ['충분한 휴식과 재충전이 가능해요', '스트레스 없는 여행을 추구해요', '여유로운 일정 진행이 가능해요'],
+                    disadvantages: ['새로운 경험이 부족할 수 있어요', '현지 문화 체험 제한적이에요']
+                },
+                '미식 탐험가형': {
+                    className: 'eat',
+                    svg: `<img src="{% static 'image/character4.svg' %}" alt="pink cloud" width="156.4" height="150.85" class="create_group-pink_cloud-d">`,
+                    name: '미식 탐험가형',
+                    keyword1: '#맛집투어',
+                    keyword2: '#현지음식',
+                    characteristics: '현지 음식과 맛집 위주로 여행 일정을 구성해요',
+                    advantages: ['음식으로 문화를 이해해요', '독특한 맛집을 발굴해요', '현지 시장 탐방이 능숙해요'],
+                    disadvantages: ['다른 관광 요소를 놓칠 수 있어요', '식비 초과 가능성이 있어요']
+                },
+                '균형 잡힌 탐험가형': {
+                    className: 'explorer',
+                    svg: `<img src="{% static 'image/character5.svg' %}" alt="pink cloud" width="127.2" height="132.88" class="create_group-pink_cloud-e">`,
+                    name: '균형잡힌 탐험가형',
+                    keyword1: '#다재다능',
+                    keyword2: '#융통성',
+                    characteristics: '계획과 즉흥성의 균형을 맞추며 다양한 경험을 추구해요',
+                    advantages: ['다양한 여행 요소 체험이 가능해요', '상황에 따른 대처가 가능해요', '친구와 조화롭게 여행할 수 있어요'],
+                    disadvantages: ['우선순위 설정이 어려워요', '깊이 있는 경험이 부족할 수 있어요']
+                },
+            };
+
+            let travelType = travelTypes[data.travel_type];
+
+            let resultPage = document.createElement('div');
+            resultPage.classList.add('test-page', 'test-active');
+            resultPage.innerHTML = `
+                <div class="testResult-top">
+                    <p>나의 여행 유형</p>
+                </div>
+                <div class="testResult-bottom">
+                    ${travelType.svg}
+                    <p class="testResult-text">${data.nickname}님의 여행 유형은</p>
+                    <strong class="testResult-result-type">${travelType.name}입니다!</strong>
+                    <div class="testResult-keywords1">
+                        <p class="testResult-keyword1">${travelType.keyword1}</p>
+                    </div>
+                    <div class="testResult-keywords2">
+                        <p class="testResult-keyword2">${travelType.keyword2}</p>
+                    </div>
+                    <div class="testResult-characteristics-box">
+                        <p class="testResult-characteristics">${travelType.characteristics}</p>
+                    </div>
+                    <div class="testResult-advantages">
+                        <p class="testResult-advantages-p">이런걸 잘해요</p>
+                        <ul class="testResult-advantages-ul">
+                            ${travelType.advantages.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="testResult-disadvantages">
+                        <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                        <ul class="testResult-disadvantages-ul">
+                            ${travelType.disadvantages.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <a class="testResult-restart" href="javascript:void(0)" onclick="restartTest()">다시 할래요</a>
+                    <button class="testResult-button"  onclick="startOddy()">오디 입장하기</button>
+                </div>
+            `;
+            document.getElementById('test-page-container').innerHTML = '';
+            document.getElementById('test-page-container').appendChild(resultPage);
+        } else {
+            alert('테스트 결과 저장 중 오류가 발생했습니다.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('테스트 결과 저장 중 오류가 발생했습니다.');
+    });
+}
+
+function startOddy() {
+    window.location.href = window.location.href = "{% url 'plans:create_group' %}#optionsPage";;
+}
+
+function restartTest() {
+    document.getElementById('test-page-container').innerHTML = '';
+    answers = [];
+    currentPage = 0;
+    questions.forEach((question, index) => createPage(index));
+    showPage(currentPage);
+}
+//테스트 결과
+/*function determineTravelType(answers) {
+    let travelTypes = {
+        '완벽주의 플래너형': {
+            name: '완벽주의 플래너형',
+            characteristics: ['#효율적', '#체계적', '주요 관광지를 빠짐없이 방문'],
+            advantages: ['시간 관리 탁월', '예산 통제력 우수', '주요 명소 놓치지 않음'],
+            disadvantages: ['융통성 부족', '예상 밖 상황에 스트레스']
+        },
+        '자유로운 모험가형': {
+            name: '자유로운 모험가형',
+            characteristics: ['#즉흥적', '#문화체험', '현지 문화에 깊이 몰입하며 새로운 경험을 추구'],
+            advantages: ['독특한 경험 발견', '현지인과 쉽게 교류', '예상 밖 상황을 즐김'],
+            disadvantages: ['중요 일정 놓칠 수 있음', '안전 문제 발생 가능성']
+        },
+        '휴식 추구형': {
+            name: '휴식 추구형',
+            characteristics: ['#힐링', '#여유', '편안한 숙소에서 여유롭게 시간을 보내며 휴식'],
+            advantages: ['충분한 휴식과 재충전', '스트레스 없는 여행', '여유로운 일정 진행'],
+            disadvantages: ['새로운 경험 부족', '현지 문화 체험 제한적']
+        },
+        '미식 탐험가형': {
+            name: '미식 탐험가형',
+            characteristics: ['#맛집투어', '#현지음식', '현지 음식과 맛집 위주로 여행 일정을 구성'],
+            advantages: ['음식으로 문화 이해', '독특한 맛집 발굴', '현지 시장 탐방 능숙'],
+            disadvantages: ['다른 관광 요소 소홀', '식비 초과 가능성']
+        },
+        '휴식 추구형 / 미식 탐험가형': { //임시데이터
+            name: '휴식 추구형 / 미식 탐험가형',
+            characteristics: ['#맛집투어', '#현지음식', '현지 음식과 맛집 위주로 여행 일정을 구성'],
+            advantages: ['음식으로 문화 이해', '독특한 맛집 발굴', '현지 시장 탐방 능숙'],
+            disadvantages: ['다른 관광 요소 소홀', '식비 초과 가능성']
+        },
+        '균형 잡힌 탐험가형': {
+            name: '균형 잡힌 탐험가형',
+            characteristics: ['#다재다능', '#융통성', '계획과 즉흥성의 균형을 맞추며 다양한 경험 추구'],
+            advantages: ['다양한 여행 요소 체험', '상황에 따른 유연한 대처', '동행자와 조화로운 여행'],
+            disadvantages: ['우선순위 설정 어려움', '깊이 있는 경험 부족할 수 있음']
+        },
+    };
+
+    return travelTypes[answers];
+}*/
+
+document.addEventListener('DOMContentLoaded', () => {
+    questions.forEach((_, index) => createPage(index));
+});
+
+const a = {
+
+}
+</script>
+{% endblock %}

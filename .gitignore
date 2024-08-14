@@ -1,0 +1,20 @@
+/venv/
+my_settings.py
+**/__pycache__/
+*.pyc
+# Ignore .pyc files
+*.pyc
+
+# Ignore all __pycache__ directories
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+
+*.sql
+*.dump
+
+db.sqlite3
+
+# Ignore SQLite database files
+db.sqlite3
+*.sqlite3-*

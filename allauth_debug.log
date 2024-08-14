@@ -1,0 +1,105 @@
+INFO 2024-07-31 18:58:26,806 autoreload Watching for file changes with StatReloader
+DEBUG 2024-07-31 18:58:26,806 autoreload Waiting for apps ready_event.
+DEBUG 2024-07-31 18:58:26,917 autoreload Apps ready_event triggered. Sending autoreload_started signal.
+DEBUG 2024-07-31 18:58:26,919 autoreload Watching dir /Users/pyeonseon-a/Desktop/Oddy/Oddy/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,919 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/contrib/admin/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,920 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/contrib/auth/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,920 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/contrib/contenttypes/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,920 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/contrib/sessions/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,920 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/contrib/messages/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,921 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/contrib/staticfiles/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,921 autoreload Watching dir /Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,929 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/contrib/sites/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,929 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/allauth/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,929 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/allauth/account/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,930 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/allauth/socialaccount/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,930 autoreload Watching dir /Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/allauth/socialaccount/providers/kakao/locale with glob **/*.mo.
+DEBUG 2024-07-31 18:58:26,990 utils (0.001) 
+            SELECT name, type FROM sqlite_master
+            WHERE type in ('table', 'view') AND NOT name='sqlite_sequence'
+            ORDER BY name; args=None
+DEBUG 2024-07-31 18:58:26,993 utils (0.000) SELECT "django_migrations"."app", "django_migrations"."name" FROM "django_migrations"; args=()
+INFO 2024-07-31 18:59:00,777 basehttp "GET / HTTP/1.1" 200 515
+DEBUG 2024-07-31 18:59:00,803 base Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'allauth.urls' from '/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/allauth/urls.py'> (None:None) 'accounts/'>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern '' [name='main']>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern 'create_group/' [name='create_group']>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern 'test/' [name='test']>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern 'login/kakao/' [name='kakao_login']>]], 'path': 'static/css/style.css'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 848, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <URLPattern list> (admin:admin) 'admin/'>
+DEBUG 2024-07-31 18:59:00,807 base Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/core/handlers/base.py", line 100, in _get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/urls/resolvers.py", line 558, in resolve
+    raise Resolver404({'tried': tried, 'path': new_path})
+django.urls.exceptions.Resolver404: {'tried': [[<URLResolver <URLPattern list> (admin:admin) 'admin/'>], [<URLResolver <module 'allauth.urls' from '/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/allauth/urls.py'> (None:None) 'accounts/'>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern '' [name='main']>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern 'create_group/' [name='create_group']>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern 'test/' [name='test']>], [<URLResolver <module 'apps.plans.urls' from '/Users/pyeonseon-a/Desktop/Oddy/Oddy/apps/plans/urls.py'> (plans:plans) ''>, <URLPattern 'login/kakao/' [name='kakao_login']>]], 'path': 'static/css/style.css'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 829, in _resolve_lookup
+    current = current[bit]
+TypeError: 'URLResolver' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 837, in _resolve_lookup
+    current = getattr(current, bit)
+AttributeError: 'URLResolver' object has no attribute 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 843, in _resolve_lookup
+    current = current[int(bit)]
+ValueError: invalid literal for int() with base 10: 'name'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/django/template/base.py", line 848, in _resolve_lookup
+    raise VariableDoesNotExist("Failed lookup for key "
+django.template.base.VariableDoesNotExist: Failed lookup for key [name] in <URLResolver <module 'allauth.urls' from '/Users/pyeonseon-a/anaconda3/lib/python3.10/site-packages/allauth/urls.py'> (None:None) 'accounts/'>
+WARNING 2024-07-31 18:59:00,809 log Not Found: /static/css/style.css
+WARNING 2024-07-31 18:59:00,810 basehttp "GET /static/css/style.css HTTP/1.1" 404 2793
+INFO 2024-07-31 18:59:18,267 basehttp "GET /login/kakao HTTP/1.1" 301 0
+INFO 2024-07-31 18:59:18,291 basehttp "GET /login/kakao/ HTTP/1.1" 302 0
+INFO 2024-07-31 19:00:03,397 basehttp "GET /accounts/kakao/login/callback/?code=XE4Q14TIhJWCSu9SkLh83p73aMXLcH8wQ9vd35nPJ76txVyYVLK6hgAAAAQKPXMYAAABkQg7gISGtS2__sNdBQ HTTP/1.1" 200 633
+DEBUG 2024-07-31 19:01:44,015 autoreload File /Users/pyeonseon-a/Desktop/Oddy/Oddy/config/settings.py. is_changed: False, is_new: True
+DEBUG 2024-07-31 19:01:44,015 autoreload File /Users/pyeonseon-a/Desktop/Oddy/Oddy/config/settings.py previous mtime: None, current mtime: 1722420103.6753244
+DEBUG 2024-07-31 19:01:44,015 autoreload /Users/pyeonseon-a/Desktop/Oddy/Oddy/config/settings.py notified as changed. Signal results: [(<function translation_file_changed at 0x7fb7c8bcedd0>, None)].
+INFO 2024-07-31 19:01:44,015 autoreload /Users/pyeonseon-a/Desktop/Oddy/Oddy/config/settings.py changed, reloading.

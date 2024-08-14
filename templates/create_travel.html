@@ -1,0 +1,704 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Oddy{% endblock %}
+
+{% block content %}
+
+<!--여행 모임 입장하기 누르면 나오는 메인-->
+<div id="travelMain" class="create_travel-main create_travel-page active">
+    <div class="create_travel-main-header">
+        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day is not None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3>
+    </div>
+    
+    <div class="create_travel-main-members-container">
+        <div class="create_travel-main-members-text">함께 여행가는 친구</div>
+        <ul>
+            <li><a href="#">친구1</a></li>
+            <li><a href="#">친구2</a></li>
+        </ul>
+    </div><br>
+    
+    <div class="create_travel-main-addPlans" onclick="showPage('viewSchedulePage')">
+        <p>여행 계획 확인하기</p>
+    </div><br>
+    
+    <div class="create_travel-main-timetable">
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a>
+    </div><br>
+    
+    <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">여행 지도 보기</a>
+</div>
+
+<!--여행 계획 추가하기->play->추가하기-->
+<div id="playPage" class="create_travel-play-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
+    <h3 class="create_travel-play-title">PLAY</h3>
+    <div class="create_travel-play-place">
+        <label for="play-place">
+            <span>여행지를 알려주세요!</span></label>
+        <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='playPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('play-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
+    </div>
+    <div class="create_travel-play-place-info">
+        <label for="play-description">
+            <span>여행지를 한줄로 소개해주세요!</span></label>
+        <input type="text" id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+    </div>
+    <button class="btn-submit" onclick="submitForm('play')">
+        <span>완료</span></button>
+</div>
+
+<!--여행 계획 추가하기->eat->추가하기-->
+<div id="eatPage" class="create_travel-eat-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
+    <h3 class="create_travel-eat-title">EAT</h3>
+    <div class="create_travel-eat-place">
+        <label for="eat-place">
+        <span>여행지를 알려주세요!</span></label><br>
+        <input type="text" id="eat-place" name="place" placeholder="장소 이름을 검색해보세요">
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='eatPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('eat-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
+    </div>
+    <div class="create_travel-eat-place-info">
+        <label for="eat-description">여행지를 한줄로 소개해주세요!</label><br>
+        <input id="eat-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+    </div>
+    <button class="btn-submit" onclick="submitForm('eat')">
+        <span>완료</span></button>
+</div>
+
+<!--여행 계획 추가하기->stay->추가하기-->
+<div id="stayPage" class="create_travel-stay-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
+    <h3 class="create_travel-stay-title">STAY</h3>
+    <div class="create_travel-stay-place">
+        <label for="stay-place">
+        <span>여행지를 알려주세요!</span></label><br>
+        <input type="text" id="stay-place" name="place" placeholder="장소 이름을 검색해보세요">
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='stayPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('stay-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
+    </div>
+    <div class="create_travel-stay-place-info">
+        <label for="stay-description">여행지를 한줄로 소개해주세요!</label><br>
+        <input id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+    </div>
+    <button class="btn-submit" onclick="submitForm('stay')">
+        <span>완료</span></button>
+</div>
+
+<!--여행 계획 추가하기->others->추가하기-->
+<div id="othersPage" class="create_travel-others-container create_travel-page">
+    <h3 class="create_travel-play-top">여행 계획 추가하기</h3>
+    <h3 class="create_travel-others-title">OTHERS</h3>
+    <div class="create_travel-others-place">
+        <label for="others-place">
+        <span>여행지를 알려주세요!</span></label><br>
+        <input type="text" id="others-place" name="place" placeholder="장소 이름을 검색해보세요">
+        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
+        <button onclick="previousPage='othersPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('others-place').value;">
+            <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
+        </button>
+    </div>
+    <div class="create_travel-others-place-info">
+        <label for="others-description">여행지를 한줄로 소개해주세요!</label><br>
+        <input id="others-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+    </div>
+    <button class="btn-submit" onclick="submitForm('others')">
+        <span>완료</span></button>
+</div>
+
+<!--장소검색-->
+<div id="placeSearchPage" class="create_travel-play-place-search create_travel-page">
+    <input type="text" id="search-place" name="place" placeholder="장소 이름을 검색해보세요">
+    <button>
+        <img onclick="searchPlace()" src="{% static 'image/search-pink.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-pink"> 
+    </button><br>
+    <div id="searchResults"></div>
+    <button class="btn-submit" onclick="showPage(previousPage)">
+        <span>완료</span></button>
+</div>
+
+<!--메인->여행 계획 추가하기-->
+<div id="viewSchedulePage" class="create_travel-all-container create_travel-page">
+    <h3 class="create_travel-all-title">여행 계획 확인하기</h3>
+    <button onclick="showPage('travelMain')">
+        <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn" onclick="showPage('travelMain')">
+    </button>
+    <div class="create_travel-all-menu">
+        <a href="#" onclick="showContent('playContent'); selectPlan('play')" class="create_travel-all-play">PLAY</a>
+        <a href="#" onclick="showContent('eatContent'); selectPlan('eat')" class="create_travel-all-eat">EAT</a>
+        <a href="#" onclick="showContent('stayContent'); selectPlan('stay')" class="create_travel-all-stay">STAY</a>
+        <a href="#" onclick="showContent('othersContent'); selectPlan('others')" class="create_travel-all-others">OTHERS</a>
+    </div>
+    <div id="playContent" class="create_travel-all-content">
+        <div class="content-items"></div>
+    </div>
+    <div id="eatContent" class="create_travel-all-content">
+        <div class="content-items"></div>
+    </div>
+    <div id="stayContent" class="create_travel-all-content">
+        <div class="content-items"></div>
+    </div>
+    <div id="othersContent" class="create_travel-all-content">
+        <div class="content-items"></div>
+    </div>
+    <div class="create_travel-buttons">
+        <button class="add-button" onclick="addNewPlan()">
+            <img src="{% static 'image/plus-btn.svg' %}" alt="back-btn" width="53" height="53" class="plus-btn">
+        </button>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
+            <img src="{% static 'image/calender-btn.svg' %}" alt="back-btn" width="53" height="53" class="calender-btn">
+        </a>
+    </div>
+</div>
+
+<!-- 여행 계획 디테일(댓글입력) -->
+<div id="travelDetail" class="create_travel-page">
+    <h3 class="travel-detail-page-top">여행 계획 상세보기</h3>
+    <div id="travelDetailContent"></div>
+    <button onclick="deleteTravelPlan()" class="delete-plan">
+        <span>계획 삭제</span></button>
+    <button onclick="showPage('viewSchedulePage')">
+        <img src="{% static 'image/chevron-left.svg' %}" alt="back-btn" width="18" height="18" class="back-btn"> 
+    </button>
+    <div id="travelDetailComments"></div>
+</div>
+
+<div id="groupIdContainer" data-group-id="{{ travel_group.id }}"></div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=asqg2o00lg&submodules=geocoder"></script>
+<script>
+    const groupId = document.getElementById('groupIdContainer').dataset.groupId;
+    let previousPage = '';
+    let selectedPlan = '';
+    let itemIdCounter = 0;
+    let currentItemId = null;
+    let currentType = null;
+    
+    function showPage(pageId) {
+    document.querySelectorAll('.create_travel-page').forEach(page => {
+        page.classList.remove('active');
+    });
+    if (pageId === 'previousPage') {
+        document.getElementById(previousPage).classList.add('active');
+    } else {
+        document.getElementById(pageId).classList.add('active');
+    }
+}
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // 여행 계획 유형 선택 함수
+    function selectPlan(planType) {
+    // 선택된 플랜 유형을 설정
+    selectedPlan = planType;
+    
+    // 모든 메뉴 항목에서 active 클래스를 제거
+    const menuItems = document.querySelectorAll('.create_travel-all-menu a');
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // 선택한 메뉴 항목에 active 클래스를 추가
+    const selectedItem = document.querySelector(`.create_travel-all-${planType}`);
+    if (selectedItem) {
+        selectedItem.classList.add('active');
+    }
+    
+    // 선택한 유형의 콘텐츠를 표시
+    showContent(planType + 'Content');
+}
+
+
+    // 새로운 여행 계획 추가
+    function addNewPlan() {
+        if (selectedPlan) {
+            showPage(selectedPlan + 'Page');
+        } else {
+            alert('장소 카테고리를 먼저 선택해주세요!');
+        }
+    }
+
+    function submitForm(type) {
+    let placeInput = document.getElementById(`${type}-place`);
+    let place = placeInput.value;
+    let address = placeInput.dataset.address;
+    let description = document.getElementById(`${type}-description`).value;
+    if (!place || !description || !address) {
+        alert('모든 내용을 채워주세요.');
+        return;
+    }
+
+    fetch(`/group/${groupId}/add_plan/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({category: type, place, address, description})
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            clearForm(type);
+            showPage('viewSchedulePage');
+            showContent(`${type}Content`);
+            loadPlans(type);
+        } else {
+            alert('계획 추가 실패: ' + data.message);
+        }
+    });
+}
+
+function searchPlace() {
+    let query = document.getElementById('search-place').value;
+    if (!query) {
+        alert('장소를 입력해주세요.');
+        return;
+    }
+
+    fetch(`/search/?query=${encodeURIComponent(query)}`)
+    .then(response => response.json())  // JSON으로 파싱
+    .then(data => {
+        let resultsHtml = '<ul>';
+        if (data.results && data.results.length > 0) {
+            data.results.forEach(function(item) {
+                let title = item.title.replace(/<[^>]*>/g, '');
+                let address = item.address;
+                resultsHtml += `<li onclick="selectPlace('${item.title.replace(/'/g, "\\'")}', '${item.address.replace(/'/g, "\\'")}')">
+                                    <h3>${item.title}</h3>
+                                    <p>${item.address}</p>
+                                </li>`;
+            });
+        } else {
+            resultsHtml += '<li>검색 결과가 없습니다.</li>';
+        }
+        resultsHtml += '</ul>';
+
+        document.getElementById('searchResults').innerHTML = resultsHtml;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('검색 결과를 가져오는데 실패했습니다.');
+    });
+}
+
+
+function selectPlace(title, address) {
+    title = title.replace(/<[^>]*>/g, '');
+    address = address.replace(/<[^>]*>/g, '');
+    console.log("selectPlace 함수 호출됨, 상호명:", title, "주소:", address);
+    console.log("이전 페이지:", previousPage);
+
+    if (!previousPage) {
+        console.error("이전 페이지 정보가 없습니다.");
+        return;
+    }
+
+    let type = previousPage.replace('Page', '');
+    let inputField = document.getElementById(`${type}-place`);
+    
+    if (inputField) {
+        inputField.value = title;  // 상호명을 입력 필드에 설정
+        inputField.dataset.address = address;  // 주소를 데이터 속성에 저장
+        console.log(`상호명 "${title}"와 주소 "${address}"가 ${type} 페이지에 저장되었습니다.`);
+    } else {
+        console.error(`${type}-place 입력 필드를 찾을 수 없습니다.`);
+    }
+    
+    showPage(previousPage);
+}
+
+
+// 여행 계획 불러오기
+function loadPlans(category) {
+    const url = `/group/${groupId}/get_plans/?category=${category}`;
+    console.log('Request URL:', url);
+    fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Received data:', data);
+        const contentContainer = document.querySelector(`#${category}Content .content-items`);
+        contentContainer.innerHTML = '';
+        
+        data.plans.forEach(plan => {
+            const planElement = document.createElement('div');
+            planElement.className = `${category}-item`;
+            planElement.id = `${category}-item-${plan.id}`;
+
+            planElement.innerHTML = `
+                <img src="/static/image/${category.toLowerCase()}.svg" alt="${category} icon" class="category-icon" 
+                    onclick="viewDetail('${category}', '${plan.place.replace(/'/g, "\\'")}', 
+                    '${plan.description.replace(/'/g, "\\'")}', 
+                    '${plan.creator.replace(/'/g, "\\'")}', ${plan.id})">
+                <div class="plan-item-content">
+                    <div class="plan-details">
+                        <p class="timetable-add">시간표에 추가 여부 o/x</p>
+                        <p class="plan-category">${category.toUpperCase()}</p>
+                        <p class="plan-creator">${plan.creator}</p>
+                        <p class="plan-place ellipsis-text">${plan.place}</p>
+                        <p class="plan-description">${plan.description}</p>
+                        <button class="post__like" onclick="event.stopPropagation(); onClickLike(${plan.id})" >
+                            <i class="bi bi-heart" id="heart-icon-${plan.id}"></i>
+                            <span class="like-count" id="like-count-${plan.id}">0명</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            contentContainer.appendChild(planElement);
+            updateLikeStatus(plan.id);
+        });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert(`계획 불러오기 실패: ${error.message}`);
+    });
+}
+
+function loadComments(itemId) {
+    fetch(`/plans/${itemId}/comments/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let commentsHtml = '';
+                data.comments.forEach(comment => {
+                    commentsHtml += `
+                        <div class="comment-item" id="comment-${comment.id}">
+                            <p class="comment-user">${comment.user}</p>
+                            <p class="comment-text">${comment.content}</p>
+                            <button onclick="delete_comment(${comment.id})">삭제</button>
+                        </div>
+                    `;
+                });
+                document.getElementById(`comment_list_${itemId}`).innerHTML = commentsHtml;
+                document.getElementById(`comment_count_${itemId}`).textContent = data.comments.length;
+            } else {
+                document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching comments:', error);
+            document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+        });
+}
+
+    // 여행 계획 삭제
+    function deleteTravelPlan() {
+        if (currentItemId !== null) {
+            fetch(`/plans/plan/${currentItemId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const element = document.getElementById(`${currentType}-item-${currentItemId}`);
+                    if (element) {
+                        element.remove();
+                    }
+                    currentItemId = null;
+                    showPage('viewSchedulePage');
+                } else {
+                    alert('계획 삭제 실패: ' + data.message);
+                }
+            });
+        } else {
+            alert('삭제할 여행 계획이 없습니다.');
+        }
+    }
+
+    // id="viewSchedulePage"에 특정 콘텐츠만 표시하고 다른 영역은 안 보이게
+    function showContent(contentId) {
+        document.querySelectorAll('.create_travel-all-content').forEach(content => {
+            content.style.display = 'none';
+        });
+        document.getElementById(contentId).style.display = 'block';
+        let category = contentId.replace('Content', '');
+        loadPlans(category);
+    }
+
+    // 여행 세부 정보 보기 함수
+function viewDetail(type, place, description, author, itemId) {
+    currentItemId = itemId;
+    currentType = type;
+    
+    // SVG 이미지 경로 설정
+    const svgPath = `/static/image/${type.toLowerCase()}.svg`;
+    
+    let detailContent = `
+        <div class="travel-detail">
+            <img src="${svgPath}" alt="${type} icon" class="type-icon">
+            <div class="detail-info">
+                <p class="detail-type">${type.toUpperCase()}</p>
+                <p class="detail-author">${author}</p>
+                <p class="detail-place ellipsis-text">${place}</p>
+                <p class="detail-description">${description}</p>
+                <button class="post__like">
+                    <i class="bi bi-heart bi-heart-btn2" id="heart-icon-detail-${itemId}"></i>
+                    <span class="like-count-2" id="like-count-detail-${itemId}">0명</span>
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('travelDetailContent').innerHTML = detailContent;
+    document.getElementById('travelDetailComments').innerHTML = `
+        <p class="comment-count">댓글 <span id="comment_count_${itemId}">0</span></p>
+        <div id="comment_list_${itemId}">
+        </div>
+        <input type="text" id="comment_${itemId}" name="content" placeholder="이 여행지에 대한 댓글을 작성해보세요">
+        <button onclick="make_comment(${itemId})" type="submit">
+        <img src="/static/image/send.svg" alt="back-btn" width="24" height="24" class="send-btn"> 
+        </button>
+    `;
+    showPage('travelDetail');
+    updateCommentCount(itemId);
+    updateLikeStatus(itemId);
+    updateDetailLikeStatus(itemId);
+
+    // 댓글 로드
+    loadComments(itemId);
+}
+
+
+    // 여행 계획 삭제 함수
+    function deleteTravelPlan() {
+        if (currentItemId !== null) {
+            fetch(`/plans/plan/${currentItemId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const element = document.getElementById(`${currentType}-item-${currentItemId}`);
+                    if (element) {
+                        element.remove();
+                    }
+                    currentItemId = null;
+                    showPage('viewSchedulePage');
+                } else {
+                    alert('계획 삭제 실패: ' + data.message);
+                }
+            });
+        } else {
+            alert('삭제할 여행 계획이 없습니다.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        loadPlans('play');
+        loadPlans('eat');
+        loadPlans('stay');
+        loadPlans('others');
+        initializeLikeStatuses();
+    });
+    // 입력 필드 초기화 함수
+    function clearForm(type) {
+        const placeField = document.getElementById(`${type}-place`);
+        const descriptionField = document.getElementById(`${type}-description`);
+
+        if (placeField) placeField.value = '';
+        if (descriptionField) descriptionField.value = '';
+    }
+
+    // 좋아요(하트) 누르면 숫자 1개 올라가고 다시 누르면 1개 줄어드는 함수
+function onClickLike(id) {
+    fetch(`/like/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        updateLikeStatus(id);
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
+
+let make_comment = (id) => {
+    let content = document.getElementById(`comment_${id}`).value;
+    if (!content) {
+        alert("댓글을 입력해주세요.");
+        return;
+    }
+
+    fetch(`/comment/add/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({ 'content': content })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 새로운 댓글을 화면에 추가
+            let commentList = document.getElementById(`comment_list_${id}`);
+            let newComment = document.createElement('div');
+            newComment.classList.add('comment-item');
+            newComment.id = `comment-${data.comment.id}`;  // 고유 ID 할당
+            newComment.innerHTML = `
+                <p>댓글 작성자: ${data.comment.user}</p>
+                <p>${data.comment.content}</p>
+                <button onclick="delete_comment(${data.comment.id})">삭제</button>
+            `;
+            commentList.appendChild(newComment); // 새로운 댓글을 목록에 추가
+            document.getElementById(`comment_${id}`).value = ""; // 입력 필드 초기화
+
+            // 댓글 수 업데이트
+            document.getElementById(`comment_count_${id}`).textContent = data.comment_count;
+        } else {
+            alert(data.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+};
+    
+    
+
+// 댓글 삭제 함수
+let delete_comment = (comment_id) => {
+    console.log("Deleting comment with ID:", comment_id);
+    const commentElement = document.getElementById(`comment-${comment_id}`);
+
+    if (commentElement) {
+        commentElement.remove();  // 댓글 요소를 화면에서 제거
+        console.log(`Comment element with ID ${comment_id} removed from DOM`);
+        updateCommentCount(currentItemId); // 댓글 수를 업데이트
+    } else {
+        console.error(`Comment element not found for ID: ${comment_id}`);
+        return;  // 요소가 없으면 더 이상 진행하지 않음
+    }
+
+    fetch(`/comment/delete/${comment_id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log(`Comment with ID ${comment_id} successfully deleted from the server`);
+        } else {
+            alert(data.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+};
+
+// 댓글 수를 업데이트하는 함수
+function updateCommentCount(itemId) {
+    // 현재 댓글 목록에서 댓글 수를 계산
+    const commentList = document.getElementById(`comment_list_${itemId}`);
+    if (commentList) {
+        const commentCount = commentList.children.length;
+        document.getElementById(`comment_count_${itemId}`).textContent = commentCount;
+        console.log(`Comment count updated to ${commentCount}`);
+        
+    }
+}
+
+function updateDetailLikeStatus(itemId) {
+    fetch(`/like/status/${itemId}/`)
+    .then(response => response.json())
+    .then(data => {
+        const likeCount = document.getElementById(`like-count-detail-${itemId}`);
+        const heartIcon = document.getElementById(`heart-icon-detail-${itemId}`);
+        
+        likeCount.textContent = `${data.like_count}명`;
+        if (data.liked) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+        } else {
+            heartIcon.classList.remove("bi-heart-fill");
+            heartIcon.classList.add("bi-heart");
+        }
+    })
+    .catch(error => console.error('Error updating detail like status:', error));
+}
+
+function initializeLikeStatuses() {
+    document.querySelectorAll('[id^="heart-icon-"]').forEach(element => {
+        const itemId = element.id.split('-')[2];
+        updateLikeStatus(itemId);
+    });
+}
+
+function updateLikeStatus(planId) {
+    fetch(`/like/status/${planId}/`)
+    .then(response => response.json())
+    .then(data => {
+        const likeCount = document.getElementById(`like-count-${planId}`);
+        const heartIcon = document.getElementById(`heart-icon-${planId}`);
+        
+        likeCount.textContent = `${data.like_count}명`;
+        if (data.liked) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+        } else {
+            heartIcon.classList.remove("bi-heart-fill");
+            heartIcon.classList.add("bi-heart");
+        }
+    })
+    .catch(error => console.error('Error updating like status:', error));
+}
+
+</script>
+
+<style>
+
+    .create_travel-addPlans-container div,
+    .create_travel-main-addPlans,
+    .create_travel-main-card,
+    .create_travel-main-button,
+    .create_travel-all-menu a,
+    button {
+        cursor: pointer;
+    }
+
+    .create_travel-buttons .add-button,
+    .create_travel-buttons .create_travel-main-button {
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+</style>
+{% endblock %}
