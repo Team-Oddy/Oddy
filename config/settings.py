@@ -12,9 +12,17 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# 환경 변수 초기화
+env = environ.Env()
+
+# .env 파일에서 환경 변수를 읽어들입니다.
+environ.Env.read_env(BASE_DIR / '.env')  # 이 줄이 꼭 필요합니다.
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOST = ['*']
 
@@ -106,8 +114,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # 또는 사용 중인 다른 데이터베이스 백엔드
-        'NAME': BASE_DIR / "db.sqlite3",  # 데이터베이스 파일 경로
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST' : env('DB_HOST'),
+        'NAME' : env('DB_NAME'),
+        'USER' : env('DB_USER'),
+        'PASSWORD' : env('DB_PASSWORD'),
     }
 }
 
