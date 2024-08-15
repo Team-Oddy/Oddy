@@ -22,6 +22,7 @@ urlpatterns=[
     path('get_plans/<int:travel_group_id>/', views.get_plans, name='get_plans'),
     #초대코드를 입력하는 페이지
     path('join_group_page/', join_group_page, name='join_group_page'),
+    path('group/<int:group_id>/', views.create_travel, name='create_travel_with_id'),
     #map view
     path('travel_map/<int:travel_group_id>/', views.travel_map, name='travel_map'),
     path('travel_map/', views.travel_map, name='travel_map'),
@@ -43,5 +44,5 @@ urlpatterns=[
     path('comment/delete/<int:comment_id>/', delete_comment, name='delete_comment'),
     
     path('save_airplane_text/', views.save_airplane_text, name='save_airplane_text'),
-
+    
 ]

@@ -7,12 +7,15 @@
 
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
+    <div class="main-ticket-img">
+        <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="288.7" height="454"></p>
+    </div>
     <div class="create_travel-main-header">
-        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day is not None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3>
+        <h3 class="create_travel-main-title">{{ travel_name }}<br>여행 시작까지 <span>{% if d_day is not None %}{{ d_day }}{% else %}{% endif %}일</span> 남았어요!</p></h3>
     </div>
     
     <div class="create_travel-main-members-container">
-        <div class="create_travel-main-members-text">함께 여행가는 친구</div>
+        <div class="create_travel-main-members-text">함께 여행가는 친구들</div>
         <ul>
             <li><a href="#">친구1</a></li>
             <li><a href="#">친구2</a></li>
@@ -20,14 +23,27 @@
     </div><br>
     
     <div class="create_travel-main-addPlans" onclick="showPage('viewSchedulePage')">
-        <p>여행 계획 확인하기</p>
+        <p>            
+        <img src="{% static 'image/main-plan-btn.svg' %}" alt="plan-btn" width="58" height="58" class="main-plan-btn"></p>
     </div><br>
     
     <div class="create_travel-main-timetable">
-        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a>
+        {% if travel_group %}
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
+            <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="58" height="58" class="main-timetable-btn">
+        </a>
+        {% else %}
+        {% endif %}
     </div><br>
-    
-    <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">여행 지도 보기</a>
+    {% if travel_group %}
+    <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">
+        <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="58" height="58" class="main-map-btn">
+    </a>
+    {% else %}
+    {% endif %}
+    <button class="create_travel-main-btn">
+        <span>친구 초대하기</span>
+    </button>
 </div>
 
 <!--여행 계획 추가하기->play->추가하기-->
@@ -36,20 +52,23 @@
     <h3 class="create_travel-play-title">PLAY</h3>
     <div class="create_travel-play-place">
         <label for="play-place">
-            <span>여행지를 알려주세요!</span></label>
+            <span>여행지를 알려주세요!</span>
+        </label>
         <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='playPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('play-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-play-place-info">
         <label for="play-description">
-            <span>여행지를 한줄로 소개해주세요!</span></label>
-        <input type="text" id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+            <span>여행지를 한줄로 소개해주세요!</span>
+        </label>
+        <input type="text" id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('play-description', 'play-char-count', 'play-char-error')">
+        <p id="play-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('play')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--여행 계획 추가하기->eat->추가하기-->
@@ -58,19 +77,21 @@
     <h3 class="create_travel-eat-title">EAT</h3>
     <div class="create_travel-eat-place">
         <label for="eat-place">
-        <span>여행지를 알려주세요!</span></label><br>
+            <span>여행지를 알려주세요!</span>
+        </label><br>
         <input type="text" id="eat-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='eatPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('eat-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-eat-place-info">
         <label for="eat-description">여행지를 한줄로 소개해주세요!</label><br>
-        <input id="eat-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+        <input id="eat-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('eat-description', 'eat-char-count', 'eat-char-error')">
+        <p id="eat-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('eat')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--여행 계획 추가하기->stay->추가하기-->
@@ -79,19 +100,21 @@
     <h3 class="create_travel-stay-title">STAY</h3>
     <div class="create_travel-stay-place">
         <label for="stay-place">
-        <span>여행지를 알려주세요!</span></label><br>
+            <span>여행지를 알려주세요!</span>
+        </label><br>
         <input type="text" id="stay-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='stayPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('stay-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-stay-place-info">
         <label for="stay-description">여행지를 한줄로 소개해주세요!</label><br>
-        <input id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+        <input id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('stay-description', 'stay-char-count', 'stay-char-error')">
+        <p id="stay-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('stay')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--여행 계획 추가하기->others->추가하기-->
@@ -100,19 +123,21 @@
     <h3 class="create_travel-others-title">OTHERS</h3>
     <div class="create_travel-others-place">
         <label for="others-place">
-        <span>여행지를 알려주세요!</span></label><br>
+            <span>여행지를 알려주세요!</span>
+        </label><br>
         <input type="text" id="others-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='othersPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('others-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-others-place-info">
         <label for="others-description">여행지를 한줄로 소개해주세요!</label><br>
-        <input id="others-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+        <input id="others-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('others-description', 'others-char-count', 'others-char-error')">
+        <p id="others-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('others')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--장소검색-->
@@ -154,9 +179,12 @@
         <button class="add-button" onclick="addNewPlan()">
             <img src="{% static 'image/plus-btn.svg' %}" alt="back-btn" width="53" height="53" class="plus-btn">
         </button>
+        {% if travel_group %}
         <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
             <img src="{% static 'image/calender-btn.svg' %}" alt="back-btn" width="53" height="53" class="calender-btn">
         </a>
+        {% else %}
+        {% endif %}
     </div>
 </div>
 
@@ -172,7 +200,8 @@
     <div id="travelDetailComments"></div>
 </div>
 
-<div id="groupIdContainer" data-group-id="{{ travel_group.id }}"></div>
+<div id="groupIdContainer" data-group-id="{{ travel_group.id }}">
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 var naverMapClientId = "{{ naver_map_client_id|escapejs }}";
@@ -185,7 +214,7 @@ var naverMapClientId = "{{ naver_map_client_id|escapejs }}";
     let itemIdCounter = 0;
     let currentItemId = null;
     let currentType = null;
-    
+
     function showPage(pageId) {
     document.querySelectorAll('.create_travel-page').forEach(page => {
         page.classList.remove('active');
@@ -241,6 +270,57 @@ var naverMapClientId = "{{ naver_map_client_id|escapejs }}";
         } else {
             alert('장소 카테고리를 먼저 선택해주세요!');
         }
+    }
+
+    function updateCharCount(inputId, countId, errorId) {
+    const input = document.getElementById(inputId);
+    const charCount = document.getElementById(countId);
+    const errorMsg = document.getElementById(errorId);
+    const maxLength = 20;
+
+    if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);  // 20자로 잘라냄
+    }
+
+    charCount.textContent = `${input.value.length}/${maxLength}`;
+
+    if (input.value.length === maxLength) {
+        errorMsg.style.display = 'block';
+    } else {
+        errorMsg.style.display = 'none';
+    }
+}
+
+    function submitForm(formType) {
+        const placeId = `${formType}-place`;
+        const descriptionId = `${formType}-description`;
+        const place = document.getElementById(placeId).value;
+        const description = document.getElementById(descriptionId).value;
+
+        if (place.trim() === "" || description.trim() === "") {
+            alert("여행지와 설명을 모두 입력해주세요.");
+            return;
+        }
+
+        if (description.length > 20) {
+            document.getElementById(`${formType}-char-error`).style.display = 'block';
+            return;
+        }
+
+        document.getElementById(placeId).value = '';
+        document.getElementById(descriptionId).value = '';
+        updateCharCount(descriptionId, `${formType}-char-count`, `${formType}-char-error`);
+
+    }
+
+    function showPage(pageId) {
+        // 모든 페이지 숨기기
+        const pages = document.getElementsByClassName('create_travel-page');
+        for (let page of pages) {
+            page.style.display = 'none';
+        }
+        // 선택된 페이지만 보이기
+        document.getElementById(pageId).style.display = 'block';
     }
 
     function submitForm(type) {
@@ -534,6 +614,11 @@ function viewDetail(type, place, description, author, itemId) {
 
         if (placeField) placeField.value = '';
         if (descriptionField) descriptionField.value = '';
+
+        const submitButton = document.querySelector(`#${type}Page .btn-submit`);
+        if (submitButton) {
+            submitButton.classList.remove('active');
+        }
     }
 
     // 좋아요(하트) 누르면 숫자 1개 올라가고 다시 누르면 1개 줄어드는 함수
@@ -579,9 +664,10 @@ let make_comment = (id) => {
             newComment.classList.add('comment-item');
             newComment.id = `comment-${data.comment.id}`;  // 고유 ID 할당
             newComment.innerHTML = `
-                <p>댓글 작성자: ${data.comment.user}</p>
+                <p>${data.comment.user}</p>
                 <p>${data.comment.content}</p>
-                <button onclick="delete_comment(${data.comment.id})">삭제</button>
+                <button onclick="delete_comment(${data.comment.id}) class="comment-delete-btn">
+                    <span>댓글 삭제<span></button>
             `;
             commentList.appendChild(newComment); // 새로운 댓글을 목록에 추가
             document.getElementById(`comment_${id}`).value = ""; // 입력 필드 초기화
@@ -685,6 +771,52 @@ function updateLikeStatus(planId) {
     .catch(error => console.error('Error updating like status:', error));
 }
 
+    //버튼 활성화/비활성화
+function enableSubmitButton(page) {
+    const placeInput = document.getElementById(`${page}-place`);
+    const descriptionInput = document.getElementById(`${page}-description`);
+    const submitButton = document.querySelector(`#${page}Page .btn-submit`);
+
+    if (placeInput.value.trim() !== '' && descriptionInput.value.trim() !== '') {
+        submitButton.classList.add('active');
+    } else {
+        submitButton.classList.remove('active');
+    }
+}
+
+// 장소 검색 페이지에 이벤트 리스너 추가
+function enableSearchButton() {
+    const searchInput = document.getElementById('search-place');
+    const searchButton = document.querySelector('#placeSearchPage .btn-submit');
+
+    if (searchInput.value.trim() !== '') {
+        searchButton.classList.add('active');
+    } else {
+        searchButton.classList.remove('active');
+    }
+}
+
+//버튼 활성화 이벤트 리스너 
+function addInputListeners(page) {
+    const placeInput = document.getElementById(`${page}-place`);
+    const descriptionInput = document.getElementById(`${page}-description`);
+
+    placeInput.addEventListener('input', () => enableSubmitButton(page));
+    descriptionInput.addEventListener('input', () => enableSubmitButton(page));
+}
+
+// 페이지 로드 시 각 입력 필드에 이벤트 리스너를 추가
+document.addEventListener('DOMContentLoaded', function() {
+
+    addInputListeners('play');
+    addInputListeners('eat');
+    addInputListeners('stay');
+    addInputListeners('others');
+
+    const searchInput = document.getElementById('search-place');
+    searchInput.addEventListener('input', enableSearchButton);
+});
+
 </script>
 
 <style>
@@ -697,11 +829,18 @@ function updateLikeStatus(planId) {
     button {
         cursor: pointer;
     }
-
     .create_travel-buttons .add-button,
     .create_travel-buttons .create_travel-main-button {
         margin-bottom: 10px;
         display: inline-block;
+    }
+
+    .btn-submit.active {
+        background: var(--pink02);
+        color: var(--black);
+    }
+    .btn-submit.active span {
+        color: var(—black);
     }
 </style>
 {% endblock %}

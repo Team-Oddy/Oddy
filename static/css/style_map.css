@@ -32,7 +32,7 @@
 .map-page .now-position-btn {
     position: absolute;
     left: 314px;
-    bottom: 20px;
+    bottom: 70px;
     z-index: 1;
 }
 
@@ -62,6 +62,6 @@
 }
 
 .map-info-creator {
-    font: var(—text-style-pretendard-regular-14);
-    color: var(—blue02);
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--blue02);
 }

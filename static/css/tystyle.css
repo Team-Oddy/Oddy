@@ -61,36 +61,57 @@
     color: var(--black);
 }
 
-#optionsPage {
-    width: 393px;
-    height: 100vh;
-    background: var(--blue02);
-}
-
 #optionsPage p {
     position: absolute;
     left: 47px;
-    top: 171px;
+    top: 185px;
     font: var(--text-style-pretendard-semibold-20);
-    color: var(--white);
+    color: var(--blue02);
 }
 
-.create_group-white_cloud {
+.door-frame {
+    width: 275.45px;
+    height: 111.282px;
+    flex-shrink: 0;
+    border-radius: 13.834px;
+    background: var(--gray02);
     position: absolute;
-    right: 0; 
-    top: 240px;
-    width: auto; 
-    height: 175px; 
-    max-width: 50%; 
+    transform: translateX(-50%);  
+    left: 50%;  
+    top: 250.27px;
+    overflow: hidden;
 }
 
-.create_group-pink_cloud {
+.door-frame img {
     position: absolute;
-    left: 0; 
-    top: 404.38px;
-    width: auto; 
-    height: 156px; 
-    max-width: 50%; 
+    top: 55%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.door {
+    width: 275.45px;
+    height: 111.282px;
+    flex-shrink: 0;
+    border-radius: 13.834px;
+    background: var(--blue01);
+    position: absolute;
+    left: 50%;
+    top: 250.27px;
+    transform: translateX(-50%);
+    animation: doorAnimation 2s ease-in-out forwards; /* 애니메이션 시간을 1s로 설정했습니다. 필요에 따라 조정하세요. */
+    transform-origin: right center;
+}
+
+@keyframes doorAnimation {
+    0% {
+        transform: translateX(-50%) scaleX(1);
+    }
+    100% {
+        transform: translateX(-50%) scaleX(0.71);
+    }
 }
 
 .create-travelgroup {
@@ -101,8 +122,7 @@
     height: 48px;
     flex-shrink: 0;
     border-radius: 5px;
-    border: 1.5px solid var(--white);
-
+    border: 1.5px solid var(--pink02);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -110,7 +130,7 @@
 
 .create-travelgroup span {
     font: var(--text-style-pretendard-semibold-16);
-    color: var(--white);
+    color: var(--black);
 }
 
 .enter-invitedgroup {
@@ -148,11 +168,35 @@
     color: var(--black);
 }
 
+/* .complete_page-check_icon {
+    position: absolute;
+    left: 168px;
+    top: 129px;
+} */
+
 .complete_page-check_icon {
     position: absolute;
     left: 168px;
     top: 129px;
-}
+    opacity: 0;
+    transform: scale(0);
+    animation: checkAnimation 1s ease-in-out forwards;
+  }
+  
+  @keyframes checkAnimation {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
 .complete_page-pink_cloud {
     position: absolute;
@@ -782,6 +826,15 @@ label[for="id_invite_code"] {
     transform: translateX(-50%);
 }
 
+.char-count {
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--gray03);
+    text-align: left;
+    position: absolute;
+    left: 285px;
+    top: 49px;
+}
+
 .btn-submit {
     width: 325px;
     height: 48px;
@@ -869,6 +922,21 @@ label[for="id_invite_code"] {
 
 .comment-content {
     margin-left: 86px; /* 왼쪽 여백 */
+}
+
+.comment-delete-btn {
+    width: 60px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: 24.444px;
+    border: 1.5px solid var(--pink02);
+    background: var(--pink01);
+    position: absolute;
+    left: 296px;
+    top: 529px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -1342,3 +1410,80 @@ label[for="id_invite_code"] {
     top: 130px;
     left: 133px
 }
+
+.main-ticket-img {
+    position: absolute;
+    top: 259px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.main-plan-btn {
+    position: absolute;
+    left: 87px;
+    top: 606px;
+}
+
+.main-timetable-btn {
+    position: absolute;
+    left: 167.74px;
+    top: 606px;
+}
+
+.main-map-btn {
+    position: absolute;
+    left: 248px;
+    top: 606px;
+}
+
+.create_travel-main-members-text {
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+    position: absolute;
+    left: 33px;
+    top: 133px;
+}
+
+.create_travel-main-title {
+    position: absolute;
+    left: 84px;
+    top: 282px;
+    font: var(--text-style-pretendard-semibold-18);
+    color: var(--black);
+    line-height: 25px;
+}
+
+.create_travel-main-title span {
+    color: #F36DA6;
+}
+
+.create_travel-main-btn {
+    width: 125px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--gray01);
+    position: absolute;
+    top: 741px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.create_travel-main-btn span {
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+}
+
+/*
+::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 1.5px;
+    background-color: var(--gray01);
+    z-index: 0;
+} */
+
+  
