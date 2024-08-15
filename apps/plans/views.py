@@ -509,8 +509,10 @@ def get_all_plans(request, travel_group_id):
     } for plan in plans]
     return JsonResponse(plans_data, safe=False)
 
+@login_required
 def get_plans(request, travel_group_id):
-    travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id, members=request.user.userprofile)
+    
     category = request.GET.get('category')
     if category:
         plans = TravelPlan.objects.filter(travel_group=travel_group, category=category)
@@ -522,12 +524,12 @@ def get_plans(request, travel_group_id):
         'category': plan.category,
         'place': plan.place,
         'description': plan.description,
-        'creator': plan.creator.nickname,
         'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
         'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
         'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
     } for plan in plans]
     return JsonResponse(plans_data, safe=False)
+
 
 import json
 import re
