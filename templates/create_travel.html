@@ -199,7 +199,7 @@
     let itemIdCounter = 0;
     let currentItemId = null;
     let currentType = null;
-    
+
     function showPage(pageId) {
     document.querySelectorAll('.create_travel-page').forEach(page => {
         page.classList.remove('active');
@@ -599,6 +599,11 @@ function viewDetail(type, place, description, author, itemId) {
 
         if (placeField) placeField.value = '';
         if (descriptionField) descriptionField.value = '';
+
+        const submitButton = document.querySelector(`#${type}Page .btn-submit`);
+        if (submitButton) {
+            submitButton.classList.remove('active');
+        }
     }
 
     // 좋아요(하트) 누르면 숫자 1개 올라가고 다시 누르면 1개 줄어드는 함수
@@ -750,6 +755,52 @@ function updateLikeStatus(planId) {
     .catch(error => console.error('Error updating like status:', error));
 }
 
+    //버튼 활성화/비활성화
+function enableSubmitButton(page) {
+    const placeInput = document.getElementById(`${page}-place`);
+    const descriptionInput = document.getElementById(`${page}-description`);
+    const submitButton = document.querySelector(`#${page}Page .btn-submit`);
+
+    if (placeInput.value.trim() !== '' && descriptionInput.value.trim() !== '') {
+        submitButton.classList.add('active');
+    } else {
+        submitButton.classList.remove('active');
+    }
+}
+
+// 장소 검색 페이지에 이벤트 리스너 추가
+function enableSearchButton() {
+    const searchInput = document.getElementById('search-place');
+    const searchButton = document.querySelector('#placeSearchPage .btn-submit');
+
+    if (searchInput.value.trim() !== '') {
+        searchButton.classList.add('active');
+    } else {
+        searchButton.classList.remove('active');
+    }
+}
+
+//버튼 활성화 이벤트 리스너 
+function addInputListeners(page) {
+    const placeInput = document.getElementById(`${page}-place`);
+    const descriptionInput = document.getElementById(`${page}-description`);
+
+    placeInput.addEventListener('input', () => enableSubmitButton(page));
+    descriptionInput.addEventListener('input', () => enableSubmitButton(page));
+}
+
+// 페이지 로드 시 각 입력 필드에 이벤트 리스너를 추가
+document.addEventListener('DOMContentLoaded', function() {
+
+    addInputListeners('play');
+    addInputListeners('eat');
+    addInputListeners('stay');
+    addInputListeners('others');
+
+    const searchInput = document.getElementById('search-place');
+    searchInput.addEventListener('input', enableSearchButton);
+});
+
 </script>
 
 <style>
@@ -762,11 +813,18 @@ function updateLikeStatus(planId) {
     button {
         cursor: pointer;
     }
-
     .create_travel-buttons .add-button,
     .create_travel-buttons .create_travel-main-button {
         margin-bottom: 10px;
         display: inline-block;
+    }
+
+    .btn-submit.active {
+        background: var(--pink02);
+        color: var(--black);
+    }
+    .btn-submit.active span {
+        color: var(--black);
     }
 </style>
 {% endblock %}

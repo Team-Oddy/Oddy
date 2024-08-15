@@ -99,8 +99,8 @@
         `;
     }
 
-    function goToViewDetail() {
-        window.location.href = "{% url 'plans:create_travel' %}#travelDetail";
+    function goToViewDetail(planId) { // 수정: 계획 ID를 받아서 처리
+        window.location.href = "{% url 'plans:create_travel' %}#travelDetail-" + planId;
     }
 
     function closeCurrentInfoWindow() {
