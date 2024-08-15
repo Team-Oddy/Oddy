@@ -28,14 +28,19 @@
     </div><br>
     
     <div class="create_travel-main-timetable">
+        {% if travel_group %}
         <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
-        <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="53" height="53" class="main-timetable-btn"></p>
+            <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="53" height="53" class="main-timetable-btn">
         </a>
+        {% else %}
+        {% endif %}
     </div><br>
-    
+    {% if travel_group %}
     <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">
-        <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="53" height="53" class="main-map-btn"></p>
+        <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="53" height="53" class="main-map-btn">
     </a>
+    {% else %}
+    {% endif %}
     <button class="create_travel-main-btn">
         <span>친구 초대하기</span>
     </button>
@@ -174,9 +179,12 @@
         <button class="add-button" onclick="addNewPlan()">
             <img src="{% static 'image/plus-btn.svg' %}" alt="back-btn" width="53" height="53" class="plus-btn">
         </button>
+        {% if travel_group %}
         <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
             <img src="{% static 'image/calender-btn.svg' %}" alt="back-btn" width="53" height="53" class="calender-btn">
         </a>
+        {% else %}
+        {% endif %}
     </div>
 </div>
 
@@ -827,7 +835,7 @@ document.addEventListener('DOMContentLoaded', function() {
         color: var(--black);
     }
     .btn-submit.active span {
-        color: var(--black);
+        color: var(—black);
     }
 </style>
 {% endblock %}

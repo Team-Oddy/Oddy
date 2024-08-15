@@ -242,7 +242,6 @@ def join_group_page(request):
                 travel_group = TravelGroup.objects.get(invite_code=invite_code)
                 user_profile = request.user.userprofile
                 if travel_group.members.filter(id=user_profile.id).exists():
-                    form.add_error('invite_code', 'You are already in this group.')
                     return redirect('plans:create_travel')
                 else:
                     travel_group.members.add(user_profile)
@@ -281,6 +280,7 @@ def create_travel(request):
     else:
         travel_name = '여행 이름 없음'
         d_day = None
+        latest_travel_group = None
 
     context = {
         'form': form,
