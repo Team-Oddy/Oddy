@@ -8,7 +8,7 @@
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <div class="main-ticket-img">
-        <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="302" height="399"></p>
+        <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="288.7" height="454"></p>
     </div>
     <div class="create_travel-main-header">
         <h3 class="create_travel-main-title">{{ travel_name }}<br>여행 시작까지 <span>{% if d_day is not None %}{{ d_day }}{% else %}{% endif %}일</span> 남았어요!</p></h3>
@@ -24,20 +24,20 @@
     
     <div class="create_travel-main-addPlans" onclick="showPage('viewSchedulePage')">
         <p>            
-        <img src="{% static 'image/main-plan-btn.svg' %}" alt="plan-btn" width="53" height="53" class="main-plan-btn"></p>
+        <img src="{% static 'image/main-plan-btn.svg' %}" alt="plan-btn" width="58" height="58" class="main-plan-btn"></p>
     </div><br>
     
     <div class="create_travel-main-timetable">
         {% if travel_group %}
         <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
-            <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="53" height="53" class="main-timetable-btn">
+            <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="58" height="58" class="main-timetable-btn">
         </a>
         {% else %}
         {% endif %}
     </div><br>
     {% if travel_group %}
     <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">
-        <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="53" height="53" class="main-map-btn">
+        <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="58" height="58" class="main-map-btn">
     </a>
     {% else %}
     {% endif %}
@@ -660,9 +660,10 @@ let make_comment = (id) => {
             newComment.classList.add('comment-item');
             newComment.id = `comment-${data.comment.id}`;  // 고유 ID 할당
             newComment.innerHTML = `
-                <p>댓글 작성자: ${data.comment.user}</p>
+                <p>${data.comment.user}</p>
                 <p>${data.comment.content}</p>
-                <button onclick="delete_comment(${data.comment.id})">삭제</button>
+                <button onclick="delete_comment(${data.comment.id}) class="comment-delete-btn">
+                    <span>댓글 삭제<span></button>
             `;
             commentList.appendChild(newComment); // 새로운 댓글을 목록에 추가
             document.getElementById(`comment_${id}`).value = ""; // 입력 필드 초기화
