@@ -101,7 +101,7 @@
     left: 50%;
     top: 250.27px;
     transform: translateX(-50%);
-    animation: doorAnimation 2.5s ease-in-out forwards;
+    animation: doorAnimation 2s ease-in-out forwards; /* 애니메이션 시간을 1s로 설정했습니다. 필요에 따라 조정하세요. */
     transform-origin: right center;
 }
 
@@ -168,11 +168,35 @@
     color: var(--black);
 }
 
+/* .complete_page-check_icon {
+    position: absolute;
+    left: 168px;
+    top: 129px;
+} */
+
 .complete_page-check_icon {
     position: absolute;
     left: 168px;
     top: 129px;
-}
+    opacity: 0;
+    transform: scale(0);
+    animation: checkAnimation 1s ease-in-out forwards;
+  }
+  
+  @keyframes checkAnimation {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
 .complete_page-pink_cloud {
     position: absolute;
@@ -1376,7 +1400,7 @@ label[for="id_invite_code"] {
 
 .main-ticket-img {
     position: absolute;
-    top: 276px;
+    top: 256px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -1384,21 +1408,57 @@ label[for="id_invite_code"] {
 .main-plan-btn {
     position: absolute;
     left: 92px;
-    top: 583px;
+    top: 563px;
 }
 
 .main-timetable-btn {
     position: absolute;
     left: 170px;
-    top: 583px;
+    top: 563px;
 }
 
 .main-map-btn {
     position: absolute;
     left: 248px;
-    top: 583px;
+    top: 563px;
+}
+
+.create_travel-main-members-text {
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+    position: absolute;
+    left: 33px;
+    top: 133px;
 }
 
 .create_travel-main-title {
-    
+    position: absolute;
+    left: 71px;
+    top: 286px;
+    font: var(--text-style-pretendard-semibold-18);
+    color: var(--black);
+    line-height: 25px;
 }
+
+.create_travel-main-title span {
+    color: #F36DA6;
+}
+
+.create_travel-main-btn {
+    width: 125px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--gray01);
+    position: absolute;
+    top: 695px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.create_travel-main-btn span {
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
+}
+
+  

@@ -243,10 +243,11 @@ def join_group_page(request):
                 user_profile = request.user.userprofile
                 if travel_group.members.filter(id=user_profile.id).exists():
                     form.add_error('invite_code', 'You are already in this group.')
+                    return redirect('plans:create_travel')
                 else:
                     travel_group.members.add(user_profile)
                     travel_group.save()
-                    return redirect('plans:my_page')
+                    return redirect('plans:create_travel')
             except TravelGroup.DoesNotExist:
                 form.add_error('invite_code', 'Invalid invite code.')
     else:
@@ -254,30 +255,27 @@ def join_group_page(request):
     
     return render(request, 'join_group.html', {'form': form})
 
-
-
-
 @login_required
 def create_travel(request):
+    user_profile = request.user.userprofile
+    
     if request.method == 'POST':
         form = TravelGroupForm(request.POST)
         if form.is_valid():
             travel_group = form.save(commit=False)
-            travel_group.creator = request.user.userprofile
+            travel_group.creator = user_profile
             travel_group.save()
-            travel_group.members.add(request.user.userprofile)
+            travel_group.members.add(user_profile)
             return redirect('plans:timetable', travel_group_id=travel_group.id)
     else:
         form = TravelGroupForm()
 
-    latest_travel_group = TravelGroup.objects.order_by('-id').first()
+    latest_travel_group = TravelGroup.objects.filter(creator=user_profile).order_by('-id').first()
     
     if latest_travel_group:
         travel_name = latest_travel_group.travel_name
         start_date = latest_travel_group.start_date
         end_date = latest_travel_group.end_date
-
-        # 현재 날짜를 기준으로 D-Day 계산
         today = datetime.today().date()
         d_day = (start_date - today).days
     else:
@@ -509,8 +507,10 @@ def get_all_plans(request, travel_group_id):
     } for plan in plans]
     return JsonResponse(plans_data, safe=False)
 
+@login_required
 def get_plans(request, travel_group_id):
-    travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id, members=request.user.userprofile)
+    
     category = request.GET.get('category')
     if category:
         plans = TravelPlan.objects.filter(travel_group=travel_group, category=category)
@@ -522,12 +522,12 @@ def get_plans(request, travel_group_id):
         'category': plan.category,
         'place': plan.place,
         'description': plan.description,
-        'creator': plan.creator.nickname,
         'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
         'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
         'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
     } for plan in plans]
     return JsonResponse(plans_data, safe=False)
+
 
 import json
 import re

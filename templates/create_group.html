@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!hasNickname) {
         showPage('createGroupPage');
     } else if (!hasTravelType) {
-        showPage('entryPage');
+        window.location.href = "{% url 'plans:create_travel' %}";
     } else if (hasNickname && !hasTravelGroup) {
         showPage('optionsPage');
     } else {
