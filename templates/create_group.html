@@ -207,6 +207,22 @@ document.getElementById('travelEndDate').addEventListener('input', function() {
 });
 
 // 추가함!!!!!!!!!!!!
+function checkUserState() {
+    return fetch('/api/user-state/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.has_travel_group) {
+                window.location.href = "{% url 'plans:create_travel' %}";
+                return true;
+            }
+            return false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return false;
+        });
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const hasNickname = {{ has_nickname|yesno:"true,false" }};
@@ -216,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!hasNickname) {
         showPage('createGroupPage');
     } else if (!hasTravelType) {
-        showPage('entryPage');
+        showPage('optionsPage');
     } else if (hasNickname && !hasTravelGroup) {
         showPage('optionsPage');
     } else {
@@ -224,6 +240,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+function skipTest() {
+    window.location.href = "{% url 'plans:create_travel' %}";
+}
 
 // 날짜 검증을 통과했는지 확인
 function nextStepDates(startInputId, endInputId) {
@@ -259,6 +278,10 @@ function showPage(pageId) {
     document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));
     document.getElementById(pageId).classList.add('create_group-active');
     document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none');
+    
+    if (pageId === 'entryPage') {
+        document.querySelector('.skip-test').onclick = skipTest;
+    }
 }
 
 
