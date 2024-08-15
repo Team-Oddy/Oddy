@@ -116,17 +116,17 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  body {
-    margin: 0;
-    padding: 0;
-    background-color: black;
-    letter-spacing: -0.4px;
-  }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  letter-spacing: -0.4px;
+}
 
-  .ellipsis-text {
-    max-width: 200px; 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;  
-  }
+.ellipsis-text {
+  max-width: 200px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;  
+}
