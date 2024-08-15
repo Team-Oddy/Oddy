@@ -7,12 +7,15 @@
 
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
+    <div class="main-ticket-img">
+        <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="302" height="399"></p>
+    </div>
     <div class="create_travel-main-header">
-        <h3 class="create_travel-main-title">{{ travel_name }}<p>{% if d_day is not None %}D-{{ d_day }}{% else %}D-1{% endif %}</p></h3>
+        <h3 class="create_travel-main-title">{{ travel_name }}<br>여행 시작까지 {% if d_day is not None %}{{ d_day }}{% else %}{% endif %}일 남았어요!</p></h3>
     </div>
     
     <div class="create_travel-main-members-container">
-        <div class="create_travel-main-members-text">함께 여행가는 친구</div>
+        <div class="create_travel-main-members-text">함께 여행가는 친구들</div>
         <ul>
             <li><a href="#">친구1</a></li>
             <li><a href="#">친구2</a></li>
@@ -20,14 +23,19 @@
     </div><br>
     
     <div class="create_travel-main-addPlans" onclick="showPage('viewSchedulePage')">
-        <p>여행 계획 확인하기</p>
+        <p>            
+        <img src="{% static 'image/main-plan-btn.svg' %}" alt="plan-btn" width="53" height="53" class="main-plan-btn"></p>
     </div><br>
     
     <div class="create_travel-main-timetable">
-        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">시간표 보기</a>
+        <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
+        <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="53" height="53" class="main-timetable-btn"></p>
+        </a>
     </div><br>
     
-    <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">여행 지도 보기</a>
+    <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">
+        <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="53" height="53" class="main-map-btn"></p>
+    </a>
 </div>
 
 <!--여행 계획 추가하기->play->추가하기-->
@@ -36,20 +44,23 @@
     <h3 class="create_travel-play-title">PLAY</h3>
     <div class="create_travel-play-place">
         <label for="play-place">
-            <span>여행지를 알려주세요!</span></label>
+            <span>여행지를 알려주세요!</span>
+        </label>
         <input type="text" id="play-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='playPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('play-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-play-place-info">
         <label for="play-description">
-            <span>여행지를 한줄로 소개해주세요!</span></label>
-        <input type="text" id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+            <span>여행지를 한줄로 소개해주세요!</span>
+        </label>
+        <input type="text" id="play-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('play-description', 'play-char-count', 'play-char-error')">
+        <p id="play-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('play')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--여행 계획 추가하기->eat->추가하기-->
@@ -58,19 +69,21 @@
     <h3 class="create_travel-eat-title">EAT</h3>
     <div class="create_travel-eat-place">
         <label for="eat-place">
-        <span>여행지를 알려주세요!</span></label><br>
+            <span>여행지를 알려주세요!</span>
+        </label><br>
         <input type="text" id="eat-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='eatPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('eat-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-eat-place-info">
         <label for="eat-description">여행지를 한줄로 소개해주세요!</label><br>
-        <input id="eat-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+        <input id="eat-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('eat-description', 'eat-char-count', 'eat-char-error')">
+        <p id="eat-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('eat')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--여행 계획 추가하기->stay->추가하기-->
@@ -79,19 +92,21 @@
     <h3 class="create_travel-stay-title">STAY</h3>
     <div class="create_travel-stay-place">
         <label for="stay-place">
-        <span>여행지를 알려주세요!</span></label><br>
+            <span>여행지를 알려주세요!</span>
+        </label><br>
         <input type="text" id="stay-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='stayPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('stay-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-stay-place-info">
         <label for="stay-description">여행지를 한줄로 소개해주세요!</label><br>
-        <input id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+        <input id="stay-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('stay-description', 'stay-char-count', 'stay-char-error')">
+        <p id="stay-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('stay')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--여행 계획 추가하기->others->추가하기-->
@@ -100,19 +115,21 @@
     <h3 class="create_travel-others-title">OTHERS</h3>
     <div class="create_travel-others-place">
         <label for="others-place">
-        <span>여행지를 알려주세요!</span></label><br>
+            <span>여행지를 알려주세요!</span>
+        </label><br>
         <input type="text" id="others-place" name="place" placeholder="장소 이름을 검색해보세요">
-        <!-- <button onclick="showPage('placeSearchPage')">검색</button> -->
         <button onclick="previousPage='othersPage'; showPage('placeSearchPage'); document.getElementById('search-place').value = document.getElementById('others-place').value;">
             <img src="{% static 'image/search-gray.svg' %}" alt="search-btn" width="24" height="24" class="search-btn-gray">
         </button>
     </div>
     <div class="create_travel-others-place-info">
         <label for="others-description">여행지를 한줄로 소개해주세요!</label><br>
-        <input id="others-description" name="description" placeholder="ex. 내가 추천받은 곳이야"></input>
+        <input id="others-description" name="description" placeholder="ex. 내가 추천받은 곳이야" maxlength="20" oninput="updateCharCount('others-description', 'others-char-count', 'others-char-error')">
+        <p id="others-char-count" class="char-count">0/20</p>
     </div>
     <button class="btn-submit" onclick="submitForm('others')">
-        <span>완료</span></button>
+        <span>완료</span>
+    </button>
 </div>
 
 <!--장소검색-->
@@ -238,6 +255,57 @@
         } else {
             alert('장소 카테고리를 먼저 선택해주세요!');
         }
+    }
+
+    function updateCharCount(inputId, countId, errorId) {
+    const input = document.getElementById(inputId);
+    const charCount = document.getElementById(countId);
+    const errorMsg = document.getElementById(errorId);
+    const maxLength = 20;
+
+    if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);  // 20자로 잘라냄
+    }
+
+    charCount.textContent = `${input.value.length}/${maxLength}`;
+
+    if (input.value.length === maxLength) {
+        errorMsg.style.display = 'block';
+    } else {
+        errorMsg.style.display = 'none';
+    }
+}
+
+    function submitForm(formType) {
+        const placeId = `${formType}-place`;
+        const descriptionId = `${formType}-description`;
+        const place = document.getElementById(placeId).value;
+        const description = document.getElementById(descriptionId).value;
+
+        if (place.trim() === "" || description.trim() === "") {
+            alert("여행지와 설명을 모두 입력해주세요.");
+            return;
+        }
+
+        if (description.length > 20) {
+            document.getElementById(`${formType}-char-error`).style.display = 'block';
+            return;
+        }
+
+        document.getElementById(placeId).value = '';
+        document.getElementById(descriptionId).value = '';
+        updateCharCount(descriptionId, `${formType}-char-count`, `${formType}-char-error`);
+
+    }
+
+    function showPage(pageId) {
+        // 모든 페이지 숨기기
+        const pages = document.getElementsByClassName('create_travel-page');
+        for (let page of pages) {
+            page.style.display = 'none';
+        }
+        // 선택된 페이지만 보이기
+        document.getElementById(pageId).style.display = 'block';
     }
 
     function submitForm(type) {
