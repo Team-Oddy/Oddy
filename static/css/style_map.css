@@ -62,6 +62,6 @@
 }
 
 .map-info-creator {
-    font: var(—text-style-pretendard-regular-14);
-    color: var(—blue02);
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--blue02);
 }

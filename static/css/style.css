@@ -46,7 +46,6 @@
 }
   
   img {
-    max-width: 100%;
     height: auto;
     display: block;
 }
@@ -120,6 +119,7 @@
     margin: 0;
     padding: 0;
     background-color: black;
+    /*background-color: #E3F2FD;*/
     letter-spacing: -0.4px;
   }
 
@@ -130,3 +130,5 @@
     text-overflow: ellipsis;
     display: inline-block;  
   }
+
+  
