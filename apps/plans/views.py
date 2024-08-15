@@ -727,3 +727,4 @@ def save_airplane_text(request):
 
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    

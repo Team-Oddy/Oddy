@@ -43,5 +43,5 @@ urlpatterns=[
     path('comment/delete/<int:comment_id>/', delete_comment, name='delete_comment'),
     
     path('save_airplane_text/', views.save_airplane_text, name='save_airplane_text'),
-
+    
 ]
