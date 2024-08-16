@@ -239,16 +239,29 @@ def join_group_page(request):
         if form.is_valid():
             invite_code = form.cleaned_data['invite_code']
             try:
+                # 초대 코드로 TravelGroup 객체 가져오기
                 travel_group = TravelGroup.objects.get(invite_code=invite_code)
                 user_profile = request.user.userprofile
+
+                # 이미 그룹에 속해 있는지 확인
                 if travel_group.members.filter(id=user_profile.id).exists():
-                    return redirect('plans:create_travel')
-                else:
-                    travel_group.members.add(user_profile)
-                    travel_group.save()
-                    return redirect('plans:create_travel')
+                    # 이미 속한 그룹의 ID를 세션에 저장
+                    request.session['group_id'] = travel_group.id
+                    return redirect('plans:create_travel')  # 이미 그룹에 속한 경우 리다이렉트
+
+                # 그룹에 추가
+                travel_group.members.add(user_profile)
+                travel_group.save()
+
+                # 성공적으로 추가된 그룹의 ID를 세션에 저장
+                request.session['group_id'] = travel_group.id
+
+                # 리다이렉트
+                return redirect('plans:create_travel')
+
             except TravelGroup.DoesNotExist:
                 form.add_error('invite_code', 'Invalid invite code.')
+    
     else:
         form = InviteCodeForm()
     
@@ -257,18 +270,30 @@ def join_group_page(request):
 @login_required
 def create_travel(request):
     user_profile = request.user.userprofile
+
+    # 세션에서 group_id 가져오기
+    group_id = request.session.get('group_id')
+    if not group_id:
+        return redirect('error_page')  # group_id가 없을 경우 에러 페이지로 리다이렉트
     
+    try:
+        travel_group = TravelGroup.objects.get(id=group_id)
+    except TravelGroup.DoesNotExist:
+        return redirect('error_page')  # 존재하지 않는 group_id에 대한 처리
+
     if request.method == 'POST':
         form = TravelGroupForm(request.POST)
         if form.is_valid():
-            travel_group = form.save(commit=False)
-            travel_group.creator = user_profile
-            travel_group.save()
-            travel_group.members.add(user_profile)
-            return redirect('plans:timetable', travel_group_id=travel_group.id)
+            new_travel_group = form.save(commit=False)
+            new_travel_group.creator = user_profile
+            new_travel_group.save()
+            new_travel_group.members.add(user_profile)
+            # 생성 후 시간표 페이지로 리다이렉트
+            return redirect('plans:timetable', travel_group_id=new_travel_group.id)
     else:
         form = TravelGroupForm()
 
+    # 사용자가 생성한 가장 최근의 여행 그룹 가져오기
     latest_travel_group = TravelGroup.objects.filter(creator=user_profile).order_by('-id').first()
     
     if latest_travel_group:
@@ -282,11 +307,13 @@ def create_travel(request):
         d_day = None
         latest_travel_group = None
 
+    # 템플릿으로 전달할 컨텍스트 설정
     context = {
         'form': form,
         'travel_name': travel_name,
         'd_day': d_day,
-        'travel_group': latest_travel_group
+        'travel_group': latest_travel_group,
+        'groupId': group_id  # 세션에서 가져온 group_id를 템플릿에 전달
     }
 
     return render(request, 'create_travel.html', context)
@@ -509,6 +536,7 @@ def get_all_plans(request, travel_group_id):
 
 @login_required
 def get_plans(request, travel_group_id):
+    # travel_group_id와 멤버를 기준으로 TravelGroup 객체 가져오기
     travel_group = get_object_or_404(TravelGroup, id=travel_group_id, members=request.user.userprofile)
     
     category = request.GET.get('category')
@@ -517,6 +545,7 @@ def get_plans(request, travel_group_id):
     else:
         plans = TravelPlan.objects.filter(travel_group=travel_group)
     
+    # 계획 데이터를 JSON으로 직렬화
     plans_data = [{
         'id': plan.id,
         'category': plan.category,
@@ -526,8 +555,9 @@ def get_plans(request, travel_group_id):
         'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
         'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
     } for plan in plans]
+    
+    # JSON 응답 반환
     return JsonResponse(plans_data, safe=False)
-
 
 import json
 import re
