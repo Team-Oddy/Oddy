@@ -686,15 +686,6 @@ label[for="id_invite_code"] {
     z-index: 0;
 }
 
-.create_travel-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    z-index: 1000;
-}
 
 .create_travel-play-title,
 .create_travel-eat-title,
