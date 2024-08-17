@@ -448,7 +448,7 @@ def travel_plan_detail(request, group_id):
 def search_view(request):
     if request.method == 'GET':
         query = request.GET.get('query', '')
-        search_type = request.GET.get('type', 'place')  # 'place' or 'address'
+        search_type = request.GET.get('type', 'place')
         results = []
         
         if query:
@@ -492,31 +492,58 @@ def search_place(query):
         return []
 
 def search_address(query):
-    url = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode"
+    print(f"Searching address for query: {query}")
+    local_search_url = "https://openapi.naver.com/v1/search/local.json"
     headers = {
-        "X-NCP-APIGW-API-KEY-ID": settings.NAVER_MAP_CLIENT_ID,
-        "X-NCP-APIGW-API-KEY": settings.NAVER_MAP_CLIENT_SECRET,
+        "X-Naver-Client-Id": settings.NAVER_SEARCH_CLIENT_ID,
+        "X-Naver-Client-Secret": settings.NAVER_SEARCH_CLIENT_SECRET,
     }
     params = {
         "query": query,
+        "display": 10
     }
     
     try:
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(local_search_url, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+        items = data.get('items', [])
+        if items:
+            results = []
+            for item in items:
+                results.append({
+                    'title': item.get('title', '').replace('<b>', '').replace('</b>', ''),
+                    'address': item.get('address', ''),
+                    'roadAddress': item.get('roadAddress', ''),
+                    'mapx': float(item.get('mapx', 0)),
+                    'mapy': float(item.get('mapy', 0))
+                })
+            return results
+        geocode_url = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode"
+        headers = {
+            "X-NCP-APIGW-API-KEY-ID": settings.NAVER_MAP_CLIENT_ID,
+            "X-NCP-APIGW-API-KEY": settings.NAVER_MAP_CLIENT_SECRET,
+        }
+        params = {
+            "query": query,
+        }
+        
+        response = requests.get(geocode_url, headers=headers, params=params)
         response.raise_for_status()
         data = response.json()
         addresses = data.get('addresses', [])
-        
         results = []
         for addr in addresses:
             results.append({
-                'title': addr.get('roadAddress', ''),
+                'title': addr.get('roadAddress', '') or addr.get('jibunAddress', ''),
                 'address': addr.get('jibunAddress', ''),
+                'roadAddress': addr.get('roadAddress', ''),
                 'mapx': float(addr.get('x', 0)),
                 'mapy': float(addr.get('y', 0))
             })
         
         return results
+
     except requests.RequestException as e:
         print(f"Address search API request failed: {e}")
         return []
