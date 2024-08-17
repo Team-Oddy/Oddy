@@ -648,7 +648,7 @@ function loadComments(itemId) {
                         <div class="comment-item" id="comment-${comment.id}">
                             <p class="comment-user">${comment.user}</p>
                             <p class="comment-text">${comment.content}</p>
-                            <button onclick="delete_comment(${comment.id})">삭제</button>
+                            <button onclick="delete_comment(${comment.id})" class="comment-delete-btn">삭제</button>
                         </div>
                     `;
                 });
@@ -728,9 +728,9 @@ function viewDetail(type, place, description, author, itemId) {
     document.getElementById('travelDetailContent').innerHTML = detailContent;
     document.getElementById('travelDetailComments').innerHTML = `
         <p class="comment-count">댓글 <span id="comment_count_${itemId}">0</span></p>
-        <div id="comment_list_${itemId}">
+        <div id="comment_list_${itemId}" class = "comment_list_align">
         </div>
-        <input type="text" id="comment_${itemId}" name="content" placeholder="이 여행지에 대한 댓글을 작성해보세요">
+        <input type="text" class = "comment_input" id="comment_${itemId}" name="content" placeholder="이 여행지에 대한 댓글을 작성해보세요">
         <button onclick="make_comment(${itemId})" type="submit">
         <img src="/static/image/send.svg" alt="back-btn" width="24" height="24" class="send-btn"> 
         </button>
@@ -742,6 +742,7 @@ function viewDetail(type, place, description, author, itemId) {
 
     // 댓글 로드
     loadComments(itemId);
+    
 }
 
 
@@ -839,7 +840,8 @@ let make_comment = (id) => {
                 <p>${data.comment.user}</p>
                 <p>${data.comment.content}</p>
                 <button onclick="delete_comment(${data.comment.id}) class="comment-delete-btn">
-                    <span>댓글 삭제<span></button>
+                    <button onclick="delete_comment(${data.comment.id})" class="comment-delete-btn">
+                    <span>댓글 삭제<span>
             `;
             commentList.appendChild(newComment); // 새로운 댓글을 목록에 추가
             document.getElementById(`comment_${id}`).value = ""; // 입력 필드 초기화

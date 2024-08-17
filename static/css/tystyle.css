@@ -900,12 +900,21 @@ label[for="id_invite_code"] {
     position: absolute;
     left: 34px;
     top: 285px;
+    padding-left: 20px;
+    margin-bottom: 20px;
     font: var(--text-style-pretendard-semibold-18);
-
+}
+.comment_list_align{
+    height: 300px;
+    overflow-y: auto;
+    padding-left: 20px;
 }
 
+/*여기에 댓글 폰트 넣기!*/
 .comment-item {
     position: relative;
+    margin-bottom: 20px;
+    color:#F36DA6;
 }
 
 .comment-item:first-child {
@@ -932,35 +941,52 @@ label[for="id_invite_code"] {
     position: absolute;
     left: 296px;
     top: 529px;
+    top: 0;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+#travelDetailComments{
+    position:relative;
+    top: 250px; /* 원하는 고정 위치 */
+}
 
+/*css */
+.comment_input{
+    width: 325px;
+    height: 46px;
+    flex-shrink: 0;
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    border: 1.5px solid var(--pink02);
+}
 #travelDetailComments input[type="text"] {
     width: 325px;
     height: 46px;
     flex-shrink: 0;
     position: absolute;
     top: 763px;
+    top: 400px;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 10px;
     border: 1.5px solid var(--pink02);
 }
-
 #comment_${itemId}::placeholder {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
     text-align: left;
     padding-left: 10px; 
 }
-
 .send-btn {
     position: absolute;
     left: 328px;
     top: 774px;
+    top: 412px;
 }
 
 #searchResults {
