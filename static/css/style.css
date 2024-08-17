@@ -41,7 +41,7 @@ html, body {
 
 .container {
   width: 393px;
-  height: 100vh;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 50%;

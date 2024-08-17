@@ -22,7 +22,7 @@
     background: #FEE500;
     position: absolute;
     left: 34px;
-    top: 84.375vh;
+    top: 705px;
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -1483,6 +1483,5 @@ label[for="id_invite_code"] {
     background-color: var(--gray01);
     z-index: 0;
 } */
-
 
   
