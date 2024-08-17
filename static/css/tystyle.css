@@ -7,11 +7,13 @@
 .create_travel-all-content {
     display: none;
   }
+
 .main-mypage img {
     position: absolute;
     left: 341px;
     top: 62px;
 }
+
 .main-kakao {
     width: 325px;
     height: 48px;
@@ -25,15 +27,18 @@
     justify-content: center; 
     align-items: center; 
 }
+
 .main-kakao span {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .main-kakao img {
     position: absolute;
     left: 17px;
     top: 15px;
 }
+
 .enter-oddy {
     width: 325px;
     height: 48px;
@@ -49,11 +54,13 @@
     align-items: center;  
     text-decoration: none; 
 }
+
 .enter-oddy span {
     position: static;  
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 #optionsPage p {
     position: absolute;
     left: 47px;
@@ -61,10 +68,12 @@
     font: var(--text-style-pretendard-semibold-20);
     color: var(--blue02);
 }
+
 .highlight-text {
     font: var(--text-style-pretendard-semibold-20);
     color: var(--pink02);
 }
+
 .door-frame {
     width: 275.45px;
     height: 111.282px;
@@ -77,6 +86,7 @@
     top: 250.27px;
     overflow: hidden;
 }
+
 .door-frame img {
     position: absolute;
     top: 55%;
@@ -85,6 +95,7 @@
     max-width: 100%;
     max-height: 100%;
 }
+
 .door {
     width: 275.45px;
     height: 111.282px;
@@ -98,6 +109,7 @@
     animation: doorAnimation 2s ease-in-out forwards; /* 애니메이션 시간을 1s로 설정했습니다. 필요에 따라 조정하세요. */
     transform-origin: right center;
 }
+
 @keyframes doorAnimation {
     0% {
         transform: translateX(-50%) scaleX(1);
@@ -106,6 +118,7 @@
         transform: translateX(-50%) scaleX(0.71);
     }
 }
+
 .create-travelgroup {
     position: absolute;
     left: 34px;
@@ -119,10 +132,12 @@
     justify-content: center;
     align-items: center;
 }
+
 .create-travelgroup span {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .enter-invitedgroup {
     position: absolute;
     left: 34px;
@@ -133,6 +148,7 @@
     border-radius: 5px;
     background: var(--pink02);
 }
+
 .enter-invitedgroup span {
     position: absolute;
     left: 77px;
@@ -140,6 +156,7 @@
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .complete_create_group {
     position: absolute;
     left: 106px;
@@ -147,6 +164,7 @@
     font: var(--text-style-pretendard-semibold-24);
     color: var(--pink02);
 }
+
 .together_trip {
     position: absolute;
     left: 101px;
@@ -154,11 +172,13 @@
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 /* .complete_page-check_icon {
     position: absolute;
     left: 168px;
     top: 129px;
 } */
+
 .complete_page-check_icon {
     position: absolute;
     left: 168px;
@@ -182,6 +202,7 @@
       transform: scale(1);
     }
   }
+
 .complete_page-pink_cloud {
     position: absolute;
     right: 0;
@@ -190,6 +211,7 @@
     height: 219.77px; 
     max-width: 50%;
     }
+
 .enter-group, .share-link {
     width: 155px;
     height: 48px;
@@ -198,6 +220,7 @@
     justify-content: center;  
     align-items: center;  
 }
+
 .enter-group {
     position: absolute;
     left: 204px;
@@ -206,11 +229,13 @@
     background: var(--pink02);
     cursor: pointer;
 }
+
 .enter-group span, .share-link span {
     position: static;  
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .share-link {
     position: absolute;
     left: 34px;
@@ -219,11 +244,13 @@
     border: 1.5px solid var(--pink02);
     background-color: transparent;
 }
+
 #entryPage img {
     position: absolute;
     left: 100px;
     top: 154px;
 }
+
 .test-start-btn {
     position: absolute;
     left: 34px;
@@ -237,10 +264,12 @@
     align-items: center;  
     text-decoration: none; 
 }
+
 .test-start-btn span {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .question, .findyourstyle, .skip-test {
     width: max-content;  
     text-align: center; 
@@ -248,21 +277,25 @@
     left: 50%;  
     position: absolute;
 }
+
 .question {
     font: var(--text-style-pretendard-semibold-20);
     color: var(--pink02);
     top: 289px;
 }
+
 .findyourstyle {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
     top: 331px;
 }
+
 .skip-test {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
     top: 657px;
 }
+
 .skip-test::after {
     content: ""; 
     position: absolute;  
@@ -273,6 +306,7 @@
     background-color: var(--gray03); 
     top: 16.49px;  
 }
+
 .my-page-top, .nicknameedit-top {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--pink02);
@@ -281,6 +315,7 @@
     left: 50%;  
     transform: translateX(-50%);  
 }
+
 .my-page-pink_cloud {
     position: absolute;
     top: 117.5px;
@@ -288,6 +323,7 @@
     transform: translateX(-50%);
     z-index: 1; 
 }
+
 .my-page-container {
     width: 325px;
     height: 89px;
@@ -299,6 +335,7 @@
     left: 34px;
     top: 175px;
 }
+
 #userName {
     font: var(--text-style-pretendard-semibold-20);
     color: var(--pink02);
@@ -306,6 +343,7 @@
     left: 57px;
     top: 192px;
 }
+
 .modify-nickname-container {
     width: 71px;
     height: 22px;
@@ -320,6 +358,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .modify-nickname {
     color: var(--black);
     font: var(--text-style-pretendard-regular-14);
@@ -327,11 +366,13 @@
     margin: 0;
     text-align: center;
 }
+
 .back-btn {
     position: absolute;
     left: 29px;
     top: 62px;
 }
+
 .nicknameedit-text {
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
@@ -339,6 +380,7 @@
     left: 34px;
     top: 141px;
 }
+
 #nicknameInput {
     width: 325px;
     height: 46px;
@@ -349,12 +391,14 @@
     top: 175px;
     left: 34px;
 }
+
 #nicknameInput::placeholder {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
     text-align: left;
     padding-left: 10px; 
 }
+
 .nicknameedit-complete-btn {
     width: 325px;
     height: 48px;
@@ -370,11 +414,14 @@
     align-items: center;  
     text-decoration: none; 
 }
+
 .nicknameedit-complete-btn span {
     position: static;  
     font: var(--text-style-pretendard-semibold-16);
     color: var(--gray03);
 }
+
+
 .checktraveltype {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
@@ -384,6 +431,7 @@
     transform: translateX(-50%);  
     padding-bottom: 1px;
 }
+
 .checktraveltype::after {
     content: "";
     position: absolute;
@@ -393,19 +441,24 @@
     height: 1px;
     background-color: var(--gray03);
 }
+
 .now-travelgroup, .past-travelgroup {
     position: absolute;
     left: 34px;
     font: var(--text-style-pretendard-semibold-20);
 }
+
 .now-travelgroup {
     top: 334px;
     color: var(--blue02);
+
 }
+
 .past-travelgroup {
     top: 521px;
     color: var(--gray04);
 }
+
 .logout-btn {
     width: 325px;
     height: 48px;
@@ -422,11 +475,13 @@
     align-items: center;
     text-decoration: none;
 }
+
 .logout-btn span {
     position: static;
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .test-page-container-top {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--pink02);
@@ -434,6 +489,7 @@
     top: 63px;
     left: 146px;
 }
+
 .test-page-number {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--gray03);
@@ -441,6 +497,7 @@
     left: 34px;
     top: 116px;
 }
+
 #test-page1 h3,
 #test-page2 h3,
 #test-page3 h3,
@@ -452,11 +509,13 @@
     left: 34px;
     top: 141px;
 }
+
 .test-page {
     position: relative;
     padding-top: 180px; 
     padding-left: 34px;
 }
+
 .test-page button:not(:last-child) {
     background-color: var(--gray01);
     width: 325px;
@@ -467,6 +526,7 @@
     font: var(--text-style-pretendard-regular-14); 
     color: var(--gray04); 
 }
+
 .next-link, .complete-btn {
     width: 325px;
     height: 48px;
@@ -484,10 +544,12 @@
     font: var(--text-style-pretendard-semibold-16);
     color: var(--gray03);
 }
+
 /*a), b), c)숨기기*/
 .test-page button .hidden-prefix {
     display: none;
 }
+
 .join_group-joinCode-container {
     width: 273px;
     height: 207px;
@@ -499,12 +561,14 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
 .join_group-white_cloud {
     position: absolute;
     top: 19px;
     left: 50%;
     transform: translateX(-50%);
 }
+
 .join_group-joinCode-h2 {
     flex-shrink: 0;
     color: var(--black);
@@ -516,6 +580,7 @@
     text-align: center;
     width: 100%; 
 }
+
 .InviteCodeForm {
     width: 235px;
     height: 45px;
@@ -527,12 +592,14 @@
     top: 114px;
     left: 19px;
 }
+
 .InviteCodeForm::placeholder {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
     text-align: left;
     padding-left: 10px; 
 }
+
 .join_group-joinCode-button span {
     position: absolute;
     bottom: 17px;  
@@ -543,10 +610,12 @@
     color: var(--black);
     width: 100%;  
 }
+
 /*label 텍스트 숨기기*/
 label[for="id_invite_code"] {
     display: none;
 } 
+
 .create_travel-all-title, 
 .create_travel-play-top,
 .create_travel-eat-top,
@@ -560,10 +629,12 @@ label[for="id_invite_code"] {
     left: 50%;  
     transform: translateX(-50%);  
 }
+
 /*
 .create_travel-all-container {
     position: relative;
 }*/
+
 .create_travel-all-menu {
     position: absolute;
     top: 128px;
@@ -574,6 +645,7 @@ label[for="id_invite_code"] {
     align-items: center;
     gap: 38px;
 }
+
 .create_travel-all-play,
 .create_travel-all-eat,
 .create_travel-all-stay,
@@ -583,10 +655,12 @@ label[for="id_invite_code"] {
     position: relative;
     display: inline-block;
 }
+
 .create_travel-all-play { color: var(--play); }
 .create_travel-all-eat { color: var(--eat); }
 .create_travel-all-stay { color: var(--stay); }
 .create_travel-all-others { color: var(--others); }
+
 .create_travel-all-play::after,
 .create_travel-all-eat::after,
 .create_travel-all-stay::after,
@@ -604,6 +678,8 @@ label[for="id_invite_code"] {
 .create_travel-all-eat::after { background-color: var(--eat); }
 .create_travel-all-stay::after { background-color: var(--stay); }
 .create_travel-all-others::after { background-color: var(--others); }*/
+
+
 .create_travel-all-menu::after {
     content: '';
     position: absolute;
@@ -614,6 +690,8 @@ label[for="id_invite_code"] {
     background-color: var(--gray01);
     z-index: 0;
 }
+
+
 .create_travel-play-title,
 .create_travel-eat-title,
 .create_travel-stay-title,
@@ -623,47 +701,63 @@ label[for="id_invite_code"] {
     top: 101px;
     font: var(--text-style-pretendard-semibold-20);
 }
+
 .create_travel-play-title {
     color: var(--play);
 }
+
 .create_travel-eat-title {
     color: var(--eat);
 }
+
 .create_travel-stay-title {
     color: var(--stay);
 }
+
 .create_travel-others-title {
     color: var(--others);
 }
+
+
 .create_travel-all-menu a {
     color: #616161; 
     text-decoration: none;
     position: relative;
 }
+
 .create_travel-all-play.active::after {
     background-color: var(--play);
 }
+
 .create_travel-all-eat.active::after {
     background-color: var(--eat);
 }
+
 .create_travel-all-stay.active::after {
     background-color: var(--stay);
 }
+
 .create_travel-all-others.active::after {
     background-color: var(--others);
 }
+
 .create_travel-all-play.active {
     color: var(--play);
 }
+
 .create_travel-all-eat.active {
     color: var(--eat);
 }
+
 .create_travel-all-stay.active {
     color: var(--stay);
 }
+
 .create_travel-all-others.active {
     color: var(--others);
 }
+
+
 .create_travel-play-place span,
 .create_travel-eat-place span,
 .create_travel-stay-place span,
@@ -674,6 +768,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
 }
+
 .create_travel-play-place-info,
 .create_travel-eat-place-info,
 .create_travel-stay-place-info,
@@ -684,6 +779,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
 }
+
 .create_travel-play-place input,
 .create_travel-eat-place input,
 .create_travel-stay-place input,
@@ -698,6 +794,7 @@ label[for="id_invite_code"] {
     left: 50%;  
     transform: translateX(-50%);  
 }
+
 .create_travel-play-place input::placeholder,
 .create_travel-play-place-info input::placeholder,
 .create_travel-eat-place input::placeholder,
@@ -711,6 +808,7 @@ label[for="id_invite_code"] {
     text-align: left;
     padding-left: 10px; 
 }
+
  .create_travel-play-place-info input,
  .create_travel-eat-place-info input,
  .create_travel-stay-place-info input,
@@ -725,6 +823,7 @@ label[for="id_invite_code"] {
     left: 50%;  
     transform: translateX(-50%);
 }
+
 .char-count {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
@@ -733,6 +832,7 @@ label[for="id_invite_code"] {
     left: 285px;
     top: 49px;
 }
+
 .btn-submit {
     width: 325px;
     height: 48px;
@@ -748,16 +848,19 @@ label[for="id_invite_code"] {
     align-items: center;  
     text-decoration: none; 
 }
+
 .btn-submit span {
     position: static;  
     font: var(--text-style-pretendard-semibold-16);
     color: var(--gray03);
 }
+
 .search-btn-gray {
     position: absolute;
     left: 321px;
     top: 186px;
 }
+
 .create_travel-play-place-search.create_travel-page input {
     width: 325px;
     height: 46px;
@@ -769,17 +872,20 @@ label[for="id_invite_code"] {
     left: 50%;  
     transform: translateX(-50%);
 }
+
 .create_travel-play-place-search.create_travel-page input::placeholder {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
     text-align: left;
     padding-left: 10px; 
 }
+
 .search-btn-pink{
     position: absolute;
     left: 321px;
     top: 100px;
 }
+
 .travel-detail-page-top {
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
@@ -791,9 +897,6 @@ label[for="id_invite_code"] {
 }
 
 .comment-count {
-    position: absolute;
-    left: 34px;
-    top: 285px;
     padding-left: 20px;
     margin-bottom: 20px;
     font: var(--text-style-pretendard-semibold-18);
@@ -812,15 +915,6 @@ label[for="id_invite_code"] {
     color:#F36DA6;
 }
 
-.comment-item:first-child {
-    position: absolute;
-    top: 343px; /* 원하는 고정 위치 */
-    left: 20px;
-}
-
-.comment-item:not(:first-child) {
-    margin-top: calc(71px + 343px); /* 첫 번째 댓글의 위치를 반영 */
-}
 
 .comment-content {
     margin-left: 86px; /* 왼쪽 여백 */
@@ -839,7 +933,6 @@ label[for="id_invite_code"] {
     background: var(--pink01);
     position: absolute;
     left: 296px;
-    top: 529px;
     top: 0;
     display: flex;
     justify-content: center;
@@ -868,23 +961,23 @@ label[for="id_invite_code"] {
     height: 46px;
     flex-shrink: 0;
     position: absolute;
-    top: 763px;
     top: 400px;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 10px;
     border: 1.5px solid var(--pink02);
 }
+
 #comment_${itemId}::placeholder {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
     text-align: left;
     padding-left: 10px; 
 }
+
 .send-btn {
     position: absolute;
     left: 328px;
-    top: 774px;
     top: 412px;
 }
 
@@ -898,21 +991,25 @@ label[for="id_invite_code"] {
     padding-left: 25px; 
     padding-right: 25px; 
 }
+
 #searchResults h3 {
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
     text-indent: 25px;
 }
+
 #searchResults p {
     font: var(--text-style-pretendard-semibold-14);
     color: var(--gray04);
     text-indent: 25px;
 }
+
 #searchResults ul {
     list-style-type: none;
     padding: 0;
     margin: 0;  
 }
+
 #searchResults li {
     cursor: pointer;
     padding: 10px 25px;  
@@ -920,12 +1017,15 @@ label[for="id_invite_code"] {
     margin-left: -25px;  
     margin-right: -25px; 
 }
+
 #searchResults li:hover {
     background-color: #F9D9E6;
 }
+
 .plan-item-content {
     position: relative;
 }
+
 .category-icon {
     position: relative; /* relative로 변경하여 부모 요소 내에서만 이동 */
     top: 177px;
@@ -933,9 +1033,12 @@ label[for="id_invite_code"] {
     left: 50%;  
     cursor: pointer;
 }
+
+
 .plan-category {
     display: none;
 }
+
 .plan-creator {
     position: absolute;
     left: 302px;
@@ -943,6 +1046,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-regular-12);
     color: var(--black);
 }
+
 .plan-place {
     position: absolute;
     left: 72px;
@@ -950,6 +1054,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .plan-description {
     position: absolute;
     left: 72px;
@@ -957,34 +1062,41 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-regular-12);
     color: var(--black);
 }
+
 .bi-heart-fill {
     color: #EA636A;
     position: absolute;
     left: 53px;
     top: 152px
 }
+
 .timetable-add { 
     display: none; /* 우선 숨겨놓고 화현 ver이랑 합치면 수정 */
 }
+
 .bi-heart{
     position: absolute;
     left: 53px;
     top: 152px
 }
+
 .like-count{
     position: absolute;
     left: 72px;
     top: 148px
 }
+
 /*여행계획 상세보기 페이지*/
 .type-icon {
     position: absolute;
     left: 38px;
     top: 123px;
 }
+
 .detail-type {
     display: none;
 }
+
 .detail-author {
     position: absolute;
     left: 304px;
@@ -992,6 +1104,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-regular-12);
     color: var(--black);
 }
+
 .detail-place {
     position: absolute;
     left: 73px;
@@ -999,6 +1112,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 .detail-description {
     position: absolute;
     left: 73px;
@@ -1006,11 +1120,14 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
 }
+
 .bi-heart-btn2 {
     position: absolute;
     left: 53px;
     top: 188px;
+
 }
+
 .like-count-2 {
     position: absolute;
     left: 73px;
@@ -1018,6 +1135,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
 }
+
 .delete-plan {
     width: 60px;
     height: 22px;
@@ -1032,6 +1150,7 @@ label[for="id_invite_code"] {
     justify-content: center;
     align-items: center;
 }
+
 .delete-plan span {
     color: var(--black);
     font: var(--text-style-pretendard-regular-12);
@@ -1039,6 +1158,7 @@ label[for="id_invite_code"] {
     margin: 0;
     text-align: center;
 }
+
 .timetable-top {
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
@@ -1048,6 +1168,7 @@ label[for="id_invite_code"] {
     transform: translateX(-50%);
     white-space: nowrap;
 }
+
 .timetable-return-btn,
 .timetable-next-btn {
     color: var(--pink02);
@@ -1058,9 +1179,11 @@ label[for="id_invite_code"] {
     transform: translateX(-50%);
     white-space: nowrap; 
 }
+
 .pagination button {
     cursor: pointer;
 }
+
 .timetable {
     width: 370px;
     height: 432px;
@@ -1068,18 +1191,23 @@ label[for="id_invite_code"] {
     top: 100px;
     left: 50%;
     transform: translateX(-50%);
+
 }
+
 .timetable-date,
 .timetable-time {
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
 }
+
 .timetable th, .timetable td {
     border: 1.5px solid var(--gray02);
     padding: 8px;
     text-align: center;
     position: relative;
 }
+
+
 .plan {
     position: absolute;
     top: 0;
@@ -1095,6 +1223,7 @@ label[for="id_invite_code"] {
     justify-content: center;
     cursor: pointer;
 }
+
 .play { background-color: var(--play); }
 .eat { background-color: var(--eat); }
 .stay { background-color: var(--stay); }
@@ -1130,6 +1259,7 @@ label[for="id_invite_code"] {
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
 }
+
 .modal-content {
         width: 273px;
         height: 207px;
@@ -1141,6 +1271,7 @@ label[for="id_invite_code"] {
         left: 50%;
         transform: translateX(-50%);
 }
+
 .modal-content h3 {
     color: var(--black);
     font: var(--text-style-pretendard-semibold-20);
@@ -1151,11 +1282,13 @@ label[for="id_invite_code"] {
     text-align: center;
     width: 100%;
 }
+
 .close-btn {
     position: absolute;
     left: 228px;
     top: 11px;
 }
+
 .modal-modify {
         color: var(--black);
         font: var(--text-style-pretendard-semibold-16);
@@ -1163,6 +1296,7 @@ label[for="id_invite_code"] {
         left: 71px;
         top: 159px;
 }
+
 .modal-remove {
     color: #EA636A;
     font: var(--text-style-pretendard-semibold-16);
@@ -1170,6 +1304,7 @@ label[for="id_invite_code"] {
     left: 71px;
     top: 159px;
 }
+
 .modal-delete,
 .modal-undo {
     color: var(--black);
@@ -1177,7 +1312,9 @@ label[for="id_invite_code"] {
     position: absolute;
     left: 164px;
     top: 159px;
+
 }
+
 .modal-next,
 .modal-complete {
     color: var(--black);
@@ -1187,6 +1324,7 @@ label[for="id_invite_code"] {
     left: 50%;
     transform: translateX(-50%);
 }
+
     /* 날짜 선택기 컨테이너 */
 .date-picker-container {
     border-radius: 15px;
@@ -1225,16 +1363,20 @@ label[for="id_invite_code"] {
     pointer-events: none;
     color: #FF69B4;
   }
+
   /* 시간 선택기 컨테이너 */
 .time-picker-container {
     margin-bottom: 15px;
 }
+
+
 /* 라벨 스타일 */
 .modal-content label {
     display: block;
     margin-bottom: 5px;
     font: var(--text-style-pretendard-regular-14);
 }
+
   #modal-start-time,
   #modal-end-time {
       font: var(--text-style-pretendard-regular-14);
@@ -1249,11 +1391,13 @@ label[for="id_invite_code"] {
       -moz-appearance: none;
       margin-bottom: 15px;
   }
+
   #modal-start-time {
     position: absolute;
     left: 32px;
     top: 112px;
   }
+
   #modal-end-time  {
     position: absolute;
     left: 147px;
@@ -1264,6 +1408,7 @@ label[for="id_invite_code"] {
   .time-picker-container {
       position: relative;
   }
+
   .modal-date-start::after {
     content: '\25BC';
     position: absolute;
@@ -1273,6 +1418,7 @@ label[for="id_invite_code"] {
     pointer-events: none;
     color: #FF69B4;
 }
+
   .time-modal-center {
     width: 8px;
     height: 1.5px;
@@ -1281,27 +1427,32 @@ label[for="id_invite_code"] {
     top: 130px;
     left: 133px
 }
+
 .main-ticket-img {
     position: absolute;
     top: 259px;
     left: 50%;
     transform: translateX(-50%);
 }
+
 .main-plan-btn {
     position: absolute;
     left: 87px;
     top: 606px;
 }
+
 .main-timetable-btn {
     position: absolute;
     left: 167.74px;
     top: 606px;
 }
+
 .main-map-btn {
     position: absolute;
     left: 248px;
     top: 606px;
 }
+
 .create_travel-main-members-text {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
@@ -1309,6 +1460,7 @@ label[for="id_invite_code"] {
     left: 33px;
     top: 133px;
 }
+
 .create_travel-main-title {
     position: absolute;
     left: 84px;
@@ -1317,9 +1469,11 @@ label[for="id_invite_code"] {
     color: var(--black);
     line-height: 25px;
 }
+
 .create_travel-main-title span {
     color: #F36DA6;
 }
+
 .create_travel-main-btn {
     width: 125px;
     height: 35px;
@@ -1331,10 +1485,12 @@ label[for="id_invite_code"] {
     left: 50%;
     transform: translateX(-50%);
 }
+
 .create_travel-main-btn span {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
+
 /*
 ::after {
     content: '';
@@ -1346,3 +1502,5 @@ label[for="id_invite_code"] {
     background-color: var(--gray01);
     z-index: 0;
 } */
+
+  
