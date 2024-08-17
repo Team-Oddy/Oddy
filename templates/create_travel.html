@@ -65,22 +65,14 @@
     <div class="create_travel-main-timetable">
         {% if travel_group %}
         <a href="{% url 'plans:timetable' travel_group_id=travel_group.id %}">
-<<<<<<< HEAD
             <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="58" height="58" class="main-timetable-btn">
-=======
-            <img src="{% static 'image/main-timetable-btn.svg' %}" alt="timetable-btn" width="53" height="53" class="main-timetable-btn">
->>>>>>> 66736e7e41136c06056b38d8e31c158137d21868
         </a>
         {% else %}
         {% endif %}
     </div><br>
     {% if travel_group %}
     <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">
-<<<<<<< HEAD
         <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="58" height="58" class="main-map-btn">
-=======
-        <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="53" height="53" class="main-map-btn">
->>>>>>> 66736e7e41136c06056b38d8e31c158137d21868
     </a>
     {% else %}
     {% endif %}
