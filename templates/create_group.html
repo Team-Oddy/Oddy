@@ -236,18 +236,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const hasNickname = {{ has_nickname|yesno:"true,false" }};
     const hasTravelGroup = {{ has_travel_group|yesno:"true,false" }};
     const hasTravelType = {{ has_travel_type|yesno:"true,false" }};
-    if (!hasNickname) {
-        showPage('createGroupPage');
-    } else if (!hasTravelType) {
-        if (!hasTravelGroup) {
+    const showOptions = {{ show_options|yesno:"true,false" }};
+
+    if (showOptions) {
+        showPage('optionsPage');
+    } else {
+        if (!hasNickname) {
+            showPage('createGroupPage');
+        } else if (!hasTravelType) {
+            if (!hasTravelGroup) {
+                showPage('optionsPage');
+            } else {
+                window.location.href = "{% url 'plans:create_travel' %}";
+            }
+        } else if (hasNickname && !hasTravelGroup) {
             showPage('optionsPage');
         } else {
             window.location.href = "{% url 'plans:create_travel' %}";
         }
-    } else if (hasNickname && !hasTravelGroup) {
-        showPage('optionsPage');
-    } else {
-        window.location.href = "{% url 'plans:create_travel' %}";
     }
 
     // travel_group_id를 전역 변수에 할당

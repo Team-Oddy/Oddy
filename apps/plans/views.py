@@ -96,10 +96,13 @@ def create_group(request):
     has_travel_group = TravelGroup.objects.filter(creator=user_profile).exists()
     has_travel_type = bool(user_profile.travel_type)
 
+    show_options = request.GET.get('show_options', 'false').lower() == 'true'
+
     context = {
         'has_nickname': has_nickname,
         'has_travel_group': has_travel_group,
         'has_travel_type': has_travel_type,
+        'show_options': show_options,
     }
 
     return render(request, 'create_group.html', context)
@@ -445,43 +448,79 @@ def travel_plan_detail(request, group_id):
 def search_view(request):
     if request.method == 'GET':
         query = request.GET.get('query', '')
+        search_type = request.GET.get('type', 'place')  # 'place' or 'address'
         results = []
-        if query:
-            url = "https://openapi.naver.com/v1/search/local.json"
-            headers = {
-                "X-Naver-Client-Id": settings.NAVER_SEARCH_CLIENT_ID,
-                "X-Naver-Client-Secret": settings.NAVER_SEARCH_CLIENT_SECRET,
-            }
-            params = {
-                "query": query,
-                "display": 10,
-                "start": 1,
-                "sort": "random"
-            }
-            try:
-                response = requests.get(url, headers=headers, params=params)
-                response.raise_for_status()  # Raises an HTTPError for bad responses
-                data = response.json()
-                results = data.get('items', [])
-                
-                for item in results:
-                    item['title'] = re.sub('<[^<]+?>', '', item['title'])
-                    # Convert coordinates to float if they exist
-                    if 'mapx' in item:
-                        item['mapx'] = float(item['mapx'])
-                    if 'mapy' in item:
-                        item['mapy'] = float(item['mapy'])
-                
-            except requests.RequestException as e:
-                print(f"API request failed: {e}")
-                results = []
         
-        context = {
-            'results': results,
-            'query': query,
-            'ncp_client_id': settings.NAVER_SEARCH_CLIENT_ID
-        }
+        if query:
+            if search_type == 'place':
+                results = search_place(query)
+            elif search_type == 'address':
+                results = search_address(query)
+        
         return JsonResponse({'results': results, 'query': query})
+
+
+def search_place(query):
+    url = "https://openapi.naver.com/v1/search/local.json"
+    headers = {
+        "X-Naver-Client-Id": settings.NAVER_SEARCH_CLIENT_ID,
+        "X-Naver-Client-Secret": settings.NAVER_SEARCH_CLIENT_SECRET,
+    }
+    params = {
+        "query": query,
+        "display": 10,
+        "start": 1,
+        "sort": "random"
+    }
+    
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+        results = data.get('items', [])
+        
+        for item in results:
+            item['title'] = re.sub('<[^<]+?>', '', item['title'])
+            if 'mapx' in item:
+                item['mapx'] = float(item['mapx'])
+            if 'mapy' in item:
+                item['mapy'] = float(item['mapy'])
+        
+        return results
+    except requests.RequestException as e:
+        print(f"Place search API request failed: {e}")
+        return []
+
+def search_address(query):
+    url = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode"
+    headers = {
+        "X-NCP-APIGW-API-KEY-ID": settings.NAVER_MAP_CLIENT_ID,
+        "X-NCP-APIGW-API-KEY": settings.NAVER_MAP_CLIENT_SECRET,
+    }
+    params = {
+        "query": query,
+    }
+    
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+        addresses = data.get('addresses', [])
+        
+        results = []
+        for addr in addresses:
+            results.append({
+                'title': addr.get('roadAddress', ''),
+                'address': addr.get('jibunAddress', ''),
+                'mapx': float(addr.get('x', 0)),
+                'mapy': float(addr.get('y', 0))
+            })
+        
+        return results
+    except requests.RequestException as e:
+        print(f"Address search API request failed: {e}")
+        return []
+
     
 
 #시간표 부분
