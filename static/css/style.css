@@ -138,3 +138,25 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
+/* 버튼 위치 조정 */
+.create_group-nickname-button, 
+.create_group-travelName-button, 
+.create_group-travelDate-button,
+.nicknameedit-complete-btn,
+.btn-submit,
+.enter-oddy,
+.main-kakao,
+.create-travelgroup,
+.enter-invitedgroup,
+.enter-group, 
+.share-link,
+.test-start-btn,
+.testResult-button,
+.logout-btn,
+.next-link, 
+.complete-btn,
+.create_travel-main-btn {
+  bottom: calc(20px + 5vh);
+  position: fixed;
+}

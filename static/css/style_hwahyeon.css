@@ -459,5 +459,76 @@ body {
     right: 30px;
 }*/
 
+body {
+    overflow-y: auto;
+}
+/*create_group.html nickname*/
+.create_group-nickname-top, .create_group-travelName-top, .create_group-travelDate-top {
+    display: flex;
+}
+/* ... (중간 코드는 그대로 유지) ... */
+
+.create_group-nickname-button, .create_group-travelName-button, .create_group-travelDate-button {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 0px;
+    border-color: var(--gray02);
+    background: var(--gray02);
+    position: fixed;
+    bottom: calc(20px + 5vh);
+    left: 34px;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    text-decoration: none; 
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.testResult-button {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: var(--pink02);
+    position: fixed;
+    color: var(--black);
+    text-align: center;
+    font: var(--text-style-pretendard-semibold-16);
+    line-height: normal;
+    left: 34px;
+    bottom: calc(20px + 5vh);
+}
+
+.testResult-restart {
+    color: var(--gray03);
+    font: var(--text-style-pretendard-regular-14);
+    line-height: normal;
+    position: fixed;
+    left: 165px;
+    bottom: calc(50px + 5vh);
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.nicknameedit-complete-btn {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 0px;
+    background: var(--gray02);
+    position: fixed;
+    bottom: calc(20px + 5vh);
+    left: 34px;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    text-decoration: none; 
+}
+
+/* ... (나머지 코드는 그대로 유지) ... */
 
 
