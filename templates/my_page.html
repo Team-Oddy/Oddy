@@ -327,7 +327,7 @@
     function showTravelType() {
         const travelType = "{{ user_profile.travel_type|escapejs }}";
         if (!travelType || travelType === 'None' || travelType.trim() === '') {
-            alert('여행 유형 테스트를 진행해 주세요!');
+            alert('여행 유형 테스트를 먼저 진행해 주세요!');
             window.location.href = "{% url 'plans:test' %}";
             return;
         }
