@@ -69,12 +69,17 @@
     color: var(--blue02);
 }
 
+.highlight-text {
+    font: var(--text-style-pretendard-semibold-20);
+    color: var(--pink02);
+}
+
 .door-frame {
     width: 275.45px;
     height: 111.282px;
     flex-shrink: 0;
     border-radius: 13.834px;
-    background: var(--gray02);
+    background: var(--blue01);
     position: absolute;
     transform: translateX(-50%);  
     left: 50%;  
@@ -96,7 +101,7 @@
     height: 111.282px;
     flex-shrink: 0;
     border-radius: 13.834px;
-    background: var(--blue01);
+    background: var(--pink01);
     position: absolute;
     left: 50%;
     top: 250.27px;

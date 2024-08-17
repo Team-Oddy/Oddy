@@ -8,19 +8,40 @@
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <div class="main-ticket-img">
-        <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="288.7" height="454"></p>
+        <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="288.7" height="454">
     </div>
     <div class="create_travel-main-header">
-        <h3 class="create_travel-main-title">{{ travel_name }}<br>여행 시작까지 <span>{% if d_day is not None %}{{ d_day }}{% else %}{% endif %}일</span> 남았어요!</p></h3>
+        <h3 class="create_travel-main-title">{{ travel_name }}<br>여행 시작까지 <span>{% if d_day is not None %}{{ d_day }}{% else %}{% endif %}일</span> 남았어요!</h3>
     </div>
-    
+    <div class="create_travel-main-text">
+        <h3>{{ travel_group.start_date|date:"n월 j일" }} - {{ travel_group.end_date|date:"n월 j일" }}</h3>
+    </div>
+   
     <div class="create_travel-main-members-container">
         <div class="create_travel-main-members-text">함께 여행가는 친구들</div>
         <ul>
-            <li><a href="#">친구1</a></li>
-            <li><a href="#">친구2</a></li>
+            {% for member in travel_group.members.all %}
+                <li>
+                    {% if member.travel_type %}
+                        <a href="javascript:void(0);" onclick="showFriendTestResult('{{ member.nickname }}', '{{ member.travel_type }}')">
+                            <img src="{% static 'image/'|add:member.travel_type|add:'.svg' %}" alt="{{ member.travel_type }}" width="30" height="30">
+                        </a>
+                    {% else %}
+                        <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile" width="30" height="30">
+                    {% endif %}
+                    <span>{{ member.nickname }}</span>
+                </li>
+            {% endfor %}
         </ul>
-    </div><br>
+    </div>
+
+    <!-- 친구 테스트 결과 모달 -->
+<div id="friendTestResultModal" class="modal" style="display: none;">
+    <div class="maintravel-modal-content">
+        <span class="close" onclick="closeFriendTestResult()">&times;</span>
+        <div id="friendTestResultContent"></div>
+    </div>
+</div>
     
     <div class="create_travel-main-addPlans" onclick="showPage('viewSchedulePage')">
         <p>            
@@ -205,6 +226,104 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=asqg2o00lg&submodules=geocoder"></script>
 <script>
+    function showFriendTestResult(nickname, travelType) {
+    let travelTypes = {
+        '완벽주의 플래너형': {
+            className: 'perfect-planner',
+            svg: `<img src="{% static 'image/character1.svg' %}" alt="완벽주의 플래너형" width="136.67" height="121.31">`,
+            name: '완벽주의 플래너형',
+            keyword1: '#효율적',
+            keyword2: '#체계적',
+            characteristics: '세세한 계획을 세우고 주요 관광지를 빠짐없이 방문해요',
+            advantages: ['시간 관리에 탁월해요', '예산 통제력이 우수해요', '주요 명소를 놓치지 않아요'],
+            disadvantages: ['융통성이 부족해요', '예상 밖 상황에 스트레스를 받아요']
+        },
+        '자유로운 모험가형': {
+            className: 'free-planner',
+            svg: `<img src="{% static 'image/character2.svg' %}" alt="자유로운 모험가형" width="135.02" height="151.29">`,
+            name: '자유로운 모험가형',
+            keyword1: '#즉흥적',
+            keyword2: '#문화체험',
+            characteristics: '현지 문화에 깊이 몰입하며 새로운 경험을 추구해요',
+            advantages: ['독특한 경험을 발견해요', '현지인과 쉽게 교류해요', '예상 밖 상황을 즐겨요'],
+            disadvantages: ['중요 일정을 놓칠 수 있어요', '안전 문제가 발생할 수 있어요']
+        },
+        '휴식 추구형': {
+            className: 'rest',
+            svg: `<img src="{% static 'image/character3.svg' %}" alt="휴식 추구형" width="134.83" height="122.54">`,
+            name: '휴식 추구형',
+            keyword1: '#힐링',
+            keyword2: '#여유',
+            characteristics: '편안한 숙소에서 여유롭게 시간을 보내며 휴식해요',
+            advantages: ['충분한 휴식과 재충전이 가능해요', '스트레스 없는 여행을 추구해요', '여유로운 일정 진행이 가능해요'],
+            disadvantages: ['새로운 경험이 부족할 수 있어요', '현지 문화 체험 제한적이에요']
+        },
+        '미식 탐험가형': {
+            className: 'eat',
+            svg: `<img src="{% static 'image/character4.svg' %}" alt="미식 탐험가형" width="156.4" height="150.85">`,
+            name: '미식 탐험가형',
+            keyword1: '#맛집투어',
+            keyword2: '#현지음식',
+            characteristics: '현지 음식과 맛집 위주로 여행 일정을 구성해요',
+            advantages: ['음식으로 문화를 이해해요', '독특한 맛집을 발굴해요', '현지 시장 탐방이 능숙해요'],
+            disadvantages: ['다른 관광 요소를 놓칠 수 있어요', '식비 초과 가능성이 있어요']
+        },
+        '균형 잡힌 탐험가형': {
+            className: 'explorer',
+            svg: `<img src="{% static 'image/character5.svg' %}" alt="균형 잡힌 탐험가형" width="127.2" height="132.88">`,
+            name: '균형잡힌 탐험가형',
+            keyword1: '#다재다능',
+            keyword2: '#융통성',
+            characteristics: '계획과 즉흥성의 균형을 맞추며 다양한 경험을 추구해요',
+            advantages: ['다양한 여행 요소 체험이 가능해요', '상황에 따른 대처가 가능해요', '친구와 조화롭게 여행할 수 있어요'],
+            disadvantages: ['우선순위 설정이 어려워요', '깊이 있는 경험이 부족할 수 있어요']
+        },
+    };
+
+    let type = travelTypes[travelType];
+
+    let resultHtml = `
+        <div class="testResult-top">
+            <p>친구의 여행 유형</p>
+        </div>
+        <div class="testResult-bottom">
+            ${type.svg}
+            <p class="testResult-text">${nickname}님의 여행 유형은</p>
+            <strong class="testResult-result-type">${type.name}입니다!</strong>
+            <div class="testResult-keywords1">
+                <p class="testResult-keyword1">${type.keyword1}</p>
+            </div>
+            <div class="testResult-keywords2">
+                <p class="testResult-keyword2">${type.keyword2}</p>
+            </div>
+            <div class="testResult-characteristics-box">
+                <p class="testResult-characteristics">${type.characteristics}</p>
+            </div>
+            <div class="testResult-advantages">
+                <p class="testResult-advantages-p">이런걸 잘해요</p>
+                <ul class="testResult-advantages-ul">
+                    ${type.advantages.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+            <div class="testResult-disadvantages">
+                <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                <ul class="testResult-disadvantages-ul">
+                    ${type.disadvantages.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+            <button onclick="closeFriendTestResult()" class="back-button">뒤로 가기</button>
+        </div>
+    `;
+
+    document.getElementById('friendTestResultContent').innerHTML = resultHtml;
+    document.getElementById('friendTestResultModal').style.display = 'block';
+}
+
+function closeFriendTestResult() {
+    document.getElementById('friendTestResultModal').style.display = 'none';
+}
+
+
     const groupId = document.getElementById('groupIdContainer').dataset.groupId;
     let previousPage = '';
     let selectedPlan = '';
