@@ -700,6 +700,8 @@ function loadComments(itemId) {
         let category = contentId.replace('Content', '');
         loadPlans(category);
     }
+
+    // 여행 세부 정보 보기 함수
     function viewDetail(type, place, description, author, itemId) {
     currentItemId = itemId;
     currentType = type;
@@ -815,8 +817,6 @@ function onClickLike(id) {
     .catch(error => console.error('Error:', error));
 }
 
-
-
 let make_comment = (id) => {
     let content = document.getElementById(`comment_${id}`).value;
     if (!content) {
@@ -859,7 +859,6 @@ let make_comment = (id) => {
     .catch(error => console.error('Error:', error));
 };
 
-
 // loadComments 함수 수정
 function loadComments(itemId) {
     fetch(`/plans/${itemId}/comments/`)
@@ -891,7 +890,6 @@ function loadComments(itemId) {
             document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
         });
 }
-    
 
 // 댓글 삭제 함수
 let delete_comment = (comment_id) => {
