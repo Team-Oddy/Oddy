@@ -22,7 +22,7 @@
     background: #FEE500;
     position: absolute;
     left: 34px;
-    top: 685px;
+    top: 87vh;  /* Changed from 705px to 87vh */
     display: flex; 
     justify-content: center; 
     align-items: center; 
