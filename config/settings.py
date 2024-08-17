@@ -33,7 +33,7 @@ environ.Env.read_env(BASE_DIR / '.env')  # 이 줄이 꼭 필요합니다.
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOST = ['*']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
