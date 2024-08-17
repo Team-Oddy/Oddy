@@ -830,6 +830,7 @@ let make_comment = (id) => {
     })
     .then(response => response.json())
     .then(data => {
+        console.log(data)
         if (data.success) {
             // 새로운 댓글을 화면에 추가
             let commentList = document.getElementById(`comment_list_${id}`);
