@@ -12,21 +12,28 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# 환경 변수 초기화
+env = environ.Env()
+
+# .env 파일에서 환경 변수를 읽어들입니다.
+environ.Env.read_env(BASE_DIR / '.env')  # 이 줄이 꼭 필요합니다.
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-pgp#=2$o_a70o3^lu=z$80gr7_*hhjuzhf^i0=72qlqju5dzba'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOST = ['*']
 
 
 # Application definition
@@ -107,8 +114,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # 또는 사용 중인 다른 데이터베이스 백엔드
-        'NAME': BASE_DIR / "db.sqlite3",  # 데이터베이스 파일 경로
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST' : env('DB_HOST'),
+        'NAME' : env('DB_NAME'),
+        'USER' : env('DB_USER'),
+        'PASSWORD' : env('DB_PASSWORD'),
     }
 }
 
@@ -161,5 +171,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 
-NAVER_CLIENT_ID = 'CCPz3A4MX0wjDBDaMgcH'
-NAVER_CLIENT_SECRET = 'PqCmky7EJL'
+#env파일로 secret key 숨기기
+import os
+from dotenv import load_dotenv
+
+# .env 파일 로드
+load_dotenv()
+
+# SECRET_KEY
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+
+# API Keys
+KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY')
+KAKAO_JAVASCRIPT_KEY = os.environ.get('KAKAO_JAVASCRIPT_KEY')
+KAKAO_ADMIN_KEY = os.environ.get('KAKAO_ADMIN_KEY')
+
+NAVER_MAP_CLIENT_ID = os.environ.get('NAVER_MAP_CLIENT_ID')
+NAVER_MAP_CLIENT_SECRET = os.environ.get('NAVER_MAP_CLIENT_SECRET')
+
+NAVER_SEARCH_CLIENT_ID = os.environ.get('NAVER_SEARCH_CLIENT_ID')
+NAVER_SEARCH_CLIENT_SECRET = os.environ.get('NAVER_SEARCH_CLIENT_SECRET')

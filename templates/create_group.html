@@ -5,6 +5,8 @@
 
 {% block content %}
 
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
 
 <div id="createGroupPage" class="create_group-page create_group-active">
     <div class="create_group-nickname-top">
@@ -26,7 +28,7 @@
 </div>
 
 <div id="optionsPage" class="create_group-page">
-    <p class>설레는 여행 계획하기, 오디와 함께해요!</p>
+    <p class>설레는 여행 계획하기, <span class="highlight-text">오디</span>와 함께해요!</p>
     <div class="door-frame">
         <img src="{% static 'image/door-white-cloud.svg' %}" alt="white-cloud" width="104.7" height="102.72">
     </div>
@@ -35,6 +37,8 @@
         <span>여행 모임 만들기</span></button>
     <button class="enter-invitedgroup" onclick="joinGroup()">
         <span>초대받은 여행 모임 입장하기</span></button>
+
+    
 </div>
 
 <div id="travelNamePage" class="create_group-page">
@@ -90,12 +94,15 @@
     <p class="complete_create_group">여행 모임 생성 완료</p>
     <p class="together_trip">설레는 여행을 함께 준비해봐요!</p>
     <img src="{% static 'image/pink-big-cloud.svg' %}" alt="pink cloud" width="224" height="219.77" class="complete_page-pink_cloud"> 
-    <button class="share-link">
-    <span>초대 링크 공유하기</span></button>
-    <b class="enter-group">
-        <span onclick="startTravel()">여행 모임 입장하기</span></b
-        utton>
+    <button class="share-link" onclick="sendLinkCustom()">
+        <span>초대 링크 공유하기</span>
+    </button>
+    <button class="enter-group">
+        <span onclick="startTravel()">여행 모임 입장하기</span>
+        </button>
 </div>
+
+
 
 <div id="entryPage" class="create_group-page">
     <img src="{% static 'image/two-character.svg' %}" alt="cloud icon" width="192.46" height="112.36"> 
@@ -136,6 +143,7 @@
 
 <script>
 let formData = {};
+let travelGroupId;  // 전역 변수로 선언
 
 document.getElementById('nickname').addEventListener('input', function() {
     let input = this.value;
@@ -207,6 +215,22 @@ document.getElementById('travelEndDate').addEventListener('input', function() {
 });
 
 // 추가함!!!!!!!!!!!!
+function checkUserState() {
+    return fetch('/api/user-state/')
+        .then(response => response.json())
+        .then(data => {
+            if (data.has_travel_group) {
+                window.location.href = "{% url 'plans:create_travel' %}";
+                return true;
+            }
+            return false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return false;
+        });
+}
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const hasNickname = {{ has_nickname|yesno:"true,false" }};
@@ -225,9 +249,15 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         window.location.href = "{% url 'plans:create_travel' %}";
     }
-    });
+
+    // travel_group_id를 전역 변수에 할당
+    travelGroupId = {{ travel_group_id|default:"null" }};
+});
 
 
+function skipTest() {
+    window.location.href = "{% url 'plans:create_travel' %}";
+}
 
 // 날짜 검증을 통과했는지 확인
 function nextStepDates(startInputId, endInputId) {
@@ -263,6 +293,10 @@ function showPage(pageId) {
     document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));
     document.getElementById(pageId).classList.add('create_group-active');
     document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none');
+    
+    if (pageId === 'entryPage') {
+        document.querySelector('.skip-test').onclick = skipTest;
+    }
 }
 
 
@@ -323,6 +357,7 @@ function submitNickname() {
     });
 }
 
+// 여행 정보 저장 함수
 function submitTravelInfo() {
     fetch('/travel_name_page/', {
         method: 'POST',
@@ -339,6 +374,7 @@ function submitTravelInfo() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            travelGroupId = data.travel_group_id;  // 서버에서 반환된 travel_group_id 저장
             showPage('completePage');
         } else {
             alert(data.error);
@@ -361,6 +397,33 @@ function submitTravelInfo() {
         document.getElementById(pageId).classList.add('create_group-active');
         document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none'); // 페이지 전환 시 에러 메시지 숨기기
     }
-    </script>
-    
+
+</script>
+<script type="text/javascript">
+    // Kakao SDK 초기화
+    Kakao.init("b895408686485c31d9dc70ae8ca3fefc");
+
+
+    function sendLinkCustom() {
+        if (!travelGroupId) {
+            console.error('Travel group ID is not set');
+            return;
+        }
+        
+        fetch(`/get_kakao_share_data/${travelGroupId}/`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                Kakao.Link.sendCustom({
+                    templateId: 111155,
+                    templateArgs: {
+                        'INVITE_CODE': data.INVITE_CODE,
+                        'NICKNAME': data.NICKNAME,
+                        'TRAVEL_NAME': data.TRAVEL_NAME
+                    }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 {% endblock %}

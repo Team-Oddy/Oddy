@@ -69,12 +69,17 @@
     color: var(--blue02);
 }
 
+.highlight-text {
+    font: var(--text-style-pretendard-semibold-20);
+    color: var(--pink02);
+}
+
 .door-frame {
     width: 275.45px;
     height: 111.282px;
     flex-shrink: 0;
     border-radius: 13.834px;
-    background: var(--gray02);
+    background: var(--blue01);
     position: absolute;
     transform: translateX(-50%);  
     left: 50%;  
@@ -96,7 +101,7 @@
     height: 111.282px;
     flex-shrink: 0;
     border-radius: 13.834px;
-    background: var(--blue01);
+    background: var(--pink01);
     position: absolute;
     left: 50%;
     top: 250.27px;
@@ -917,6 +922,21 @@ label[for="id_invite_code"] {
     margin-left: 86px; /* 왼쪽 여백 */
 }
 
+.comment-delete-btn {
+    width: 60px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: 24.444px;
+    border: 1.5px solid var(--pink02);
+    background: var(--pink01);
+    position: absolute;
+    left: 296px;
+    top: 529px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 #travelDetailComments input[type="text"] {
     width: 325px;
@@ -1391,27 +1411,27 @@ label[for="id_invite_code"] {
 
 .main-ticket-img {
     position: absolute;
-    top: 256px;
+    top: 259px;
     left: 50%;
     transform: translateX(-50%);
 }
 
 .main-plan-btn {
     position: absolute;
-    left: 92px;
-    top: 563px;
+    left: 87px;
+    top: 606px;
 }
 
 .main-timetable-btn {
     position: absolute;
-    left: 170px;
-    top: 563px;
+    left: 167.74px;
+    top: 606px;
 }
 
 .main-map-btn {
     position: absolute;
     left: 248px;
-    top: 563px;
+    top: 606px;
 }
 
 .create_travel-main-members-text {
@@ -1424,8 +1444,8 @@ label[for="id_invite_code"] {
 
 .create_travel-main-title {
     position: absolute;
-    left: 71px;
-    top: 286px;
+    left: 84px;
+    top: 282px;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
     line-height: 25px;
@@ -1442,7 +1462,7 @@ label[for="id_invite_code"] {
     border-radius: 10px;
     background: var(--gray01);
     position: absolute;
-    top: 695px;
+    top: 741px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -1452,4 +1472,175 @@ label[for="id_invite_code"] {
     color: var(--black);
 }
 
+/*
+::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -5px;
+    height: 1.5px;
+    background-color: var(--gray01);
+    z-index: 0;
+} */
+
+/* ... (이전 코드는 그대로 유지) ... */
+
+.main-kakao {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: #FEE500;
+    position: fixed;
+    left: 34px;
+    bottom: calc(20px + 5vh);
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.enter-oddy {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 0px;
+    background: var(--pink02);
+    position: fixed;
+    bottom: calc(20px + 5vh);
+    left: 34px;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    text-decoration: none; 
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.create-travelgroup {
+    position: fixed;
+    left: 34px;
+    bottom: calc(20px + 15vh);
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 1.5px solid var(--pink02);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.enter-invitedgroup {
+    position: fixed;
+    left: 34px;
+    bottom: calc(20px + 5vh);
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: var(--pink02);
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.enter-group, .share-link {
+    width: 155px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+}
+
+.enter-group {
+    position: fixed;
+    right: 34px;
+    bottom: calc(20px + 5vh);
+    border-radius: 5px;
+    background: var(--pink02);
+    cursor: pointer;
+}
+
+.share-link {
+    position: fixed;
+    left: 34px;
+    bottom: calc(20px + 5vh);
+    border-radius: 5px;
+    border: 1.5px solid var(--pink02);
+    background-color: transparent;
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.test-start-btn {
+    position: fixed;
+    left: 34px;
+    bottom: calc(20px + 5vh);
+    width: 325px;
+    height: 48px;
+    border-radius: 5px;
+    border: 1.5px solid var(--pink02);
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    text-decoration: none; 
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.btn-submit {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 0px;
+    background: var(--gray02);
+    position: fixed;
+    bottom: calc(20px + 5vh);
+    left: 34px;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    text-decoration: none; 
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.next-link, .complete-btn {
+    width: 325px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 0px;
+    border-color: var(--gray02);
+    background: var(--gray02);
+    position: fixed;
+    bottom: calc(20px + 5vh);
+    left: 34px;
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--gray03);
+}
+
+/* ... (중간 코드는 그대로 유지) ... */
+
+.create_travel-main-btn {
+    width: 125px;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--gray01);
+    position: fixed;
+    bottom: calc(20px + 5vh);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* ... (나머지 코드는 그대로 유지) ... */
   

@@ -13,12 +13,13 @@ from django.views.decorators.http import require_http_methods
 import random
 import string
 import re
+import logging
 from .forms import TravelGroupForm
-from .models import TravelGroup, TravelPlan
+from .models import *
 from datetime import datetime, timedelta
 from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404
-from .models import TravelGroup, TravelPlan
+from django.conf import settings
 
 
 #선아 작성 부분
@@ -103,6 +104,14 @@ def create_group(request):
 
     return render(request, 'create_group.html', context)
 
+def user_state(request):
+    user_profile = request.user.userprofile
+    return JsonResponse({
+        'has_nickname': bool(user_profile.nickname),
+        'has_travel_group': TravelGroup.objects.filter(creator=user_profile).exists(),
+        'has_travel_type': bool(user_profile.travel_type)
+    })
+
 @csrf_exempt
 @login_required
 def travel_name_page(request):
@@ -123,7 +132,7 @@ def travel_name_page(request):
                 )
                 travel_group.save()
                 travel_group.members.add(user_profile)  # members ManyToMany 필드에 사용자 프로필 추가
-                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료'})
+                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료', 'travel_group_id': travel_group.id})
             except UserProfile.DoesNotExist:
                 return JsonResponse({'success': False, 'error': '사용자 프로필이 존재하지 않습니다.'})
         else:
@@ -143,7 +152,12 @@ def delete_travel_group(request, travel_group_id):
     return JsonResponse({'success': True, 'message': '여행 모임이 삭제되었습니다.'})
 
 def complete_page(request):
-    return render(request, 'create_group.html', {'completed': True})
+    # 가장 최근에 생성된 TravelGroup을 가져옵니다.
+    latest_travel_group = TravelGroup.objects.filter(creator=request.user.userprofile).latest('id')
+    return render(request, 'create_group.html', {
+        'completed': True,
+        'travel_group_id': latest_travel_group.id
+    })
 
 def test(request):
     return render(request, 'test.html')
@@ -271,13 +285,10 @@ def join_group_page(request):
             try:
                 travel_group = TravelGroup.objects.get(invite_code=invite_code)
                 user_profile = request.user.userprofile
-                if travel_group.members.filter(id=user_profile.id).exists():
-                    form.add_error('invite_code', 'You are already in this group.')
-                    return redirect('plans:create_travel')
-                else:
+                if not travel_group.members.filter(id=user_profile.id).exists():
                     travel_group.members.add(user_profile)
                     travel_group.save()
-                    return redirect('plans:create_travel')
+                return redirect('plans:create_travel_with_id', group_id=travel_group.id)
             except TravelGroup.DoesNotExist:
                 form.add_error('invite_code', 'Invalid invite code.')
     else:
@@ -285,27 +296,38 @@ def join_group_page(request):
     
     return render(request, 'join_group.html', {'form': form})
 
+import logging
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from datetime import datetime
+from .models import TravelGroup, UserProfile
+from .forms import InviteCodeForm, TravelGroupForm
 @login_required
-def create_travel(request):
+def create_travel(request, group_id=None):
     user_profile = request.user.userprofile
     
+    if group_id:
+        travel_group = get_object_or_404(TravelGroup, id=group_id)
+        if user_profile not in travel_group.members.all():
+            return HttpResponseForbidden("You don't have permission to access this group.")
+    else:
+        travel_group = TravelGroup.objects.filter(members=user_profile).order_by('-id').first()
+
     if request.method == 'POST':
         form = TravelGroupForm(request.POST)
         if form.is_valid():
-            travel_group = form.save(commit=False)
-            travel_group.creator = user_profile
-            travel_group.save()
-            travel_group.members.add(user_profile)
-            return redirect('plans:timetable', travel_group_id=travel_group.id)
+            new_travel_group = form.save(commit=False)
+            new_travel_group.creator = user_profile
+            new_travel_group.save()
+            new_travel_group.members.add(user_profile)
+            return redirect('plans:timetable', travel_group_id=new_travel_group.id)
     else:
         form = TravelGroupForm()
 
-    latest_travel_group = TravelGroup.objects.filter(creator=user_profile).order_by('-id').first()
-    
-    if latest_travel_group:
-        travel_name = latest_travel_group.travel_name
-        start_date = latest_travel_group.start_date
-        end_date = latest_travel_group.end_date
+    if travel_group:
+        travel_name = travel_group.travel_name
+        start_date = travel_group.start_date
         today = datetime.today().date()
         d_day = (start_date - today).days
     else:
@@ -317,14 +339,9 @@ def create_travel(request):
         'form': form,
         'travel_name': travel_name,
         'd_day': d_day,
-        'travel_group': latest_travel_group
+        'travel_group': travel_group
     }
-
     return render(request, 'create_travel.html', context)
-
-def travel_map(request):
-    return render(request, 'travel_map.html')
-
 
 
 #map예제 추가해봤으나 검색은 안되는 중.. 지도는 잘 불러와짐
@@ -432,8 +449,8 @@ def search_view(request):
         if query:
             url = "https://openapi.naver.com/v1/search/local.json"
             headers = {
-                "X-Naver-Client-Id": settings.NAVER_CLIENT_ID,
-                "X-Naver-Client-Secret": settings.NAVER_CLIENT_SECRET
+                "X-Naver-Client-Id": settings.NAVER_SEARCH_CLIENT_ID,
+                "X-Naver-Client-Secret": settings.NAVER_SEARCH_CLIENT_SECRET,
             }
             params = {
                 "query": query,
@@ -462,7 +479,7 @@ def search_view(request):
         context = {
             'results': results,
             'query': query,
-            'ncp_client_id': settings.NAVER_CLIENT_ID
+            'ncp_client_id': settings.NAVER_SEARCH_CLIENT_ID
         }
         return JsonResponse({'results': results, 'query': query})
     
@@ -729,6 +746,7 @@ def travel_map(request, travel_group_id):
     context = {
         'travel_group': travel_group,
         'travel_plans': travel_plans,
+        'naver_map_client_id': settings.NAVER_MAP_CLIENT_ID,
     }
     return render(request, 'travel_map.html', context)
 
@@ -760,4 +778,21 @@ def save_airplane_text(request):
 
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-    
+
+#추가
+@login_required
+@require_http_methods(["GET"])
+def get_kakao_share_data(request, travel_group_id):
+    try:
+        user_profile = request.user.userprofile
+        travel_group = TravelGroup.objects.get(id=travel_group_id, members=user_profile)
+        
+        share_data = {
+            'INVITE_CODE': travel_group.invite_code,
+            'NICKNAME': user_profile.nickname or user_profile.user.username,
+            'TRAVEL_NAME': travel_group.travel_name
+        }
+        
+        return JsonResponse(share_data)
+    except TravelGroup.DoesNotExist:
+        return JsonResponse({'error': 'Travel group not found'}, status=404)

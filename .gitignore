@@ -18,3 +18,5 @@ db.sqlite3
 # Ignore SQLite database files
 db.sqlite3
 *.sqlite3-*
+
+.env
