@@ -198,6 +198,7 @@
         <span>완료</span></button>
 </div>
 
+
 <!--메인->여행 계획 추가하기-->
 <div id="viewSchedulePage" class="create_travel-all-container create_travel-page">
     <h3 class="create_travel-all-title">여행 계획 확인하기</h3>
@@ -530,25 +531,26 @@ function searchPlace() {
         alert('장소를 입력해주세요.');
         return;
     }
+    // 검색 결과를 초기화
+    document.getElementById('searchResults').innerHTML = '';
 
-    fetch(`/search/?query=${encodeURIComponent(query)}`)
-    .then(response => response.json())  // JSON으로 파싱
+    fetch(`/search/?query=${encodeURIComponent(query)}&type=address`)
+    .then(response => response.json())
     .then(data => {
         let resultsHtml = '<ul>';
         if (data.results && data.results.length > 0) {
             data.results.forEach(function(item) {
                 let title = item.title.replace(/<[^>]*>/g, '');
-                let address = item.address;
-                resultsHtml += `<li onclick="selectPlace('${item.title.replace(/'/g, "\\'")}', '${item.address.replace(/'/g, "\\'")}')">
-                                    <h3>${item.title}</h3>
-                                    <p>${item.address}</p>
+                let address = item.address || item.roadAddress;
+                resultsHtml += `<li onclick="selectPlace('${title.replace(/'/g, "\\'")}', '${address.replace(/'/g, "\\'")}')">
+                                    <h3>${title}</h3>
+                                    <p>${address}</p>
                                 </li>`;
             });
         } else {
             resultsHtml += '<li>검색 결과가 없습니다.</li>';
         }
         resultsHtml += '</ul>';
-
         document.getElementById('searchResults').innerHTML = resultsHtml;
     })
     .catch(error => {
@@ -986,7 +988,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('search-place');
     searchInput.addEventListener('input', enableSearchButton);
 });
-
 </script>
 
 <style>
