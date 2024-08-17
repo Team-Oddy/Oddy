@@ -350,46 +350,47 @@ function closeFriendTestResult() {
 
     document.addEventListener('DOMContentLoaded', function() {
         var buttons = document.querySelector('.create_travel-buttons');
-        document.body.appendChild(buttons);
+        var container = document.querySelector('.container'); // '.container'를 실제 container의 클래스나 ID로 변경하세요
+        container.appendChild(buttons);
         
         // Fixed 위치 설정이 올바르게 적용되는지 확인
         buttons.style.position = 'fixed';
         buttons.style.bottom = '20px';
-        buttons.style.right = '777px';
+        buttons.style.right = '6%';
         buttons.style.zIndex = '1000';
     });
 
-    function showPage(pageId) {
-        // 모든 페이지 숨기기
-        const pages = document.getElementsByClassName('create_travel-page');
-        for (let page of pages) {
-            page.style.display = 'none';
-        }
-
-        // 선택된 페이지를 보여주기
-        const selectedPage = document.getElementById(pageId);
-        selectedPage.style.display = 'block';
-
-        // 모든 페이지의 active 상태 제거
-        document.querySelectorAll('.create_travel-page').forEach(page => {
-            page.classList.remove('active');
-        });
-
-        // 선택된 페이지를 active 상태로 설정
-        if (pageId === 'previousPage') {
-            document.getElementById(previousPage).classList.add('active');
-        } else {
-            selectedPage.classList.add('active');
-        }
-
-        // 페이지에 따라 버튼 표시/숨김 설정
-        const buttons = document.querySelector('.create_travel-buttons');
-        if (pageId === 'viewSchedulePage') {
-            buttons.style.display = 'flex'; // 'viewSchedulePage'에서만 버튼 표시
-        } else {
-            buttons.style.display = 'none'; // 다른 페이지에서는 버튼 숨김
-        }
+function showPage(pageId) {
+    // 모든 페이지 숨기기
+    const pages = document.getElementsByClassName('create_travel-page');
+    for (let page of pages) {
+        page.style.display = 'none';
     }
+
+    // 선택된 페이지를 보여주기
+    const selectedPage = document.getElementById(pageId);
+    selectedPage.style.display = 'block';
+
+    // 모든 페이지의 active 상태 제거
+    document.querySelectorAll('.create_travel-page').forEach(page => {
+        page.classList.remove('active');
+    });
+
+    // 선택된 페이지를 active 상태로 설정
+    if (pageId === 'previousPage') {
+        document.getElementById(previousPage).classList.add('active');
+    } else {
+        selectedPage.classList.add('active');
+    }
+
+    // 페이지에 따라 버튼 표시/숨김 설정
+    const buttons = document.querySelector('.create_travel-buttons');
+    if (pageId === 'viewSchedulePage') {
+        buttons.style.display = 'flex'; // 'viewSchedulePage'에서만 버튼 표시
+    } else {
+        buttons.style.display = 'none'; // 다른 페이지에서는 버튼 숨김
+    }
+}
 
 
     function getCookie(name) {
@@ -994,10 +995,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     .btn-submit.active {
         background: var(--pink02);
-        color: var(--black);
     }
     .btn-submit.active span {
-        color: var(—black);
+        color: var(--black);
     }
 </style>
 

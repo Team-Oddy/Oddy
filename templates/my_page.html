@@ -126,7 +126,157 @@
         <p>나의 여행 유형</p>
     </div>
     {% if user_profile.travel_type == '완벽주의 플래너형' %}
-        <!-- 여행 유형에 따른 결과 표시 -->
+        <div class="testResult-bottom">
+            <img src="{% static 'image/character1.svg' %}" alt="완벽주의 플래너형" width="136.67" height="121.31" class="create_group-pink_cloud-a">
+            <p class="testResult-text">{{ user_profile.nickname }}님의 여행 유형은</p>
+            <strong class="testResult-result-type">완벽주의 플래너형입니다!</strong>
+            <div class="testResult-keywords1">
+                <p class="testResult-keyword1">#효율적</p>
+            </div>
+            <div class="testResult-keywords2">
+                <p class="testResult-keyword2">#체계적</p>
+            </div>
+            <div class="testResult-characteristics-box">
+                <p class="testResult-characteristics">세세한 계획을 세우고 주요 관광지를 빠짐없이 방문해요</p>
+            </div>
+            <div class="testResult-advantages">
+                <p class="testResult-advantages-p">이런걸 잘해요</p>
+                <ul class="testResult-advantages-ul">
+                    <li>시간 관리에 탁월해요</li>
+                    <li>예산 통제력이 우수해요</li>
+                    <li>주요 명소를 놓치지 않아요</li>
+                </ul>
+            </div>
+            <div class="testResult-disadvantages">
+                <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                <ul class="testResult-disadvantages-ul">
+                    <li>융통성이 부족해요</li>
+                    <li>예상 밖 상황에 스트레스를 받아요</li>
+                </ul>
+            </div>
+        </div>
+    {% elif user_profile.travel_type == '자유로운 모험가형' %}
+        <div class="testResult-bottom">
+            <img src="{% static 'image/character2.svg' %}" alt="자유로운 모험가형" width="135.02" height="151.29" class="create_group-pink_cloud-b">
+            <p class="testResult-text">{{ user_profile.nickname }}님의 여행 유형은</p>
+            <strong class="testResult-result-type">자유로운 모험가형입니다!</strong>
+            <div class="testResult-keywords1">
+                <p class="testResult-keyword1">#즉흥적</p>
+            </div>
+            <div class="testResult-keywords2">
+                <p class="testResult-keyword2">#문화체험</p>
+            </div>
+            <div class="testResult-characteristics-box">
+                <p class="testResult-characteristics">현지 문화에 깊이 몰입하며 새로운 경험을 추구해요</p>
+            </div>
+            <div class="testResult-advantages">
+                <p class="testResult-advantages-p">이런걸 잘해요</p>
+                <ul class="testResult-advantages-ul">
+                    <li>독특한 경험을 발견해요</li>
+                    <li>현지인과 쉽게 교류해요</li>
+                    <li>예상 밖 상황을 즐겨요</li>
+                </ul>
+            </div>
+            <div class="testResult-disadvantages">
+                <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                <ul class="testResult-disadvantages-ul">
+                    <li>중요 일정을 놓칠 수 있어요</li>
+                    <li>안전 문제가 발생할 수 있어요</li>
+                </ul>
+            </div>
+        </div>
+    {% elif user_profile.travel_type == '휴식 추구형' %}
+        <div class="testResult-bottom">
+            <img src="{% static 'image/character3.svg' %}" alt="휴식 추구형" width="134.83" height="122.54" class="create_group-pink_cloud-c">
+            <p class="testResult-text">{{ user_profile.nickname }}님의 여행 유형은</p>
+            <strong class="testResult-result-type">휴식 추구형입니다!</strong>
+            <div class="testResult-keywords1">
+                <p class="testResult-keyword1">#힐링</p>
+            </div>
+            <div class="testResult-keywords2">
+                <p class="testResult-keyword2">#여유</p>
+            </div>
+            <div class="testResult-characteristics-box">
+                <p class="testResult-characteristics">편안한 숙소에서 여유롭게 시간을 보내며 휴식해요</p>
+            </div>
+            <div class="testResult-advantages">
+                <p class="testResult-advantages-p">이런걸 잘해요</p>
+                <ul class="testResult-advantages-ul">
+                    <li>충분한 휴식과 재충전이 가능해요</li>
+                    <li>스트레스 없는 여행을 추구해요</li>
+                    <li>여유로운 일정 진행이 가능해요</li>
+                </ul>
+            </div>
+            <div class="testResult-disadvantages">
+                <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                <ul class="testResult-disadvantages-ul">
+                    <li>새로운 경험이 부족할 수 있어요</li>
+                    <li>현지 문화 체험 제한적이에요</li>
+                </ul>
+            </div>
+        </div>
+    {% elif user_profile.travel_type == '미식 탐험가형' %}
+        <div class="testResult-bottom">
+            <img src="{% static 'image/character4.svg' %}" alt="미식 탐험가형" width="156.4" height="150.85" class="create_group-pink_cloud-d">
+            <p class="testResult-text">{{ user_profile.nickname }}님의 여행 유형은</p>
+            <strong class="testResult-result-type">미식 탐험가형입니다!</strong>
+            <div class="testResult-keywords1">
+                <p class="testResult-keyword1">#맛집투어</p>
+            </div>
+            <div class="testResult-keywords2">
+                <p class="testResult-keyword2">#현지음식</p>
+            </div>
+            <div class="testResult-characteristics-box">
+                <p class="testResult-characteristics">현지 음식과 맛집 위주로 여행 일정을 구성해요</p>
+            </div>
+            <div class="testResult-advantages">
+                <p class="testResult-advantages-p">이런걸 잘해요</p>
+                <ul class="testResult-advantages-ul">
+                    <li>음식으로 문화를 이해해요</li>
+                    <li>독특한 맛집을 발굴해요</li>
+                    <li>현지 시장 탐방이 능숙해요</li>
+                </ul>
+            </div>
+            <div class="testResult-disadvantages">
+                <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                <ul class="testResult-disadvantages-ul">
+                    <li>다른 관광 요소를 놓칠 수 있어요</li>
+                    <li>식비 초과 가능성이 있어요</li>
+                </ul>
+            </div>
+        </div>
+    {% elif user_profile.travel_type == '균형 잡힌 탐험가형' %}
+        <div class="testResult-bottom">
+            <img src="{% static 'image/character5.svg' %}" alt="균형잡힌 탐험가형" width="127.2" height="132.88" class="create_group-pink_cloud-e">
+            <p class="testResult-text">{{ user_profile.nickname }}님의 여행 유형은</p>
+            <strong class="testResult-result-type">균형잡힌 탐험가형입니다!</strong>
+            <div class="testResult-keywords1">
+                <p class="testResult-keyword1">#다재다능</p>
+            </div>
+            <div class="testResult-keywords2">
+                <p class="testResult-keyword2">#융통성</p>
+            </div>
+            <div class="testResult-characteristics-box">
+                <p class="testResult-characteristics">계획과 즉흥성의 균형을 맞추며 다양한 경험을 추구해요</p>
+            </div>
+            <div class="testResult-advantages">
+                <p class="testResult-advantages-p">이런걸 잘해요</p>
+                <ul class="testResult-advantages-ul">
+                    <li>다양한 여행 요소 체험이 가능해요</li>
+                    <li>상황에 따른 대처가 가능해요</li>
+                    <li>친구와 조화롭게 여행할 수 있어요</li>
+                </ul>
+            </div>
+            <div class="testResult-disadvantages">
+                <p class="testResult-disadvantages-p">아쉬운 점은</p>
+                <ul class="testResult-disadvantages-ul">
+                    <li>우선순위 설정이 어려워요</li>
+                    <li>깊이 있는 경험이 부족할 수 있어요</li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <!-- 이 부분의 스크립트는 제거 -->
     {% endif %}
     <a href="{% url 'plans:test' %}" class="testResult-restart">다시 할래요</a>
     <button class="testResult-button" onclick="hideTravelType()">확인</button>
@@ -178,6 +328,7 @@
         const travelType = "{{ user_profile.travel_type|escapejs }}";
         if (!travelType || travelType === 'None' || travelType.trim() === '') {
             alert('여행 유형 테스트를 진행해 주세요!');
+            window.location.href = "{% url 'plans:test' %}";
             return;
         }
         document.getElementById('profilePage').style.display = 'none';
