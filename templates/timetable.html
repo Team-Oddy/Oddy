@@ -289,10 +289,13 @@ function addPlanToTimetable(plan) {
             planElement.onclick = function() { openModifyOrDeleteModal(plan.id); };
 
             const duration = endHour - startHour;
-            cell.rowSpan = duration + 1;
+
+            // rowSpan을 정확하게 설정
+            cell.rowSpan = duration > 0 ? duration : 1;
             cell.appendChild(planElement);
 
-            for (let hour = startHour + 1; hour <= endHour; hour++) {
+            // 추가적인 셀 숨기기
+            for (let hour = startHour + 1; hour < startHour + duration; hour++) {
                 const nextCell = document.querySelector(`td[data-date="${plan.date}"][data-hour="${hour}"]`);
                 if (nextCell) {
                     nextCell.style.display = 'none';
@@ -301,6 +304,7 @@ function addPlanToTimetable(plan) {
         }
     }
 }
+
 
 function showPlans(category) {
     // 기존에 활성화된 버튼에서 active 클래스 제거

@@ -22,7 +22,7 @@
     background: #FEE500;
     position: absolute;
     left: 34px;
-    top: 705px;
+    top: 685px;
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -69,12 +69,17 @@
     color: var(--blue02);
 }
 
+.highlight-text {
+    font: var(--text-style-pretendard-semibold-20);
+    color: var(--pink02);
+}
+
 .door-frame {
     width: 275.45px;
     height: 111.282px;
     flex-shrink: 0;
     border-radius: 13.834px;
-    background: var(--gray02);
+    background: var(--blue01);
     position: absolute;
     transform: translateX(-50%);  
     left: 50%;  
@@ -96,7 +101,7 @@
     height: 111.282px;
     flex-shrink: 0;
     border-radius: 13.834px;
-    background: var(--blue01);
+    background: var(--pink01);
     position: absolute;
     left: 50%;
     top: 250.27px;
@@ -625,9 +630,10 @@ label[for="id_invite_code"] {
     transform: translateX(-50%);  
 }
 
+/*
 .create_travel-all-container {
     position: relative;
-}
+}*/
 
 .create_travel-all-menu {
     position: absolute;
@@ -685,14 +691,6 @@ label[for="id_invite_code"] {
     z-index: 0;
 }
 
-.create_travel-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
 
 .create_travel-play-title,
 .create_travel-eat-title,

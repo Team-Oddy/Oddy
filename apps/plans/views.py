@@ -156,11 +156,41 @@ def complete_page(request):
 def test(request):
     return render(request, 'test.html')
 
+# 수정된 마이페이지 뷰: 진행 중인 여행 모임과 종료된 여행 모임을 구분하여 제공
 @login_required
 def my_page(request):
     user_profile = request.user.userprofile
-    travel_groups = user_profile.joined_travel_groups.all()
-    return render(request, 'my_page.html', {'user_profile': user_profile, 'travel_groups': travel_groups})
+    today = datetime.today().date()  # 현재 날짜
+
+    # 진행 중인 여행 모임 (종료일이 현재 날짜 이후인 경우)
+    ongoing_travel_groups = TravelGroup.objects.filter(members=user_profile, end_date__gte=today)
+
+    # 종료된 여행 모임 (종료일이 현재 날짜 이전인 경우)
+    past_travel_groups = TravelGroup.objects.filter(members=user_profile, end_date__lt=today)
+
+    context = {
+        'user_profile': user_profile,
+        'ongoing_travel_groups': ongoing_travel_groups,
+        'past_travel_groups': past_travel_groups,
+    }
+    return render(request, 'my_page.html', context)
+
+# 새로운 뷰 추가
+@login_required
+def view_travel_group(request, travel_group_id):
+    # 해당 여행 모임 가져오기
+    travel_group = get_object_or_404(TravelGroup, id=travel_group_id, members=request.user.userprofile)
+
+    # 최신 여행 계획이 있는지 확인하고 d-day 계산
+    today = datetime.today().date()
+    d_day = (travel_group.start_date - today).days if travel_group.start_date else None
+
+    context = {
+        'travel_group': travel_group,
+        'travel_name': travel_group.travel_name,
+        'd_day': d_day,
+    }
+    return render(request, 'create_travel.html', context)
 
 @login_required 
 @csrf_exempt
@@ -513,6 +543,7 @@ def get_all_plans(request, travel_group_id):
         'place': plan.place,
         'description': plan.description,
         'creator': plan.creator.nickname,
+        'creator': plan.creator.nickname,
         'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
         'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
         'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
@@ -534,6 +565,7 @@ def get_plans(request, travel_group_id):
         'category': plan.category,
         'place': plan.place,
         'description': plan.description,
+        'creator': plan.creator.nickname,
         'date': plan.date.strftime('%Y-%m-%d') if plan.date else None,
         'plan_start_time': plan.plan_start_time.strftime('%H:%M') if plan.plan_start_time else None,
         'plan_end_time': plan.plan_end_time.strftime('%H:%M') if plan.plan_end_time else None
