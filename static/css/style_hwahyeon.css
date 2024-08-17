@@ -86,6 +86,13 @@ body {
     color: var(--gray03);
     
 }
+.create_group-travelName-length {
+    position: absolute;
+    left: 324px;
+    top: 191px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--gray03);
+}
 
 .create_group-nickname-input-p, .create_group-travelName-p, .create_group-travelDate-p {
     width: 110px;
