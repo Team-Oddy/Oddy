@@ -700,6 +700,7 @@ function loadComments(itemId) {
         let category = contentId.replace('Content', '');
         loadPlans(category);
     }
+
     function viewDetail(type, place, description, author, itemId) {
     currentItemId = itemId;
     currentType = type;
@@ -815,8 +816,6 @@ function onClickLike(id) {
     .catch(error => console.error('Error:', error));
 }
 
-
-
 let make_comment = (id) => {
     let content = document.getElementById(`comment_${id}`).value;
     if (!content) {
@@ -858,7 +857,6 @@ let make_comment = (id) => {
     })
     .catch(error => console.error('Error:', error));
 };
-
 
 // loadComments 함수 수정
 function loadComments(itemId) {

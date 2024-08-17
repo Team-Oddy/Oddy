@@ -451,12 +451,7 @@ body {
 
 
 /*닉네임 버튼 활성화*/
-.nicknameedit-complete-btn.active {
-    background: var(--pink02);
-}
-.nicknameedit-complete-btn.active span {
-    color: var(--black);
-}
+
 
 
 /*fab 버튼
