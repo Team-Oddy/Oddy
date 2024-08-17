@@ -21,6 +21,7 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 
+
 #선아 작성 부분
 def main(request):
     if request.user.is_authenticated:
@@ -131,7 +132,7 @@ def travel_name_page(request):
                 )
                 travel_group.save()
                 travel_group.members.add(user_profile)  # members ManyToMany 필드에 사용자 프로필 추가
-                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료'})
+                return JsonResponse({'success': True, 'message': '여행 모임 저장 완료', 'travel_group_id': travel_group.id})
             except UserProfile.DoesNotExist:
                 return JsonResponse({'success': False, 'error': '사용자 프로필이 존재하지 않습니다.'})
         else:
@@ -151,7 +152,12 @@ def delete_travel_group(request, travel_group_id):
     return JsonResponse({'success': True, 'message': '여행 모임이 삭제되었습니다.'})
 
 def complete_page(request):
-    return render(request, 'create_group.html', {'completed': True})
+    # 가장 최근에 생성된 TravelGroup을 가져옵니다.
+    latest_travel_group = TravelGroup.objects.filter(creator=request.user.userprofile).latest('id')
+    return render(request, 'create_group.html', {
+        'completed': True,
+        'travel_group_id': latest_travel_group.id
+    })
 
 def test(request):
     return render(request, 'test.html')
@@ -772,4 +778,21 @@ def save_airplane_text(request):
 
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-    
+
+#추가
+@login_required
+@require_http_methods(["GET"])
+def get_kakao_share_data(request, travel_group_id):
+    try:
+        user_profile = request.user.userprofile
+        travel_group = TravelGroup.objects.get(id=travel_group_id, members=user_profile)
+        
+        share_data = {
+            'INVITE_CODE': travel_group.invite_code,
+            'NICKNAME': user_profile.nickname or user_profile.user.username,
+            'TRAVEL_NAME': travel_group.travel_name
+        }
+        
+        return JsonResponse(share_data)
+    except TravelGroup.DoesNotExist:
+        return JsonResponse({'error': 'Travel group not found'}, status=404)

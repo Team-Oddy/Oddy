@@ -76,7 +76,7 @@
     </a>
     {% else %}
     {% endif %}
-    <button class="create_travel-main-btn">
+    <button class="create_travel-main-btn" onclick="sendLinkCustom()">
         <span>친구 초대하기</span>
     </button>
 </div>
@@ -1000,4 +1000,34 @@ document.addEventListener('DOMContentLoaded', function() {
         color: var(—black);
     }
 </style>
+
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+    // Kakao SDK 초기화
+    Kakao.init("b895408686485c31d9dc70ae8ca3fefc");
+
+    let travelGroupId = {{ travel_group.id|default:"null" }};
+
+    function sendLinkCustom() {
+        if (!travelGroupId) {
+            console.error('Travel group ID is not set');
+            return;
+        }
+        
+        fetch(`/get_kakao_share_data/${travelGroupId}/`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                Kakao.Link.sendCustom({
+                    templateId: 111155,
+                    templateArgs: {
+                        'INVITE_CODE': data.INVITE_CODE,
+                        'NICKNAME': data.NICKNAME,
+                        'TRAVEL_NAME': data.TRAVEL_NAME
+                    }
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 {% endblock %}

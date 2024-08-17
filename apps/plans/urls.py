@@ -45,4 +45,8 @@ urlpatterns=[
     
     path('save_airplane_text/', views.save_airplane_text, name='save_airplane_text'),
     path('travel_group/<int:travel_group_id>/', views.view_travel_group, name='view_travel_group'),
+    
+    path('kakao/', kakao_view, name='kakao_link'),
+    
+    path('get_kakao_share_data/<int:travel_group_id>/', views.get_kakao_share_data, name='get_kakao_share_data'),
 ]
