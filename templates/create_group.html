@@ -58,12 +58,14 @@
     </div>
     <div class="create_group-travelName-bottom">
         <p class="create_group-travelName-comment">여행 이름을 알려주세요!</p><br>
-        <input class="create_group-travelName-input" type="text" id="travelName" placeholder="  여행 이름을 입력하세요 0/15">
-        <p id="travelNameError" class="create_group-error">15글자 이내로 작성해주세요!</p><br>
+        <input class="create_group-travelName-input" type="text" id="travelName" placeholder="  여행 이름을 입력하세요">
+        <p id="travelNameError" class="create_group-error" style="display: none;">15자 이내로 작성해주세요!</p>
+        <p id="travelNameLength" class="create_group-travelName-length">0/15</p>
         <button onclick="nextStep('travelName', 'travelDatePage')" class="create_group-travelName-button" id="travelNameButton">
             <span>다음</span></button>
     </div>
 </div>
+
 
 <div id="travelDatePage" class="create_group-page">
     <div class="create_group-travelDate-top">
@@ -159,11 +161,25 @@ document.getElementById('nickname').addEventListener('input', function() {
 });
 
 document.getElementById('travelName').addEventListener('input', function() {
+    let input = this.value;
+    let length = input.length;
+    document.getElementById('travelNameLength').textContent = `${length}/15`;
+
     let button = document.getElementById('travelNameButton');
     if (this.value.trim() !== "") {
         button.classList.add('active');
     } else {
         button.classList.remove('active');
+    }
+    
+    if (length > 15) {
+        document.getElementById('travelNameError').style.display = 'block';
+        button.classList.remove('active');
+    } else {
+        document.getElementById('travelNameError').style.display = 'none';
+        if (length > 0) {
+            button.classList.add('active');
+        }
     }
 });
 
@@ -311,14 +327,17 @@ function nextStep(inputId, nextPageId) {
     if (value.trim() === "") {
         return;
     }
-    if (inputId === 'nickname') {
-        if (value.length > 5) {
-            document.getElementById('nicknameError').style.display = 'block';
-            return;
-        } else {
-            document.getElementById('nicknameError').style.display = 'none';
-        }
+    if (inputId === 'nickname' && value.length > 5) {
+        document.getElementById('nicknameError').style.display = 'block';
+        return;
+    } else if (inputId === 'travelName' && value.length > 15) {
+        document.getElementById('travelNameError').style.display = 'block';
+        return;
+    } else {
+        document.getElementById('nicknameError').style.display = 'none';
+        document.getElementById('travelNameError').style.display = 'none';
     }
+
     formData[inputId] = value;
 
     if (inputId === 'nickname') {
