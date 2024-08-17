@@ -38,7 +38,19 @@
                 <li>
                     {% if member.travel_type %}
                         <a href="javascript:void(0);" onclick="showFriendTestResult('{{ member.nickname }}', '{{ member.travel_type }}')">
-                            <img src="{% static 'image/'|add:member.travel_type|add:'.svg' %}" alt="{{ member.travel_type }}" width="30" height="30">
+                            {% if member.travel_type == '완벽주의 플래너형' %}
+                                <img src="{% static 'image/character1.svg' %}" alt="완벽주의 플래너형" width="30" height="30">
+                            {% elif member.travel_type == '자유로운 모험가형' %}
+                                <img src="{% static 'image/character2.svg' %}" alt="자유로운 모험가형" width="30" height="30">
+                            {% elif member.travel_type == '휴식 추구형' %}
+                                <img src="{% static 'image/character3.svg' %}" alt="휴식 추구형" width="30" height="30">
+                            {% elif member.travel_type == '미식 탐험가형' %}
+                                <img src="{% static 'image/character4.svg' %}" alt="미식 탐험가형" width="30" height="30">
+                            {% elif member.travel_type == '균형 잡힌 탐험가형' %}
+                                <img src="{% static 'image/character5.svg' %}" alt="균형 잡힌 탐험가형" width="30" height="30">
+                            {% else %}
+                                <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile" width="30" height="30">
+                            {% endif %}
                         </a>
                     {% else %}
                         <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile" width="30" height="30">
