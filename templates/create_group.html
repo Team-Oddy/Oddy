@@ -225,23 +225,24 @@ function checkUserState() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-const hasNickname = {{ has_nickname|yesno:"true,false" }};
-const hasTravelGroup = {{ has_travel_group|yesno:"true,false" }};
-const hasTravelType = {{ has_travel_type|yesno:"true,false" }};
-if (!hasNickname) {
-    showPage('createGroupPage');
-} else if (!hasTravelType) {
-    if (!hasTravelGroup) {
+    const hasNickname = {{ has_nickname|yesno:"true,false" }};
+    const hasTravelGroup = {{ has_travel_group|yesno:"true,false" }};
+    const hasTravelType = {{ has_travel_type|yesno:"true,false" }};
+    if (!hasNickname) {
+        showPage('createGroupPage');
+    } else if (!hasTravelType) {
+        if (!hasTravelGroup) {
+            showPage('optionsPage');
+        } else {
+            window.location.href = "{% url 'plans:create_travel' %}";
+        }
+    } else if (hasNickname && !hasTravelGroup) {
         showPage('optionsPage');
     } else {
         window.location.href = "{% url 'plans:create_travel' %}";
     }
-} else if (hasNickname && !hasTravelGroup) {
-    showPage('optionsPage');
-} else {
-    window.location.href = "{% url 'plans:create_travel' %}";
-}
-});
+    });
+
 
 
 function skipTest() {

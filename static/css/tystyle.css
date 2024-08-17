@@ -630,9 +630,10 @@ label[for="id_invite_code"] {
     transform: translateX(-50%);  
 }
 
+/*
 .create_travel-all-container {
     position: relative;
-}
+}*/
 
 .create_travel-all-menu {
     position: absolute;
@@ -690,14 +691,6 @@ label[for="id_invite_code"] {
     z-index: 0;
 }
 
-.create_travel-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
 
 .create_travel-play-title,
 .create_travel-eat-title,
