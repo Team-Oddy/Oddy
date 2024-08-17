@@ -97,7 +97,7 @@
                 {% endif %}
                 <!-- 새로운 여행 모임 추가 버튼 -->
                 <li>
-                    <a href="{% url 'plans:create_group' %}" class="add-group-btn">
+                    <a href="{% url 'plans:create_group' %}?show_options=true" class="add-group-btn">
                         <img src="{% static 'image/mypage_plus.svg' %}" alt="plus btn" class="mypage-plus">
                     </a>
                 </li>
