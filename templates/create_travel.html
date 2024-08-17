@@ -735,6 +735,13 @@ function viewDetail(type, place, description, author, itemId) {
         <img src="/static/image/send.svg" alt="back-btn" width="24" height="24" class="send-btn"> 
         </button>
     `;
+    
+    document.getElementById(`comment_${itemId}`).addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            make_comment(itemId);
+        }
+    });
     showPage('travelDetail');
     updateCommentCount(itemId);
     updateLikeStatus(itemId);
@@ -830,31 +837,62 @@ let make_comment = (id) => {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         if (data.success) {
-            // 새로운 댓글을 화면에 추가
             let commentList = document.getElementById(`comment_list_${id}`);
             let newComment = document.createElement('div');
             newComment.classList.add('comment-item');
-            newComment.id = `comment-${data.comment.id}`;  // 고유 ID 할당
+            newComment.id = `comment-${data.comment.id}`;
             newComment.innerHTML = `
                 <p>${data.comment.user}</p>
                 <p>${data.comment.content}</p>
-                <button onclick="delete_comment(${data.comment.id}) class="comment-delete-btn">
-                    <button onclick="delete_comment(${data.comment.id})" class="comment-delete-btn">
+                <button onclick="delete_comment(${data.comment.id})" class="comment-delete-btn">
                     <span>댓글 삭제<span>
+                </button>
             `;
-            commentList.appendChild(newComment); // 새로운 댓글을 목록에 추가
-            document.getElementById(`comment_${id}`).value = ""; // 입력 필드 초기화
-
-            // 댓글 수 업데이트
+            commentList.appendChild(newComment);
+            document.getElementById(`comment_${id}`).value = "";
             document.getElementById(`comment_count_${id}`).textContent = data.comment_count;
+            
+            // 스크롤을 최신 댓글로 이동
+            commentList.scrollTop = commentList.scrollHeight;
         } else {
             alert(data.error);
         }
     })
     .catch(error => console.error('Error:', error));
 };
+
+// loadComments 함수 수정
+function loadComments(itemId) {
+    fetch(`/plans/${itemId}/comments/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let commentsHtml = '';
+                data.comments.forEach(comment => {
+                    commentsHtml += `
+                        <div class="comment-item" id="comment-${comment.id}">
+                            <p class="comment-user">${comment.user}</p>
+                            <p class="comment-text">${comment.content}</p>
+                            <button onclick="delete_comment(${comment.id})" class="comment-delete-btn">삭제</button>
+                        </div>
+                    `;
+                });
+                let commentList = document.getElementById(`comment_list_${itemId}`);
+                commentList.innerHTML = commentsHtml;
+                document.getElementById(`comment_count_${itemId}`).textContent = data.comments.length;
+                
+                // 스크롤을 최신 댓글로 이동
+                commentList.scrollTop = commentList.scrollHeight;
+            } else {
+                document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching comments:', error);
+            document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
+        });
+}
     
     
 
