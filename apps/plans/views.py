@@ -781,14 +781,17 @@ def add_comment(request, plan_id):
 @login_required
 @require_POST
 def delete_comment(request, comment_id):
-    comment = Comment.objects.get(id=comment_id)
-
-    if request.user.userprofile == comment.user:
-        comment.delete()
-        comment_count = comment.travel_plan.comments.count()
-        return JsonResponse({'success': True, 'comment_count': comment_count, 'comment_id': comment_id})
-    else:
-        return JsonResponse({'success': False, 'error': '삭제할 권한이 없습니다.'})
+    try:
+        comment = Comment.objects.get(id=comment_id)
+        
+        if request.user.userprofile == comment.user:
+            comment.delete()
+            comment_count = comment.travel_plan.comments.count()
+            return JsonResponse({'success': True, 'comment_count': comment_count, 'comment_id': comment_id})
+        else:
+            return JsonResponse({'success': False, 'error': '삭제할 권한이 없습니다.'}, status=403)
+    except Comment.DoesNotExist:
+        return JsonResponse({'success': False, 'error': '댓글을 찾을 수 없습니다.'}, status=404)
 
 def get_comments(request, plan_id):
     travel_plan = get_object_or_404(TravelPlan, id=plan_id)

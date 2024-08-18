@@ -931,17 +931,7 @@ function loadComments(itemId) {
 
 // 댓글 삭제 함수
 let delete_comment = (comment_id) => {
-    console.log("Deleting comment with ID:", comment_id);
-    const commentElement = document.getElementById(`comment-${comment_id}`);
-
-    if (commentElement) {
-        commentElement.remove();  // 댓글 요소를 화면에서 제거
-        console.log(`Comment element with ID ${comment_id} removed from DOM`);
-        updateCommentCount(currentItemId); // 댓글 수를 업데이트
-    } else {
-        console.error(`Comment element not found for ID: ${comment_id}`);
-        return;  // 요소가 없으면 더 이상 진행하지 않음
-    }
+    console.log("Attempting to delete comment with ID:", comment_id);
 
     fetch(`/comment/delete/${comment_id}/`, {
         method: 'POST',
@@ -949,16 +939,33 @@ let delete_comment = (comment_id) => {
             'X-CSRFToken': csrftoken
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server responded with an error');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             console.log(`Comment with ID ${comment_id} successfully deleted from the server`);
+            const commentElement = document.getElementById(`comment-${comment_id}`);
+            if (commentElement) {
+                commentElement.remove();  // 댓글 요소를 화면에서 제거
+                console.log(`Comment element with ID ${comment_id} removed from DOM`);
+                updateCommentCount(currentItemId); // 댓글 수를 업데이트
+            } else {
+                console.error(`Comment element not found for ID: ${comment_id}`);
+            }
         } else {
-            alert(data.error);
+            console.error('Failed to delete comment:', data.error);
+            alert(data.error || '댓글 삭제에 실패했습니다.');
         }
     })
-    .catch(error => console.error('Error:', error));
-};
+    .catch(error => {
+        console.error('Error:', error);
+        alert('친구의 댓글을 삭제할 수 없습니다!');
+    });
+}
 
 // 댓글 수를 업데이트하는 함수
 function updateCommentCount(itemId) {
