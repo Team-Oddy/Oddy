@@ -1146,14 +1146,18 @@ label[for="id_invite_code"] {
 
 .bi-heart{
     position: absolute;
-    left: 53px;
-    top: 152px
+    /*left: 53px;
+    top: 152px;*/
+    left: 13.5%;
+    top: 630%;
 }
 
 .like-count{
     position: absolute;
-    left: 72px;
-    top: 148px
+   /* left: 72px;
+    top: 148px*/
+    left: 18.5%;
+    top: 617%;
 }
 
 /*여행계획 상세보기 페이지*/
