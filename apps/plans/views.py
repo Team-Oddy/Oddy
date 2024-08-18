@@ -260,18 +260,14 @@ def determine_travel_type(answers):
         return '자유로운 모험가형'
     elif count_c >= 3:
         if (
-            (answers[1].startswith('c') and answers[4].startswith('c')) or
-            (answers[1].startswith('c') and answers[2].startswith('c') and answers[3].startswith('c')) or
-            (answers[1].startswith('c') and answers[2].startswith('c') and answers[3].startswith('c') and answers[4].startswith('c')) or
-            (answers[1].startswith('c') and answers[3].startswith('c') and answers[4].startswith('c'))
+            answers[1].startswith('c')
         ):
-            return '휴식 추구형'
-        elif answers[1].startswith('c'):
             return '미식 탐험가형'
         else:
-            return '미식 탐험가형'
+            return '휴식 추구형'
     else:
         return '균형 잡힌 탐험가형'
+    
     
 #초대코드 처리로직
 from django.shortcuts import render, redirect

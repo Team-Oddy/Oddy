@@ -21,23 +21,6 @@
   --text-style-pretendard-semibold-18: 600 18px/normal 'Pretendard', sans-serif;
   --text-style-pretendard-semibold-20: 600 20px/normal 'Pretendard', sans-serif;
   --text-style-pretendard-semibold-24: 600 24px/normal 'Pretendard', sans-serif;
-
-  --text-style-bm-regular-40: 400 40px/normal 'BMJUA', sans-serif;
-  --text-style-bm-regular-50: 400 50px/normal 'BMJUA', sans-serif;
-}
-
-@font-face {
-  font-family: 'Pretendard-Regular';
-  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'BMJUA';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
 }
 
 /* Reset CSS */
@@ -99,6 +82,14 @@ button {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.create_group-page {
+  display: none;
+}
+
+.create_group-page.create_group-active {
+  display: block;
 }
 
 .create_group-error,
