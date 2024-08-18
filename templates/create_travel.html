@@ -6,16 +6,48 @@
 {% block content %}
 
 <style>
-    .create_travel-buttons {
-        position: fixed;
-        bottom: 20px;
-        right: 135px;
-        display: none; /* 기본적으로 숨김 */
-        flex-direction: row;
-        gap: 10px;
-        z-index: 1000;
-        transform: none;
-    }
+.create_travel-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 5%;
+    display: none; /* 기본적으로 숨김 */
+    flex-direction: row;
+    gap: 10px;
+    z-index: 1000;
+    transform: none;
+}
+body.custom-container-style {
+    width: 393px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    background-color: white;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 0 0 100vw black; /* 외부 영역을 검은색으로 만듭니다 */
+}
+
+body.custom-container-style::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black; /* 바탕 색을 검은색으로 설정 */
+    z-index: -1; /* 요소의 뒤쪽에 위치시켜서 흰색 영역 뒤에 검은색 배경을 만듭니다 */
+}
+
+body.custom-container-style .container {
+    z-index: 1; /* 컨텐츠가 배경 위에 나타나도록 보장 */
+}
+
+</style>
+
 
 </style>
 
@@ -361,17 +393,18 @@ function closeFriendTestResult() {
     let currentItemId = null;
     let currentType = null;
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var buttons = document.querySelector('.create_travel-buttons');
-        var container = document.querySelector('.container'); // '.container'를 실제 container의 클래스나 ID로 변경하세요
-        container.appendChild(buttons);
-        
-        // Fixed 위치 설정이 올바르게 적용되는지 확인
-        buttons.style.position = 'fixed';
-        buttons.style.bottom = '20px';
-        buttons.style.right = '6%';
-        buttons.style.zIndex = '1000';
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    var buttonsContainer = document.querySelector(".create_travel-buttons");
+    if (buttonsContainer) {
+        // .create_travel-buttons 요소를 body로 이동
+        document.body.appendChild(buttonsContainer);
+
+        // 특정 스타일이 적용되도록 클래스를 body에 추가
+        document.body.classList.add('custom-container-style');
+    }
+});
+
+
 
 function showPage(pageId) {
     // 모든 페이지 숨기기
@@ -701,6 +734,7 @@ function loadComments(itemId) {
         loadPlans(category);
     }
 
+    // 여행 세부 정보 보기 함수
     function viewDetail(type, place, description, author, itemId) {
     currentItemId = itemId;
     currentType = type;
@@ -889,7 +923,6 @@ function loadComments(itemId) {
             document.getElementById(`comment_list_${itemId}`).innerHTML = '<p>댓글을 불러오는 데 실패했습니다.</p>';
         });
 }
-    
 
 // 댓글 삭제 함수
 let delete_comment = (comment_id) => {
