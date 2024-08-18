@@ -1,3 +1,11 @@
+.create_group-page {
+    display: none;
+  }
+
+.create_group-page.create_group-active {
+    display: block;
+  }  
+
 .create_travel-page {
     display: none;
   }
@@ -14,6 +22,45 @@
     top: 62px;
 }
 
+.onboarding-logo {
+    font: var(--text-style-bm-regular-50);
+    color: var(--pink02);
+    position: absolute;
+    left: 50%;
+    top: 165px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    overflow: visible;
+    width: auto; 
+    text-align: center;
+    z-index: 10;
+
+}
+
+.onboarding-text {
+    font: var(--text-style-pretendard-semibold-20);
+    color: var(--white);
+    position: absolute;
+    left: 50%;
+    top: 229px;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    overflow: visible;
+    width: auto; 
+    text-align: center;
+    z-index: 10;
+}
+
+.main-splash_desgin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
 .main-kakao {
     width: 325px;
     height: 48px;
@@ -26,6 +73,7 @@
     display: flex; 
     justify-content: center; 
     align-items: center; 
+    z-index: 100;
 }
 
 .main-kakao span {
@@ -38,6 +86,25 @@
     left: 17px;
     top: 15px;
 }
+
+@keyframes flyAirplane {
+    0% {
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(100vw, -180vh);
+      opacity: 0;
+    }
+  }
+  
+  .main-airplane-animation {
+    position: fixed;
+    left: 0;
+    top: 45%;
+    z-index: 1000;
+    animation: flyAirplane 6s linear forwards;
+  }
 
 .enter-oddy {
     width: 325px;
@@ -63,10 +130,15 @@
 
 #optionsPage p {
     position: absolute;
-    left: 47px;
+    transform: translateX(-50%);  
+    left: 50%;  
     top: 185px;
     font: var(--text-style-pretendard-semibold-20);
     color: var(--blue02);
+    white-space: nowrap;
+    overflow: visible;
+    width: auto; 
+    text-align: center;
 }
 
 .highlight-text {
@@ -557,7 +629,7 @@
     border-radius: 30px;
     background: var(--pink01);
     position: absolute;
-    top: 322px;
+    top: 282px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -897,32 +969,27 @@ label[for="id_invite_code"] {
 }
 
 .comment-count {
-    padding-left: 20px;
+    padding-left: 45px;
     margin-bottom: 20px;
     font: var(--text-style-pretendard-semibold-18);
 }
 .comment_list_align{
     height: 300px;
     overflow-y: auto;
-    padding-left: 20px;
-
+    padding-left: 45px;
 }
 
 /*여기에 댓글 폰트 넣기!*/
 .comment-item {
     position: relative;
     margin-bottom: 20px;
-    color:#F36DA6;
+    font: var(--text-style-pretendard-semibold-16);
+    color: var(--black);
 }
-
 
 .comment-content {
     margin-left: 86px; /* 왼쪽 여백 */
 }
-
-
-
-
 
 .comment-delete-btn {
     width: 60px;
@@ -932,11 +999,14 @@ label[for="id_invite_code"] {
     border: 1.5px solid var(--pink02);
     background: var(--pink01);
     position: absolute;
-    left: 296px;
-    top: 0;
+    left: 251px;
+    top: 7px;
     display: flex;
     justify-content: center;
     align-items: center;
+    font: var(--text-style-pretendard-regular-12);
+    color: var(--black);
+
 }
 
 #travelDetailComments{
@@ -978,7 +1048,7 @@ label[for="id_invite_code"] {
 .send-btn {
     position: absolute;
     left: 328px;
-    top: 412px;
+    top: 410px;
 }
 
 
@@ -1267,7 +1337,7 @@ label[for="id_invite_code"] {
         border-radius: 30px;
         background: var(--pink01);
         position: absolute;
-        top: 322px;
+        top: 282px;
         left: 50%;
         transform: translateX(-50%);
 }
@@ -1377,60 +1447,147 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-regular-14);
 }
 
-  #modal-start-time,
-  #modal-end-time {
-      font: var(--text-style-pretendard-regular-14);
-      width: 35%;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      background-color: var(--white);
-      color: #333;
-      appearance: none; 
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      margin-bottom: 15px;
-  }
+#modal-start-time,
+#modal-end-time {
+    font: var(--text-style-pretendard-regular-14);
+    width: 35%;
+    padding: 10px 30px 10px 10px; /* 오른쪽 패딩 증가 */
+    border: none;
+    border-radius: 10px;
+    background-color: var(--white);
+    color: #333;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    margin-bottom: 15px;
+    position: relative;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FF69B4%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px auto;
+}
 
-  #modal-start-time {
+#modal-start-time {
     position: absolute;
     left: 32px;
     top: 112px;
-  }
+}
 
-  #modal-end-time  {
+#modal-end-time {
     position: absolute;
     left: 147px;
     top: 112px;
-  }
-  
-  /* 커스텀 화살표 추가 */
-  .time-picker-container {
-      position: relative;
-  }
-
-  .modal-date-start::after {
-    content: '\25BC';
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: #FF69B4;
 }
 
-  .time-modal-center {
+.time-picker-container {
+    position: relative;
+}
+
+.time-modal-center {
     width: 8px;
     height: 1.5px;
     background: var(--white);
     position: absolute;
     top: 130px;
-    left: 133px
+    left: 133px;
+}
+
+/* 브라우저별 스타일 재정의 */
+#modal-start-time::-ms-expand,
+#modal-end-time::-ms-expand {
+    display: none;
+}
+
+#modal-start-time::-webkit-calendar-picker-indicator,
+#modal-end-time::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.travelmain-logo {
+    position: absolute;
+    left: 33px;
+    top: 47px;
+    font: var(--text-style-bm-regular-40);
+    color: var(--pink02);
+}
+
+.create_travel-main-members-container {
+    position: relative;
+    margin-top: 20px;
+}
+
+.create_travel-main-members-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.create_travel-main-members-container li {
+    position: relative;
+    text-align: center;
+    width: 116px; /* 프로필 원과 닉네임을 포함할 수 있는 너비 */
+}
+
+.create_travel-main-members-container li .profile-circle {
+    position: absolute;
+    top: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px; /* 프로필 원 크기 증가 */
+    height: 50px; /* 프로필 원 크기 증가 */
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--gray01);
+}
+
+.create_travel-main-members-container li img {
+    width: 40px; /* 캐릭터 이미지 크기 증가 */
+    height: 40px; /* 캐릭터 이미지 크기 증가 */
+    object-fit: contain; /* 이미지 비율 유지 */
+    object-position: center; /* 이미지 중앙 정렬 */
+}
+
+.create_travel-main-members-container li .nickname {
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--black);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(140px + 60px - 5px); /* 프로필 원 아래에 위치 */
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px; /* 닉네임 최대 너비 증가 */
+    width: 100%; /* 부모 요소의 전체 너비 사용 */
+}
+
+.full-width-divider {
+    position: absolute;
+    left: 0px;
+    top: 218px;
+    width: 100%;
+    height: 1px;
+    background-color: var(--gray01) /* 연한 회색 또는 원하는 색상 */
+  }
+
+
+.travelmain-datetext {
+    position: absolute;
+    left: 106.7px;
+    top: 333px;
+    font: var(--text-style-pretendard-regular-14);
+    color: var(--white);
 }
 
 .main-ticket-img {
     position: absolute;
-    top: 259px;
+    top: 251px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -1438,19 +1595,19 @@ label[for="id_invite_code"] {
 .main-plan-btn {
     position: absolute;
     left: 87px;
-    top: 606px;
-}
-
-.main-timetable-btn {
-    position: absolute;
-    left: 167.74px;
-    top: 606px;
+    top: 598px;
 }
 
 .main-map-btn {
     position: absolute;
+    left: 167.74px;
+    top: 598px;
+}
+
+.main-timetable-btn {
+    position: absolute;
     left: 248px;
-    top: 606px;
+    top: 598px;
 }
 
 .create_travel-main-members-text {
@@ -1458,13 +1615,13 @@ label[for="id_invite_code"] {
     color: var(--black);
     position: absolute;
     left: 33px;
-    top: 133px;
+    top: 110px;
 }
 
 .create_travel-main-title {
     position: absolute;
     left: 84px;
-    top: 282px;
+    top: 274px;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
     line-height: 25px;
@@ -1474,19 +1631,19 @@ label[for="id_invite_code"] {
     color: #F36DA6;
 }
 
-.create_travel-main-btn {
+.create_travel-main-invite-btn {
     width: 125px;
     height: 35px;
     flex-shrink: 0;
     border-radius: 10px;
     background: var(--gray01);
     position: absolute;
-    top: 741px;
+    top: 733px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.create_travel-main-btn span {
+.create_travel-main-invite-btn span {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
@@ -1503,4 +1660,33 @@ label[for="id_invite_code"] {
     z-index: 0;
 } */
 
-  
+/* 모달을 전체 화면으로 덮고 맨 앞으로 위치시키기 위한 스타일 */
+.friends-testresult-modal {
+    display: none; /* 기본적으로 숨겨진 상태 */
+    position: fixed; /* 화면에 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--white); /* 반투명한 검은색 배경 */
+    z-index: 9999; /* 가장 앞에 위치 */
+    display: flex; /* 중앙 정렬을 위해 flex 사용 */
+    justify-content: center;
+    align-items: center;
+}
+
+.maintravel-modal-content .close {
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    color: var(--black);
+    font-size: 35px;
+    cursor: pointer;
+}
+
+  #friendTestResultContent img {
+    position: absolute;
+    left: 50%;
+    top: 103.59px;
+    transform: translateX(-50%);
+  }

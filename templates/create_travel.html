@@ -5,22 +5,9 @@
 
 {% block content %}
 
-<style>
-    .create_travel-buttons {
-        position: fixed;
-        bottom: 20px;
-        right: 135px;
-        display: none; /* 기본적으로 숨김 */
-        flex-direction: row;
-        gap: 10px;
-        z-index: 1000;
-        transform: none;
-    }
-
-</style>
-
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
+    <h2 class="travelmain-logo">Oddy</h2>
     <div class="main-ticket-img">
         <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="288.7" height="454">
     </div>
@@ -28,7 +15,7 @@
         <h3 class="create_travel-main-title">{{ travel_name }}<br>여행 시작까지 <span>{% if d_day is not None %}{{ d_day }}{% else %}{% endif %}일</span> 남았어요!</h3>
     </div>
     <div class="create_travel-main-text">
-        <h3>{{ travel_group.start_date|date:"n월 j일" }} - {{ travel_group.end_date|date:"n월 j일" }}</h3>
+        <h3 class="travelmain-datetext">{{ travel_group.start_date|date:"n월 j일" }} - {{ travel_group.end_date|date:"n월 j일" }}</h3>
     </div>
    
     <div class="create_travel-main-members-container">
@@ -36,33 +23,37 @@
         <ul>
             {% for member in travel_group.members.all %}
                 <li>
-                    {% if member.travel_type %}
-                        <a href="javascript:void(0);" onclick="showFriendTestResult('{{ member.nickname }}', '{{ member.travel_type }}')">
-                            {% if member.travel_type == '완벽주의 플래너형' %}
-                                <img src="{% static 'image/character1.svg' %}" alt="완벽주의 플래너형" width="30" height="30">
-                            {% elif member.travel_type == '자유로운 모험가형' %}
-                                <img src="{% static 'image/character2.svg' %}" alt="자유로운 모험가형" width="30" height="30">
-                            {% elif member.travel_type == '휴식 추구형' %}
-                                <img src="{% static 'image/character3.svg' %}" alt="휴식 추구형" width="30" height="30">
-                            {% elif member.travel_type == '미식 탐험가형' %}
-                                <img src="{% static 'image/character4.svg' %}" alt="미식 탐험가형" width="30" height="30">
-                            {% elif member.travel_type == '균형 잡힌 탐험가형' %}
-                                <img src="{% static 'image/character5.svg' %}" alt="균형 잡힌 탐험가형" width="30" height="30">
-                            {% else %}
-                                <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile" width="30" height="30">
-                            {% endif %}
-                        </a>
-                    {% else %}
-                        <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile" width="30" height="30">
-                    {% endif %}
-                    <span>{{ member.nickname }}</span>
+                    <div class="profile-circle">
+                        {% if member.travel_type %}
+                            <a href="javascript:void(0);" onclick="showFriendTestResult('{{ member.nickname }}', '{{ member.travel_type }}')">
+                                {% if member.travel_type == '완벽주의 플래너형' %}
+                                    <img src="{% static 'image/character1.svg' %}" alt="완벽주의 플래너형">
+                                {% elif member.travel_type == '자유로운 모험가형' %}
+                                    <img src="{% static 'image/character2.svg' %}" alt="자유로운 모험가형">
+                                {% elif member.travel_type == '휴식 추구형' %}
+                                    <img src="{% static 'image/character3.svg' %}" alt="휴식 추구형">
+                                {% elif member.travel_type == '미식 탐험가형' %}
+                                    <img src="{% static 'image/character4.svg' %}" alt="미식 탐험가형">
+                                {% elif member.travel_type == '균형 잡힌 탐험가형' %}
+                                    <img src="{% static 'image/character5.svg' %}" alt="균형 잡힌 탐험가형">
+                                {% else %}
+                                    <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile">
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile">
+                        {% endif %}
+                    </div>
+                    <span class="nickname">{{ member.nickname }}</span>
                 </li>
             {% endfor %}
         </ul>
+        <div class="full-width-divider"></div>
     </div>
+    
 
     <!-- 친구 테스트 결과 모달 -->
-<div id="friendTestResultModal" class="modal" style="display: none;">
+<div id="friendTestResultModal" class="friends-testresult-modal" style="display: none;">
     <div class="maintravel-modal-content">
         <span class="close" onclick="closeFriendTestResult()">&times;</span>
         <div id="friendTestResultContent"></div>
@@ -81,14 +72,15 @@
         </a>
         {% else %}
         {% endif %}
-    </div><br>
+ 
     {% if travel_group %}
     <a href="{% url 'plans:travel_map' travel_group_id=travel_group.id %}" class="create_travel-main-button">
         <img src="{% static 'image/main-map-btn.svg' %}" alt="map-btn" width="58" height="58" class="main-map-btn">
     </a>
     {% else %}
     {% endif %}
-    <button class="create_travel-main-btn" onclick="sendLinkCustom()">
+    </div><br>
+    <button class="create_travel-main-invite-btn" onclick="sendLinkCustom()">
         <span>친구 초대하기</span>
     </button>
 </div>
@@ -314,7 +306,7 @@ var naverMapClientId = "{{ naver_map_client_id|escapejs }}";
 
     let resultHtml = `
         <div class="testResult-top">
-            <p>친구의 여행 유형</p>
+            <p>여행 유형</p>
         </div>
         <div class="testResult-bottom">
             ${type.svg}
@@ -341,7 +333,6 @@ var naverMapClientId = "{{ naver_map_client_id|escapejs }}";
                     ${type.disadvantages.map(item => `<li>${item}</li>`).join('')}
                 </ul>
             </div>
-            <button onclick="closeFriendTestResult()" class="back-button">뒤로 가기</button>
         </div>
     `;
 
@@ -843,7 +834,7 @@ let make_comment = (id) => {
                 <p>${data.comment.user}</p>
                 <p>${data.comment.content}</p>
                 <button onclick="delete_comment(${data.comment.id})" class="comment-delete-btn">
-                    <span>댓글 삭제<span>
+                    <span>삭제<span>
                 </button>
             `;
             commentList.appendChild(newComment);
@@ -1027,6 +1018,16 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
+    .create_travel-buttons {
+        position: fixed;
+        bottom: 20px;
+        right: 135px;
+        display: none; /* 기본적으로 숨김 */
+        flex-direction: row;
+        gap: 10px;
+        z-index: 1000;
+        transform: none;
+    }
 
     .create_travel-addPlans-container div,
     .create_travel-main-addPlans,

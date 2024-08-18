@@ -81,7 +81,7 @@ body {
 .create_group-nickname-length {
     position: absolute;
     left: 328px;
-    top: 191px;
+    top: 190px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
     
@@ -89,7 +89,7 @@ body {
 .create_group-travelName-length {
     position: absolute;
     left: 324px;
-    top: 191px;
+    top: 190px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
 }
@@ -260,7 +260,9 @@ body {
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
     top: 63px;
-    left: 153px;
+    left: 50%;
+    transform: translateX(-50%);
+
 }
 
 .create_group-pink_cloud-a {
@@ -317,6 +319,10 @@ body {
     transform: translateX(-50%);  
     position: absolute;
     top: 300px;
+    white-space: nowrap;
+    overflow: visible;
+    width: auto; 
+    text-align: center;
 }
 .testResult-keywords1, .testResult-keywords2 {
     width: 69px;
