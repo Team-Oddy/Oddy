@@ -4,50 +4,6 @@
 {% block title %}Oddy{% endblock %}
 
 {% block content %}
-
-<style>
-.create_travel-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 5%;
-    display: none; /* 기본적으로 숨김 */
-    flex-direction: row;
-    gap: 10px;
-    z-index: 1000;
-    transform: none;
-}
-body.custom-container-style {
-    width: 393px;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    -webkit-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    background-color: white;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    box-shadow: 0 0 0 100vw black; /* 외부 영역을 검은색으로 만듭니다 */
-}
-
-body.custom-container-style::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black; /* 바탕 색을 검은색으로 설정 */
-    z-index: -1; /* 요소의 뒤쪽에 위치시켜서 흰색 영역 뒤에 검은색 배경을 만듭니다 */
-}
-
-body.custom-container-style .container {
-    z-index: 1; /* 컨텐츠가 배경 위에 나타나도록 보장 */
-}
-
-</style>
-
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <h2 class="travelmain-logo">Oddy</h2>
@@ -1067,29 +1023,6 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', enableSearchButton);
 });
 </script>
-
-<style>
-    .create_travel-addPlans-container div,
-    .create_travel-main-addPlans,
-    .create_travel-main-card,
-    .create_travel-main-button,
-    .create_travel-all-menu a,
-    button {
-        cursor: pointer;
-    }
-    .create_travel-buttons .add-button,
-    .create_travel-buttons .create_travel-main-button {
-        margin-bottom: 10px;
-        display: inline-block;
-    }
-
-    .btn-submit.active {
-        background: var(--pink02);
-    }
-    .btn-submit.active span {
-        color: var(--black);
-    }
-</style>
 
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
