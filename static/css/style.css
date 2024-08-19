@@ -17,7 +17,6 @@
 
   --text-style-pretendard-regular-12: 400 12px/normal 'Pretendard', sans-serif;
   --text-style-pretendard-regular-14: 400 14px/normal 'Pretendard', sans-serif;
-  --text-style-pretendard-regular-15: 400 15px/normal 'Pretendard', sans-serif;
   --text-style-pretendard-semibold-16: 600 16px/normal 'Pretendard', sans-serif;
   --text-style-pretendard-semibold-18: 600 18px/normal 'Pretendard', sans-serif;
   --text-style-pretendard-semibold-20: 600 20px/normal 'Pretendard', sans-serif;
@@ -59,7 +58,7 @@ html, body {
 
 .container {
   width: 393px;
-  height: 100vh;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 50%;
@@ -100,14 +99,6 @@ button {
   background: none;
   border: none;
   cursor: pointer;
-}
-
-.create_group-page {
-  display: none;
-}
-
-.create_group-page.create_group-active {
-  display: block;
 }
 
 .create_group-error,
