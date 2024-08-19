@@ -7,7 +7,8 @@
 
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 
-
+<div id="loadingIndicator" class="loading-indicator"></div>
+<div id="mainContent" style="display: none;">
 <div id="createGroupPage" class="create_group-page create_group-active">
     <div class="create_group-nickname-top">
         <p class="create_group-nickname-top-content">닉네임 입력</p>
@@ -142,7 +143,7 @@
 <div id="joinCompletePage" class="create_group-page">
     <button onclick="showPage('entryPage')">여행 모임 입장하기</button>
 </div>
-
+</div>
 <script>
 let formData = {};
 let travelGroupId;  // 전역 변수로 선언
@@ -249,33 +250,35 @@ function checkUserState() {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const mainContent = document.getElementById('mainContent');
     const hasNickname = {{ has_nickname|yesno:"true,false" }};
     const hasTravelGroup = {{ has_travel_group|yesno:"true,false" }};
     const hasTravelType = {{ has_travel_type|yesno:"true,false" }};
     const showOptions = {{ show_options|yesno:"true,false" }};
 
-    if (showOptions) {
-        showPage('optionsPage');
-    } else {
-        if (!hasNickname) {
+    function initializePage() {
+        if (showOptions) {
+            showPage('optionsPage');
+        } else if (!hasNickname) {
             showPage('createGroupPage');
-        } else if (!hasTravelType) {
-            if (!hasTravelGroup) {
-                showPage('optionsPage');
-            } else {
-                window.location.href = "{% url 'plans:create_travel' %}";
-            }
+        } else if (!hasTravelType && !hasTravelGroup) {
+            showPage('optionsPage');
         } else if (hasNickname && !hasTravelGroup) {
             showPage('optionsPage');
         } else {
             window.location.href = "{% url 'plans:create_travel' %}";
+            return;
         }
+
+        loadingIndicator.style.display = 'none';
+        mainContent.style.display = 'block';
     }
 
-    // travel_group_id를 전역 변수에 할당
+    setTimeout(initializePage, 0);
+
     travelGroupId = {{ travel_group_id|default:"null" }};
 });
-
 
 function skipTest() {
     window.location.href = "{% url 'plans:create_travel' %}";
@@ -312,8 +315,8 @@ function startTravel() {
 }
 
 function showPage(pageId) {
-    document.querySelectorAll('.create_group-page').forEach(page => page.classList.remove('create_group-active'));
-    document.getElementById(pageId).classList.add('create_group-active');
+    document.querySelectorAll('.create_group-page').forEach(page => page.style.display = 'none');
+    document.getElementById(pageId).style.display = 'block';
     document.querySelectorAll('.create_group-error').forEach(error => error.style.display = 'none');
     
     if (pageId === 'entryPage') {

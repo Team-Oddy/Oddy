@@ -503,7 +503,7 @@ body {
 }
 
 .travelgroup-ul li span {
-    font: var(--text-style-pretendard-regular-16);
+    font: var(--text-style-pretendard-semibold-16);
     color: var(--white);
 }
 
