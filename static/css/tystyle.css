@@ -510,7 +510,7 @@
 
 .past-travelgroup {
     top: 521px;
-    color: #575A6B;
+    color: var(--gray04);
 }
 
 .logout-btn {
