@@ -5,16 +5,93 @@
 {% block title %}Oddy{% endblock %}
 
 {% block content %}
+<style>
+    .tutorial-container {
+        position: relative;
+        width: 309px;
+        height: 320px;
+        left: 42px;
+        top: 230px;
+        overflow: hidden;
+    }
+
+    .tutorial-image {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+
+    .tutorial-image.active {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .tutorial-image.previous {
+        transform: translateX(-100%);
+    }
+
+    .main-logo {
+        position: absolute;
+        left: 33px;
+        top: 47px;
+        font: var(--text-style-bm-regular-40);
+        color: var(--pink02);
+    }
+</style>
+
+<script>
+    (function() {
+        function initTutorial() {
+            const tutorialImages = document.querySelectorAll('.tutorial-image');
+            let currentIndex = 0;
+
+            function showNextImage() {
+                const currentImage = tutorialImages[currentIndex];
+                const nextIndex = (currentIndex + 1) % tutorialImages.length;
+                const nextImage = tutorialImages[nextIndex];
+
+                currentImage.classList.remove('active');
+                currentImage.classList.add('previous');
+                nextImage.classList.add('active');
+
+                setTimeout(() => {
+                    currentImage.classList.remove('previous');
+                }, 500);
+
+                currentIndex = nextIndex;
+            }
+
+            setInterval(showNextImage, 3500); // 3초마다 이미지 전환
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTutorial);
+        } else {
+            initTutorial();
+        }
+    })();
+</script>
+
 {% if user.is_authenticated %}
     <a href="{% url 'plans:my_page' %}" class="main-mypage">
-    <img src="{% static 'image/person.svg' %}" alt="Person Icon" width="20" height="20">
+        <img src="{% static 'image/person.svg' %}" alt="Person Icon" width="20" height="20">
     </a>
+    <h2 class="main-logo">Oddy</h2>
+    <div class="tutorial-container">
+        <img src="{% static 'image/tutorial_1.svg' %}" alt="tutorial_1" class="tutorial-image active" width="309" height="320">
+        <img src="{% static 'image/tutorial_2.svg' %}" alt="tutorial_2" class="tutorial-image" width="309" height="320">
+        <img src="{% static 'image/tutorial_3.svg' %}" alt="tutorial_3" class="tutorial-image" width="309" height="320">
+        <img src="{% static 'image/tutorial_4.svg' %}" alt="tutorial_4" class="tutorial-image" width="309" height="320">
+    </div>
     <a href="{% url 'plans:create_group' %}" class="enter-oddy">
         <span>오디 시작하기</span>
     </a>
 {% else %}
-        <h2 class="onboarding-logo">Oddy</h2>
-        <h3 class="onboarding-text">설레는 여행 계획하기, 오디와 함께해요!</h3>
+    <h2 class="onboarding-logo">Oddy</h2>
+    <h3 class="onboarding-text">설레는 여행 계획하기, 오디와 함께해요!</h3>
     <img src="{% static 'image/onboarding.svg' %}" alt="Splash Design" width="404" height="351" class="main-splash_desgin">
     <a href="{% provider_login_url 'kakao' %}" class="main-kakao">
         <img src="{% static 'image/kakao_talk.svg' %}" alt="kakao Icon" width="20" height="18.57">
