@@ -67,10 +67,9 @@
     flex-shrink: 0;
     border-radius: 5px;
     background: #FEE500;
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    left: 34px;
+    top: 705px;
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -96,10 +95,9 @@
     border-radius: 5px;
     border: 0px;
     background: var(--pink02);
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    top: 705px;
+    left: 34px;
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -176,10 +174,9 @@
 }
 
 .create-travelgroup {
-    position: fixed;
-    bottom: 5.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    left: 34px;
+    top: 638px;
     width: 325px;
     height: 48px;
     flex-shrink: 0;
@@ -196,10 +193,9 @@
 }
 
 .enter-invitedgroup {
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    left: 34px;
+    top: 705px;
     width: 325px;
     height: 48px;
     flex-shrink: 0;
@@ -280,9 +276,9 @@
 }
 
 .enter-group {
-    position: fixed;
-    bottom: 1.2rem;
+    position: absolute;
     left: 204px;
+    top: 705px;
     border-radius: 5px;
     background: var(--pink02);
     cursor: pointer;
@@ -295,9 +291,9 @@
 }
 
 .share-link {
+    position: absolute;
     left: 34px;
-    position: fixed;
-    bottom: 1.2rem; 
+    top: 705px;
     border-radius: 5px;
     border: 1.5px solid var(--pink02);
     background-color: transparent;
@@ -310,10 +306,9 @@
 }
 
 .test-start-btn {
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    left: 34px;
+    top: 705px;
     width: 325px;
     height: 48px;
     border-radius: 5px;
@@ -352,21 +347,18 @@
 .skip-test {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
-    position: fixed;
-    bottom: 5.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    top: 657px;
 }
 
 .skip-test::after {
     content: ""; 
     position: absolute;  
-    width: 86.01px;
+    left: 50%;  
+    transform: translateX(-50%);  
+    width: 86.006px;
     height: 1px;
     background-color: var(--gray03); 
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -1px;  
+    top: 16.49px;  
 }
 
 .my-page-top, .nicknameedit-top {
@@ -518,7 +510,7 @@
 
 .past-travelgroup {
     top: 521px;
-    color: var(--gray04);
+    color: #575A6B;
 }
 
 .logout-btn {
@@ -529,10 +521,9 @@
     border: 0px;
     border-color: var(--gray02);
     background: var(--gray02);
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    top: 705px;
+    left: 34px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -598,10 +589,9 @@
     border: 0px;
     border-color: var(--gray02);
     background: var(--gray02);
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    top: 705px;
+    left: 34px;
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -904,10 +894,9 @@ label[for="id_invite_code"] {
     border-radius: 5px;
     border: 0px;
     background: var(--gray02);
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    top: 705px;
+    left: 34px;
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -1508,7 +1497,6 @@ label[for="id_invite_code"] {
     color: var(--pink02);
 }
 
-
 .create_travel-main-members-container {
     position: relative;
     margin-top: 20px;
@@ -1582,7 +1570,7 @@ label[for="id_invite_code"] {
 .full-width-divider {
     position: absolute;
     left: 0;
-    top: 225px;
+    top: 218px;
     width: 100%;
     height: 1px;
     background-color: var(--gray01); /* 연한 회색 또는 원하는 색상 */
@@ -1592,14 +1580,14 @@ label[for="id_invite_code"] {
 .travelmain-datetext {
     position: absolute;
     left: 106.7px;
-    top: 343px;
+    top: 333px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--white);
 }
 
 .main-ticket-img {
     position: absolute;
-    top: 261px;
+    top: 251px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -1607,19 +1595,19 @@ label[for="id_invite_code"] {
 .main-plan-btn {
     position: absolute;
     left: 87px;
-    top: 608px;
+    top: 598px;
 }
 
 .main-map-btn {
     position: absolute;
     left: 167.74px;
-    top: 608px;
+    top: 598px;
 }
 
 .main-timetable-btn {
     position: absolute;
     left: 248px;
-    top: 608px;
+    top: 598px;
 }
 
 .create_travel-main-members-text {
@@ -1633,7 +1621,7 @@ label[for="id_invite_code"] {
 .create_travel-main-title {
     position: absolute;
     left: 84px;
-    top: 284px;
+    top: 274px;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
     line-height: 25px;
@@ -1668,13 +1656,15 @@ label[for="id_invite_code"] {
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 100vh;
+    min-height: 110vh;
     background-color: var(--white);
+    overflow: hidden;
     z-index: 9999; /* 가장 앞에 위치 */
     display: flex; /* 중앙 정렬을 위해 flex 사용 */
     justify-content: center;
-    align-items: center
+    align-items: center;
 }
+
 
 
 .maintravel-modal-content .close {

@@ -124,10 +124,9 @@ body {
     border: 0px;
     border-color: var(--gray02);
     background: var(--gray02);
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    top: 705px;
+    left: 34px;
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -428,23 +427,21 @@ body {
     flex-shrink: 0;
     border-radius: 5px;
     background: var(--pink02);
+    position: absolute;
     color: var(--black);
     text-align: center;
     font: var(--text-style-pretendard-semibold-16);
     line-height: normal;
-    position: fixed;
-    bottom: 1.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    left: 34px;
+    top: 755px;
 }
 .testResult-restart {
     color: var(--gray03);
     font: var(--text-style-pretendard-regular-14);
     line-height: normal;
-    position: fixed;
-    bottom: 5.2rem;
-    transform: translateX(-50%);  
-    left: 50%; 
+    position: absolute;
+    left: 165px;
+    top: 707px;
 }
 
 .testResult-restart::after {
@@ -506,7 +503,7 @@ body {
 }
 
 .travelgroup-ul li span {
-    font: var(--text-style-pretendard-semibold-16);
+    font: var(--text-style-pretendard-regular-15);
     color: var(--white);
 }
 
