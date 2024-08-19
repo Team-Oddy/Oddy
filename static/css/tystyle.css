@@ -56,7 +56,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
     object-fit: cover;
     z-index: 1;
 }
@@ -87,24 +87,6 @@
     top: 15px;
 }
 
-@keyframes flyAirplane {
-    0% {
-      transform: translate(0, 0);
-      opacity: 1;
-    }
-    100% {
-      transform: translate(100vw, -180vh);
-      opacity: 0;
-    }
-  }
-  
-  .main-airplane-animation {
-    position: fixed;
-    left: 0;
-    top: 45%;
-    z-index: 1000;
-    animation: flyAirplane 6s linear forwards;
-  }
 
 .enter-oddy {
     width: 325px;
@@ -528,7 +510,7 @@
 
 .past-travelgroup {
     top: 521px;
-    color: var(--gray04);
+    color: #575A6B;
 }
 
 .logout-btn {
@@ -551,7 +533,7 @@
 .logout-btn span {
     position: static;
     font: var(--text-style-pretendard-semibold-16);
-    color: var(--black);
+    color: var(--gray04);
 }
 
 .test-page-container-top {
@@ -1666,17 +1648,6 @@ label[for="id_invite_code"] {
     color: var(--black);
 }
 
-/*
-::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -5px;
-    height: 1.5px;
-    background-color: var(--gray01);
-    z-index: 0;
-} */
 
 /* 모달을 전체 화면으로 덮고 맨 앞으로 위치시키기 위한 스타일 */
 .friends-testresult-modal {
@@ -1685,8 +1656,8 @@ label[for="id_invite_code"] {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-color: var(--white); /* 반투명한 검은색 배경 */
+    min-height: 100vh;
+    background-color: var(--white);
     z-index: 9999; /* 가장 앞에 위치 */
     display: flex; /* 중앙 정렬을 위해 flex 사용 */
     justify-content: center;
