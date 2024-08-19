@@ -7,7 +7,7 @@
 <!--여행 모임 입장하기 누르면 나오는 메인-->
 <div id="travelMain" class="create_travel-main create_travel-page active">
     <h2 class="travelmain-logo">Oddy</h2>
-    <div class="main-ticket-img">
+    <div id="mainTicketImg" class="main-ticket-img">
         <img src="{% static 'image/main-ticket.svg' %}" alt="ticket" width="288.7" height="454">
     </div>
     <div class="create_travel-main-header">
@@ -82,7 +82,7 @@
     {% else %}
     {% endif %}
     </div><br>
-    <button class="create_travel-main-invite-btn" onclick="sendLinkCustom()">
+    <button id="ctInvite" class="create_travel-main-invite-btn" onclick="sendLinkCustom()">
         <span>친구 초대하기</span>
     </button>
 </div>
@@ -340,10 +340,14 @@ var naverMapClientId = "{{ naver_map_client_id|escapejs }}";
 
     document.getElementById('friendTestResultContent').innerHTML = resultHtml;
     document.getElementById('friendTestResultModal').style.display = 'block';
+    document.getElementById('mainTicketImg').style.display = 'none';
+    document.getElementById('ctInvite').style.display = 'none';
 }
 
 function closeFriendTestResult() {
     document.getElementById('friendTestResultModal').style.display = 'none';
+    document.getElementById('mainTicketImg').style.display = 'block';
+    document.getElementById('ctInvite').style.display = 'block';
 }
 
 
