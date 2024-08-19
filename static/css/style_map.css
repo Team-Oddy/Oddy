@@ -22,7 +22,7 @@
 .map-page .map-travel_group_name {
     position: absolute;
     left: 34px;
-    top: 74px;
+    top: 44px;
     font: var(--text-style-pretendard-semibold-24);
     color: #F36DA6;
     cursor: pointer;

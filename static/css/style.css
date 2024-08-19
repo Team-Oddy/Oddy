@@ -106,7 +106,7 @@ button {
 #nicknameError {
 position: absolute;
 left: 40px;
-top: 228px;
+top: 198px;
 color: #EA636A;
 font: var(--text-style-pretendard-regular-14);
 }

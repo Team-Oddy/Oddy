@@ -19,7 +19,7 @@
 .main-mypage img {
     position: absolute;
     left: 341px;
-    top: 62px;
+    top: 32px;
 }
 
 .onboarding-logo {
@@ -116,7 +116,7 @@
     position: absolute;
     transform: translateX(-50%);  
     left: 50%;  
-    top: 185px;
+    top: 155px;
     font: var(--text-style-pretendard-semibold-20);
     color: var(--blue02);
     white-space: nowrap;
@@ -139,7 +139,7 @@
     position: absolute;
     transform: translateX(-50%);  
     left: 50%;  
-    top: 250.27px;
+    top: 220.27px;
     overflow: hidden;
 }
 
@@ -160,7 +160,7 @@
     background: var(--pink01);
     position: absolute;
     left: 50%;
-    top: 250.27px;
+    top: 220.27px;
     transform: translateX(-50%);
     animation: doorAnimation 2s ease-in-out forwards; /* 애니메이션 시간을 1s로 설정했습니다. 필요에 따라 조정하세요. */
     transform-origin: right center;
@@ -176,9 +176,10 @@
 }
 
 .create-travelgroup {
-    position: absolute;
-    left: 34px;
-    top: 638px;
+    position: fixed;
+    bottom: 5.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     width: 325px;
     height: 48px;
     flex-shrink: 0;
@@ -195,9 +196,10 @@
 }
 
 .enter-invitedgroup {
-    position: absolute;
-    left: 34px;
-    top: 705px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     width: 325px;
     height: 48px;
     flex-shrink: 0;
@@ -216,7 +218,7 @@
 .complete_create_group {
     position: absolute;
     left: 106px;
-    top: 207px;
+    top: 177px;
     font: var(--text-style-pretendard-semibold-24);
     color: var(--pink02);
 }
@@ -224,7 +226,7 @@
 .together_trip {
     position: absolute;
     left: 101px;
-    top: 247px;
+    top: 217px;
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
@@ -238,7 +240,7 @@
 .complete_page-check_icon {
     position: absolute;
     left: 168px;
-    top: 129px;
+    top: 99px;
     opacity: 0;
     transform: scale(0);
     animation: checkAnimation 1s ease-in-out forwards;
@@ -262,7 +264,7 @@
 .complete_page-pink_cloud {
     position: absolute;
     right: 0;
-    top: 393.43px;
+    top: 363.43px;
     width: auto;
     height: 219.77px; 
     max-width: 50%;
@@ -278,9 +280,9 @@
 }
 
 .enter-group {
-    position: absolute;
+    position: fixed;
+    bottom: 1.2rem;
     left: 204px;
-    top: 705px;
     border-radius: 5px;
     background: var(--pink02);
     cursor: pointer;
@@ -293,9 +295,9 @@
 }
 
 .share-link {
-    position: absolute;
     left: 34px;
-    top: 705px;
+    position: fixed;
+    bottom: 1.2rem;
     border-radius: 5px;
     border: 1.5px solid var(--pink02);
     background-color: transparent;
@@ -304,13 +306,14 @@
 #entryPage img {
     position: absolute;
     left: 100px;
-    top: 154px;
+    top: 124px;
 }
 
 .test-start-btn {
-    position: absolute;
-    left: 34px;
-    top: 705px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     width: 325px;
     height: 48px;
     border-radius: 5px;
@@ -337,19 +340,22 @@
 .question {
     font: var(--text-style-pretendard-semibold-20);
     color: var(--pink02);
-    top: 289px;
+    top: 259px;
 }
 
 .findyourstyle {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
-    top: 331px;
+    top: 301px;
 }
 
 .skip-test {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
-    top: 657px;
+    position: fixed;
+    bottom: 5.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
 }
 
 .skip-test::after {
@@ -367,7 +373,7 @@
     font: var(--text-style-pretendard-semibold-16);
     color: var(--pink02);
     position: absolute;
-    top: 63px;
+    top: 33px;
     left: 50%;  
     transform: translateX(-50%);  
 }
@@ -426,7 +432,7 @@
 .back-btn {
     position: absolute;
     left: 29px;
-    top: 62px;
+    top: 32px;
 }
 
 .nicknameedit-text {
@@ -434,7 +440,7 @@
     color: var(--black);
     position: absolute;
     left: 34px;
-    top: 141px;
+    top: 111px;
 }
 
 #nicknameInput {
@@ -444,7 +450,7 @@
     border-radius: 10px;
     border: 1.5px solid var(--gray03);
     position: absolute;
-    top: 175px;
+    top: 145px;
     left: 34px;
 }
 
@@ -462,9 +468,10 @@
     border-radius: 5px;
     border: 0px;
     background: var(--gray02);
-    position: absolute;
-    top: 705px;
-    left: 34px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -542,7 +549,7 @@
     font: var(--text-style-pretendard-semibold-16);
     color: var(--pink02);
     position: absolute;
-    top: 63px;
+    top: 33px;
     left: 146px;
 }
 
@@ -551,7 +558,7 @@
     color: var(--gray03);
     position: absolute;
     left: 34px;
-    top: 116px;
+    top: 86px;
 }
 
 #test-page1 h3,
@@ -563,12 +570,12 @@
     color: var(--black);
     position: absolute;
     left: 34px;
-    top: 141px;
+    top: 111px;
 }
 
 .test-page {
     position: relative;
-    padding-top: 180px; 
+    padding-top: 150px; 
     padding-left: 34px;
 }
 
@@ -591,9 +598,10 @@
     border: 0px;
     border-color: var(--gray02);
     background: var(--gray02);
-    position: absolute;
-    top: 705px;
-    left: 34px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -681,7 +689,7 @@ label[for="id_invite_code"] {
     font: var(--text-style-pretendard-semibold-16);
     color: var(--pink02);
     position: absolute;
-    top: 63px;
+    top: 33px;
     left: 50%;  
     transform: translateX(-50%);  
 }
@@ -693,7 +701,7 @@ label[for="id_invite_code"] {
 
 .create_travel-all-menu {
     position: absolute;
-    top: 128px;
+    top: 98px;
     left: 0;
     right: 0;
     display: flex;
@@ -754,7 +762,7 @@ label[for="id_invite_code"] {
 .create_travel-others-title {
     position: absolute;
     left: 34px;
-    top: 101px;
+    top: 71px;
     font: var(--text-style-pretendard-semibold-20);
 }
 
@@ -820,7 +828,7 @@ label[for="id_invite_code"] {
 .create_travel-others-place span {
     position: absolute;
     left: 34px;
-    top: 141px;
+    top: 111px;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
 }
@@ -831,7 +839,7 @@ label[for="id_invite_code"] {
 .create_travel-others-place-info {
     position: absolute;
     left: 34px;
-    top: 261px;
+    top: 231px;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
 }
@@ -846,7 +854,7 @@ label[for="id_invite_code"] {
     border-radius: 10px;
     border: 1.5px solid var(--gray03);
     position: absolute;
-    top: 175px;
+    top: 145px;
     left: 50%;  
     transform: translateX(-50%);  
 }
@@ -875,7 +883,7 @@ label[for="id_invite_code"] {
     border-radius: 10px;
     border: 1.5px solid var(--gray03);
     position: fixed;
-    top: 295px;
+    top: 265px;
     left: 50%;  
     transform: translateX(-50%);
 }
@@ -896,9 +904,10 @@ label[for="id_invite_code"] {
     border-radius: 5px;
     border: 0px;
     background: var(--gray02);
-    position: absolute;
-    top: 705px;
-    left: 34px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -914,7 +923,7 @@ label[for="id_invite_code"] {
 .search-btn-gray {
     position: absolute;
     left: 321px;
-    top: 186px;
+    top: 156px;
 }
 
 .create_travel-play-place-search.create_travel-page input {
@@ -924,7 +933,7 @@ label[for="id_invite_code"] {
     border-radius: 10px;
     border: 1.5px solid var(--pink02);
     position: absolute;
-    top: 89px;
+    top: 59px;
     left: 50%;  
     transform: translateX(-50%);
 }
@@ -939,14 +948,14 @@ label[for="id_invite_code"] {
 .search-btn-pink{
     position: absolute;
     left: 321px;
-    top: 100px;
+    top: 70px;
 }
 
 .travel-detail-page-top {
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
-    top: 63px;
+    top: 33px;
     left: 50%;  
     transform: translateX(-50%);
     white-space: nowrap;
@@ -995,7 +1004,7 @@ label[for="id_invite_code"] {
 
 #travelDetailComments{
     position:relative;
-    top: 250px; /* 원하는 고정 위치 */
+    top: 220px; /* 원하는 고정 위치 */
 }
 
 /*css */
@@ -1003,10 +1012,10 @@ label[for="id_invite_code"] {
     width: 325px;
     height: 46px;
     flex-shrink: 0;
-    position: absolute;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     border-radius: 10px;
     border: 1.5px solid var(--pink02);
 }
@@ -1014,10 +1023,10 @@ label[for="id_invite_code"] {
     width: 325px;
     height: 46px;
     flex-shrink: 0;
-    position: absolute;
-    top: 400px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     border-radius: 10px;
     border: 1.5px solid var(--pink02);
 }
@@ -1030,9 +1039,9 @@ label[for="id_invite_code"] {
 }
 
 .send-btn {
-    position: absolute;
-    left: 328px;
-    top: 410px;
+    left: 325px;
+    position: fixed;
+    bottom: 1.8rem;
 }
 
 
@@ -1082,7 +1091,7 @@ label[for="id_invite_code"] {
 
 .category-icon {
     position: relative; /* relative로 변경하여 부모 요소 내에서만 이동 */
-    top: 177px;
+    top: 147px;
     transform: translateX(-50%);  
     left: 50%;  
     cursor: pointer;
@@ -1096,7 +1105,7 @@ label[for="id_invite_code"] {
 .plan-creator {
     position: absolute;
     left: 302px;
-    top: 151px; /* icon과 상호작용하는 요소들 위치 수정 */
+    top: 121px; /* icon과 상호작용하는 요소들 위치 수정 */
     font: var(--text-style-pretendard-regular-12);
     color: var(--black);
 }
@@ -1104,7 +1113,7 @@ label[for="id_invite_code"] {
 .plan-place {
     position: absolute;
     left: 72px;
-    top: 93px;
+    top: 63px;
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
@@ -1112,43 +1121,43 @@ label[for="id_invite_code"] {
 .plan-description {
     position: absolute;
     left: 72px;
-    top: 130px; /* icon과 상호작용하는 요소들 위치 수정 */
+    top: 100px; /* icon과 상호작용하는 요소들 위치 수정 */
     font: var(--text-style-pretendard-regular-12);
     color: var(--black);
 }
 
+.plan-details {
+    z-index: 1;
+}
+
 .bi-heart-fill {
     color: #EA636A;
+}
+
+.bi-heart, .bi-heart-fill {
     position: absolute;
     left: 53px;
-    top: 152px
+    top: 123px;
+    cursor: pointer; /* 클릭 가능한 포인터 커서 */
+    z-index: 99;
 }
+
 
 .timetable-add { 
     display: none; /* 우선 숨겨놓고 화현 ver이랑 합치면 수정 */
 }
 
-.bi-heart{
-    position: absolute;
-    /*left: 53px;
-    top: 152px;*/
-    left: 13.5%;
-    top: 630%;
-}
-
 .like-count{
     position: absolute;
-   /* left: 72px;
-    top: 148px*/
-    left: 18.5%;
-    top: 617%;
+    left: 72px;
+    top: 120px
 }
 
 /*여행계획 상세보기 페이지*/
 .type-icon {
     position: absolute;
     left: 38px;
-    top: 123px;
+    top: 93px;
 }
 
 .detail-type {
@@ -1158,7 +1167,7 @@ label[for="id_invite_code"] {
 .detail-author {
     position: absolute;
     left: 304px;
-    top: 188px;
+    top: 158px;
     font: var(--text-style-pretendard-regular-12);
     color: var(--black);
 }
@@ -1166,7 +1175,7 @@ label[for="id_invite_code"] {
 .detail-place {
     position: absolute;
     left: 73px;
-    top: 131px;
+    top: 101px;
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
@@ -1174,7 +1183,7 @@ label[for="id_invite_code"] {
 .detail-description {
     position: absolute;
     left: 73px;
-    top: 166px;
+    top: 136px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
 }
@@ -1182,14 +1191,14 @@ label[for="id_invite_code"] {
 .bi-heart-btn2 {
     position: absolute;
     left: 53px;
-    top: 188px;
+    top: 158px;
 
 }
 
 .like-count-2 {
     position: absolute;
     left: 73px;
-    top: 186px;
+    top: 156px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
 }
@@ -1203,7 +1212,7 @@ label[for="id_invite_code"] {
     background: var(--pink01);
     position: absolute;
     left: 296px;
-    top: 229px;
+    top: 199px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1221,7 +1230,7 @@ label[for="id_invite_code"] {
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
-    top: 63px;
+    top: 33px;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap;
@@ -1232,7 +1241,7 @@ label[for="id_invite_code"] {
     color: var(--pink02);
     font: var(--text-style-pretendard-semibold-16);
     position: absolute;
-    top: 610px;
+    top: 580px;
     left: 50%;
     transform: translateX(-50%);
     white-space: nowrap; 
@@ -1246,7 +1255,7 @@ label[for="id_invite_code"] {
     width: 370px;
     height: 432px;
     position: absolute;
-    top: 100px;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
 
@@ -1671,7 +1680,7 @@ label[for="id_invite_code"] {
 .maintravel-modal-content .close {
     position: absolute;
     top: 0px;
-    right: 15px;
+    right: 20px;
     color: var(--black);
     font-size: 35px;
     cursor: pointer;

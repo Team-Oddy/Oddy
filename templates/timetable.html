@@ -405,19 +405,18 @@ function changePage(url) {
     max-height: 400px; 
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 15px; 
 }
 
 .tt-plan-management {
     margin-top: 650px;
-    padding: 20px;
+    padding: 10px;
     background-color: var(--white);
     border-radius: 5px;
 }
 
 .tt-category-buttons {
     position: absolute;
-    top: 647px;
+    top: 617px;
     left: 0;
     right: 0;
     display: flex;
@@ -494,7 +493,6 @@ function changePage(url) {
 
 .tt-category-icon {
     position: relative; /* relative로 변경하여 부모 요소 내에서만 이동 */
-    top: 10px;
     transform: translateX(-50%);  
     left: 50%;  
     cursor: pointer;
@@ -505,43 +503,46 @@ function changePage(url) {
     display: none;
 }
 
-.tt-plan-creator {
-    position: absolute;
-    left: 295px;
-    top: -16px; /* icon과 상호작용하는 요소들 위치 수정(167px씩 빼기) */
-    font: var(--text-style-pretendard-regular-12);
-    color: var(--black);
-}
-
 .tt-plan-place {
     position: absolute;
-    left: 63px;
-    top: -74px;
+    left: 73px;
+    top: -84px;
     font: var(--text-style-pretendard-semibold-16);
     color: var(--black);
 }
 
 .tt-plan-description {
     position: absolute;
-    left: 63px;
-    top: -37px; /* icon과 상호작용하는 요소들 위치 수정 */
+    left: 73px;
+    top: -47px;
     font: var(--text-style-pretendard-regular-12);
     color: var(--black);
 }
-.tt-bi-heart{
+
+.tt-plan-creator {
     position: absolute;
-    left: 44px;
-    top: -15px /*167px 빼기*/
+    left: 302px;
+    top: -26px;
+    font: var(--text-style-pretendard-regular-12);
+    color: var(--black);
 }
-.tt-like-count{
+
+.tt-bi-heart {
     position: absolute;
-    left: 64px;
-    top: -19px
+    left: 54px;
+    top: -24px /*167px 빼기*/;
 }
+
+.tt-like-count {
+    position: absolute;
+    left: 74px;
+    top: -28px;
+}
+
 .tt-airplane_icon {
     position: absolute;
-    top: -74px;
-    left: 239px;
+    top: -86px;
+    left: 249px;
 }
 </style>
 {% endblock %}
