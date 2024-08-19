@@ -66,36 +66,39 @@ body.custom-container-style .container {
    
     <div class="create_travel-main-members-container">
         <div class="create_travel-main-members-text">함께 여행가는 친구들</div>
-        <ul>
-            {% for member in travel_group.members.all %}
-                <li>
-                    <div class="profile-circle">
-                        {% if member.travel_type %}
-                            <a href="javascript:void(0);" onclick="showFriendTestResult('{{ member.nickname }}', '{{ member.travel_type }}')">
-                                {% if member.travel_type == '완벽주의 플래너형' %}
-                                    <img src="{% static 'image/character1.svg' %}" alt="완벽주의 플래너형">
-                                {% elif member.travel_type == '자유로운 모험가형' %}
-                                    <img src="{% static 'image/character2.svg' %}" alt="자유로운 모험가형">
-                                {% elif member.travel_type == '휴식 추구형' %}
-                                    <img src="{% static 'image/character3.svg' %}" alt="휴식 추구형">
-                                {% elif member.travel_type == '미식 탐험가형' %}
-                                    <img src="{% static 'image/character4.svg' %}" alt="미식 탐험가형">
-                                {% elif member.travel_type == '균형 잡힌 탐험가형' %}
-                                    <img src="{% static 'image/character5.svg' %}" alt="균형 잡힌 탐험가형">
-                                {% else %}
-                                    <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile">
-                                {% endif %}
-                            </a>
-                        {% else %}
-                            <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile">
-                        {% endif %}
-                    </div>
-                    <span class="nickname">{{ member.nickname }}</span>
-                </li>
-            {% endfor %}
-        </ul>
+        <div class="ct-travelgroup-container">
+            <ul class="travelgroup-ul">
+                {% for member in travel_group.members.all %}
+                    <li>
+                        <div class="profile-circle">
+                            {% if member.travel_type %}
+                                <a href="javascript:void(0);" onclick="showFriendTestResult('{{ member.nickname }}', '{{ member.travel_type }}')">
+                                    {% if member.travel_type == '완벽주의 플래너형' %}
+                                        <img src="{% static 'image/character1.svg' %}" alt="완벽주의 플래너형">
+                                    {% elif member.travel_type == '자유로운 모험가형' %}
+                                        <img src="{% static 'image/character2.svg' %}" alt="자유로운 모험가형">
+                                    {% elif member.travel_type == '휴식 추구형' %}
+                                        <img src="{% static 'image/character3.svg' %}" alt="휴식 추구형">
+                                    {% elif member.travel_type == '미식 탐험가형' %}
+                                        <img src="{% static 'image/character4.svg' %}" alt="미식 탐험가형">
+                                    {% elif member.travel_type == '균형 잡힌 탐험가형' %}
+                                        <img src="{% static 'image/character5.svg' %}" alt="균형 잡힌 탐험가형">
+                                    {% else %}
+                                        <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile">
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                <img src="{% static 'image/default_profile.svg' %}" alt="Default Profile">
+                            {% endif %}
+                        </div>
+                        <span class="nickname">{{ member.nickname }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
         <div class="full-width-divider"></div>
     </div>
+    
     
 
     <!-- 친구 테스트 결과 모달 -->
