@@ -1499,6 +1499,7 @@ label[for="id_invite_code"] {
     color: var(--pink02);
 }
 
+
 .create_travel-main-members-container {
     position: relative;
     margin-top: 20px;
@@ -1516,7 +1517,7 @@ label[for="id_invite_code"] {
     top: 141px;
 }
 
-.create_travel-main-members-container .travelgroup-ul {
+.create_travel-main-members-container .ct-travelgroup-ul {
     display: flex;
     flex-wrap: nowrap; /* 가로로 나열 */
     gap: 10px;
@@ -1577,6 +1578,7 @@ label[for="id_invite_code"] {
     height: 1px;
     background-color: var(--gray01); /* 연한 회색 또는 원하는 색상 */
 }
+
 
 .travelmain-datetext {
     position: absolute;

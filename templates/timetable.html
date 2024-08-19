@@ -101,6 +101,7 @@
             {% for hour in hours %}
                 <option value="{{ hour|stringformat:'02d' }}:00">{{ hour }}:00</option>
             {% endfor %}
+            <option value="22:00">22:00</option>
         </select>
         <button onclick="saveDateTimeAndClose()" class="modal-complete">저장</button>
         <button onclick="closeTimeModal()">
