@@ -176,9 +176,10 @@
 }
 
 .create-travelgroup {
-    position: absolute;
-    left: 34px;
-    top: 638px;
+    position: fixed;
+    bottom: 5.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     width: 325px;
     height: 48px;
     flex-shrink: 0;
@@ -195,9 +196,10 @@
 }
 
 .enter-invitedgroup {
-    position: absolute;
-    left: 34px;
-    top: 705px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     width: 325px;
     height: 48px;
     flex-shrink: 0;
@@ -278,9 +280,9 @@
 }
 
 .enter-group {
-    position: absolute;
+    position: fixed;
+    bottom: 1.2rem;
     left: 204px;
-    top: 705px;
     border-radius: 5px;
     background: var(--pink02);
     cursor: pointer;
@@ -293,9 +295,9 @@
 }
 
 .share-link {
-    position: absolute;
     left: 34px;
-    top: 705px;
+    position: fixed;
+    bottom: 1.2rem; 
     border-radius: 5px;
     border: 1.5px solid var(--pink02);
     background-color: transparent;
@@ -308,9 +310,10 @@
 }
 
 .test-start-btn {
-    position: absolute;
-    left: 34px;
-    top: 705px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     width: 325px;
     height: 48px;
     border-radius: 5px;
@@ -349,18 +352,21 @@
 .skip-test {
     font: var(--text-style-pretendard-regular-14);
     color: var(--gray03);
-    top: 657px;
+    position: fixed;
+    bottom: 5.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
 }
 
 .skip-test::after {
     content: ""; 
     position: absolute;  
-    left: 50%;  
-    transform: translateX(-50%);  
-    width: 86.006px;
+    width: 86.01px;
     height: 1px;
     background-color: var(--gray03); 
-    top: 16.49px;  
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -1px;  
 }
 
 .my-page-top, .nicknameedit-top {
@@ -592,9 +598,10 @@
     border: 0px;
     border-color: var(--gray02);
     background: var(--gray02);
-    position: absolute;
-    top: 705px;
-    left: 34px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -897,9 +904,10 @@ label[for="id_invite_code"] {
     border-radius: 5px;
     border: 0px;
     background: var(--gray02);
-    position: absolute;
-    top: 705px;
-    left: 34px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     display: flex;  
     justify-content: center;  
     align-items: center;  
@@ -1574,7 +1582,7 @@ label[for="id_invite_code"] {
 .full-width-divider {
     position: absolute;
     left: 0;
-    top: 218px;
+    top: 225px;
     width: 100%;
     height: 1px;
     background-color: var(--gray01); /* 연한 회색 또는 원하는 색상 */
@@ -1584,14 +1592,14 @@ label[for="id_invite_code"] {
 .travelmain-datetext {
     position: absolute;
     left: 106.7px;
-    top: 333px;
+    top: 343px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--white);
 }
 
 .main-ticket-img {
     position: absolute;
-    top: 251px;
+    top: 261px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -1599,19 +1607,19 @@ label[for="id_invite_code"] {
 .main-plan-btn {
     position: absolute;
     left: 87px;
-    top: 598px;
+    top: 608px;
 }
 
 .main-map-btn {
     position: absolute;
     left: 167.74px;
-    top: 598px;
+    top: 608px;
 }
 
 .main-timetable-btn {
     position: absolute;
     left: 248px;
-    top: 598px;
+    top: 608px;
 }
 
 .create_travel-main-members-text {
@@ -1625,7 +1633,7 @@ label[for="id_invite_code"] {
 .create_travel-main-title {
     position: absolute;
     left: 84px;
-    top: 274px;
+    top: 284px;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
     line-height: 25px;
