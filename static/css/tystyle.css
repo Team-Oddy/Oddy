@@ -523,9 +523,10 @@
     border: 0px;
     border-color: var(--gray02);
     background: var(--gray02);
-    position: absolute;
-    top: 705px;
-    left: 34px;
+    position: fixed;
+    bottom: 1.2rem;
+    transform: translateX(-50%);  
+    left: 50%; 
     display: flex;
     justify-content: center;
     align-items: center;
