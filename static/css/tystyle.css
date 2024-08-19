@@ -1503,7 +1503,7 @@ label[for="id_invite_code"] {
 .travelmain-logo {
     position: absolute;
     left: 33px;
-    top: 47px;
+    top: 17px;
     font: var(--text-style-bm-regular-40);
     color: var(--pink02);
 }
@@ -1523,7 +1523,7 @@ label[for="id_invite_code"] {
 }
 .ct-travelgroup-container {
     position: relative;
-    top: 141px;
+    top: 111px;
 }
 
 .create_travel-main-members-container .ct-travelgroup-ul {
@@ -1568,7 +1568,7 @@ label[for="id_invite_code"] {
 }
 
 .create_travel-main-members-container .nickname {
-    margin-top: 10px;
+    margin-top: 7px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--black);
     text-align: center;
@@ -1582,7 +1582,7 @@ label[for="id_invite_code"] {
 .full-width-divider {
     position: absolute;
     left: 0;
-    top: 225px;
+    top: 195px;
     width: 100%;
     height: 1px;
     background-color: var(--gray01); /* 연한 회색 또는 원하는 색상 */
@@ -1592,14 +1592,14 @@ label[for="id_invite_code"] {
 .travelmain-datetext {
     position: absolute;
     left: 106.7px;
-    top: 343px;
+    top: 318px;
     font: var(--text-style-pretendard-regular-14);
     color: var(--white);
 }
 
 .main-ticket-img {
     position: absolute;
-    top: 261px;
+    top: 236px;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -1607,19 +1607,19 @@ label[for="id_invite_code"] {
 .main-plan-btn {
     position: absolute;
     left: 87px;
-    top: 608px;
+    top: 583px;
 }
 
 .main-map-btn {
     position: absolute;
     left: 167.74px;
-    top: 608px;
+    top: 583px;
 }
 
 .main-timetable-btn {
     position: absolute;
     left: 248px;
-    top: 608px;
+    top: 583px;
 }
 
 .create_travel-main-members-text {
@@ -1627,13 +1627,13 @@ label[for="id_invite_code"] {
     color: var(--black);
     position: absolute;
     left: 33px;
-    top: 110px;
+    top: 80px;
 }
 
 .create_travel-main-title {
     position: absolute;
     left: 84px;
-    top: 284px;
+    top: 259px;
     font: var(--text-style-pretendard-semibold-18);
     color: var(--black);
     line-height: 25px;
@@ -1650,7 +1650,7 @@ label[for="id_invite_code"] {
     border-radius: 10px;
     background: var(--gray01);
     position: absolute;
-    top: 733px;
+    top: 713px;
     left: 50%;
     transform: translateX(-50%);
 }
