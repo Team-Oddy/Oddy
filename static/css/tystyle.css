@@ -1524,7 +1524,7 @@ label[for="id_invite_code"] {
     
 }
 
-.create_travel-main-members-container .travelgroup-ul li {
+.create_travel-main-members-container .ct-travelgroup-ul li {
     font: var(--text-style-pretendard-semibold-20);
     border-radius: 10px;
     display: flex;
