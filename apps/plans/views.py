@@ -803,7 +803,7 @@ def get_comments(request, plan_id):
     return JsonResponse({'success': True, 'comments': comments_data})
 
 
-#지도 마커 구현 코드
+#지도뷰 구현(태연)
 def travel_map(request, travel_group_id):
     travel_group = get_object_or_404(TravelGroup, id=travel_group_id)
     travel_plans = TravelPlan.objects.filter(travel_group=travel_group)

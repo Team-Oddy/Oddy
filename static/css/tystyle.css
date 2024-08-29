@@ -162,7 +162,7 @@
     left: 50%;
     top: 220.27px;
     transform: translateX(-50%);
-    animation: doorAnimation 2s ease-in-out forwards; /* 애니메이션 시간을 1s로 설정했습니다. 필요에 따라 조정하세요. */
+    animation: doorAnimation 2s ease-in-out forwards; 
     transform-origin: right center;
 }
 

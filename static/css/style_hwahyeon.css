@@ -552,7 +552,7 @@ body.custom-container-style {
     background-color: white;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    box-shadow: 0 0 0 100vw black; /* 외부 영역을 검은색으로 만듭니다 */
+    box-shadow: 0 0 0 100vw black;
 }
 
 body.custom-container-style::before {
@@ -563,7 +563,7 @@ body.custom-container-style::before {
     width: 100%;
     height: 100%;
     background-color: black; /* 바탕 색을 검은색으로 설정 */
-    z-index: -1; /* 요소의 뒤쪽에 위치시켜서 흰색 영역 뒤에 검은색 배경을 만듭니다 */
+    z-index: -1;
 }
 
 body.custom-container-style .container {
