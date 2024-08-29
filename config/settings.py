@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 환경 변수 초기화
 env = environ.Env()
 
-# .env 파일에서 환경 변수를 읽어들입니다.
-environ.Env.read_env(BASE_DIR / '.env')  # 이 줄이 꼭 필요합니다.
+# .env 파일에서 환경 변수를 읽어들이는 부분
+environ.Env.read_env(BASE_DIR / '.env')  # 이 줄이 꼭 필요!
 
 
 # Quick-start development settings - unsuitable for production
@@ -91,8 +91,8 @@ TEMPLATES = [
 SOCIALACCOUNT_PROVIDERS = {
     'kakao': {
         'APP': {
-            'client_id': '56ed8606aae97db283049aa0f47d4faf',
-            'secret': 'I4A30NnQWWD6aLHZoA0v3JnVazy6xuPP',
+            'client_id': os.environ.get('KAKAO_REST_API_KEY'),
+            'secret': os.environ.get('KAKAO_SECRET_KEY'),
             'key': ''
         }
     }
@@ -169,25 +169,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
-
-#env파일로 secret key 숨기기
-import os
-from dotenv import load_dotenv
-
-# .env 파일 로드
-load_dotenv()
-
-# SECRET_KEY
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-
-# API Keys
-KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY')
-KAKAO_JAVASCRIPT_KEY = os.environ.get('KAKAO_JAVASCRIPT_KEY')
-KAKAO_ADMIN_KEY = os.environ.get('KAKAO_ADMIN_KEY')
-
-NAVER_MAP_CLIENT_ID = os.environ.get('NAVER_MAP_CLIENT_ID')
-NAVER_MAP_CLIENT_SECRET = os.environ.get('NAVER_MAP_CLIENT_SECRET')
-
-NAVER_SEARCH_CLIENT_ID = os.environ.get('NAVER_SEARCH_CLIENT_ID')
-NAVER_SEARCH_CLIENT_SECRET = os.environ.get('NAVER_SEARCH_CLIENT_SECRET')
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080',
+                        'https://test.oddy.o-r.kr/',
+                        ]
