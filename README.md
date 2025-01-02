@@ -1,4 +1,4 @@
-<img width="160" src="https://github.com/user-attachments/assets/e2b61348-05d5-4970-8393-e5b39bff212d">
+<img width="240" src="https://github.com/user-attachments/assets/480cea24-f0e2-413d-b090-c22375ace551">
 
 ### **설레는 여행 계획하기, 오디와 함께해요!**
 
